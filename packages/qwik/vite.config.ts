@@ -26,6 +26,6 @@ export default defineConfig(() => {
         ],
       },
     },
-    plugins: [qwikCity({ trailingSlash: true }), qwikVite({}), tsconfigPaths()],
+    plugins: [qwikVite({}), tsconfigPaths()],
   };
 });

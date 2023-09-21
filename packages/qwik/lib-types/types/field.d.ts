@@ -1,0 +1,28 @@
+import { NoSerialize, QRL, QwikChangeEvent, QwikFocusEvent } from "@builder.io/qwik";
+import { FieldPath, FieldPathValue } from "./path";
+export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+export type FieldEvent = Event | QwikChangeEvent<FieldElement> | QwikFocusEvent<FieldElement>;
+export type PartialKey<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+export type ValidateField<T> = (value: T) => Promise<string> | undefined;
+export type FieldType<T> = T extends string | null | undefined ? "string" : T extends string[] | null | undefined ? "string[]" : T extends number | null | undefined ? "number" : T extends boolean | null | undefined ? "boolean" : T extends NoSerialize<Blob> | NoSerialize<File> | null | undefined ? "File" : T extends NoSerialize<Blob>[] | NoSerialize<File>[] | null | undefined ? "File[]" : T extends Date | null | undefined ? "Date" : never;
+/**
+ * Function type to transform a field.
+ */
+export type TransformField<T> = (value: T | undefined, event: FieldEvent, element: FieldElement) => Promise<T | undefined> | undefined;
+export type InternalFieldStore<T, TFieldName extends FieldPath<T>> = {
+    initialValue: FieldPathValue<T, TFieldName> | undefined;
+    startValue: FieldPathValue<T, TFieldName> | undefined;
+    validate: QRL<ValidateField<FieldPathValue<T, TFieldName> | undefined>>[];
+    transform: QRL<TransformField<FieldPathValue<T, TFieldName>>>[];
+    elements: FieldElement[];
+    consumers: number[];
+};
+export type FieldStore<T, TFieldName extends FieldPath<T>> = {
+    internal: InternalFieldStore<T, TFieldName>;
+    name: TFieldName;
+    value: FieldPathValue<T, TFieldName> | undefined;
+    error: string;
+    active: boolean;
+    touched: boolean;
+    dirty: boolean;
+};

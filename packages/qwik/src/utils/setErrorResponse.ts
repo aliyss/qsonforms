@@ -26,13 +26,13 @@ type ErrorResponseOptions = SetResponseOptions &
  * array.
  *
  * @param form The form of the errors.
- * @param formErrors The form errors.
+ * @param _formErrors The form errors.
  * @param options The error options.
  */
 export function setErrorResponse<T, TResponseData extends ResponseData<T>>(
   form: FormStore<T, TResponseData>,
-  formErrors: FormErrors,
-  { duration, shouldActive = true }: ErrorResponseOptions,
+  _formErrors: FormErrors,
+  { duration }: ErrorResponseOptions,
 ): void {
   // Combine errors that were not set for any field or field array into one
   // general form error response message

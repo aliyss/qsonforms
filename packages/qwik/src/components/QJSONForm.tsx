@@ -10,7 +10,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import type { QwikSubmitEvent } from "@builder.io/qwik";
+import { type QwikSubmitEvent } from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
 import type { JSX } from "@builder.io/qwik/jsx-runtime";
 // import { FormError } from "../exceptions";
@@ -22,6 +22,7 @@ import type {
   ResponseData,
 } from "../types";
 import { JSONSchema7 } from "json-schema";
+import { SchemaParser } from "./SchemaParser";
 
 /**
  * Function type to handle the submission of the form.
@@ -58,7 +59,6 @@ export type FormProps<T, TResponseData extends ResponseData<T>> = {
     | "multipart/form-data"
     | undefined;
   name?: string | undefined;
-  children: any;
 };
 
 /**
@@ -78,7 +78,6 @@ export function QJSONForm<
   shouldDirty,
   shouldFocus,
   reloadDocument,
-  children,
   ...formProps
 }: FormProps<FromData<T>, TResponseData>): JSX.Element {
   // Destructure form props
@@ -123,7 +122,8 @@ export function QJSONForm<
             // Run submit actions of form
             const [actionResult] = await Promise.all([
               !reloadDocument
-                ? action?.submit(encType ? new FormData(element) : values)
+                ? // eslint-disable-next-line qwik/valid-lexical-scope
+                  action?.submit(encType ? new FormData(element) : values)
                 : undefined,
               // eslint-disable-next-line qwik/valid-lexical-scope
               onSubmit$?.(values as FromData<T>, event),
@@ -131,7 +131,7 @@ export function QJSONForm<
 
             // Set form action result if necessary
             if (actionResult?.value) {
-              const { errors, response } = actionResult.value;
+              const { response } = actionResult.value;
               // setFieldErrors(form, errors, { ...options, shouldFocus: false });
               if (Object.keys(response).length) {
                 setResponse(form, response, options);
@@ -167,7 +167,11 @@ export function QJSONForm<
         }
       }}
     >
-      {children}
+      <SchemaParser
+        layout={form.uiSchema.layout}
+        templates={form.uiSchema.templates}
+        formData={form}
+      />
     </form>
   );
 }

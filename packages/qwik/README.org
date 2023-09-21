@@ -1,0 +1,72 @@
+* QSONForms (WIP)
+
+** Why
+
+I initially started out with JSONForms and svelte. This was not a good match as I had to reimplement almost everything.
+I then moved on to qwik because of it's fancy name. Using qwik-react with JSONForms worked, but I had some wierd issues I do not remember anymore.
+After that I continued with react-jsonschema-form and got pretty far with that until I wanted to dynamically modify the UiSchema.
+Since it does not support the same UiSchema Layout like JSONForms, I opted to build the thing myself.
+
+I wanted to combine the flexibility of react-jsonschema-form with the UiSchema Layout of JSONForms and that's where Modular Forms did most of the heavy lifting for a qwik implementation.
+
+Heavily inspired by the following projects:
+- [[https://jsonforms.io/][JSONForms.io]]
+- [[https://rjsf-team.github.io/react-jsonschema-form/docs/][react-jsonschema-form]]
+- [[https://modularforms.dev][Modular Forms]]
+
+I especially want to thank [[https://github.com/fabian-hiller][Fabian Hiller]] for Modular Forms. I copied so much it's not even funny. I am still working on removing everything that is not explicitly necessary from my repository, but I'd rather have it working qwik and dirty for my own purposes.
+
+** Usage
+
+*** Install
+#+begin_src bash
+  npm install qsonforms
+#+end_src
+
+*** Usage
+
+**** Define Data
+#+begin_src typescript
+  const schema = {
+    type: "object",
+    properties: {
+      first_name: {
+        type: "string"
+      },
+      last_name: {
+        type: "string"
+      }
+    }
+  }
+
+  const formData = useSignal({ first_name: "Aliyss", last_name: "Snow" })
+
+  const uiSchema = createUiSchema(...);
+#+end_src
+
+**** Create Form
+#+begin_src typescript
+  const [userForm, { QSONForm }] = useQSONForm(schema, {
+    loader: formData,
+    uiSchema: uiSchema
+  });
+
+  return <QSONForm />
+#+end_src
+
+** Vision
+
+The key idea is to have dynamic forms. View controlled by data. JSON Schema is perfect for this. The UiSchema is more or less the same like with JSONForms, however for the Components I used a similar strategy like react-jsonschema-form does.
+
+*** Moving away from Modular Forms
+I do very much enjoy Modular Forms. However I want to only take what is necessary from it. Currently I copy pasted and adjusted as much as possible just to make it work. I will look into removing everything that is not necessary for the functionality of QSONForms.
+
+** Caveats
+
+*** Typesafety
+Typesafety is not really given. Theoretically it could quickly implemented with json-schema-to-ts, however when currently using it I get "type instantiation to deep" or something like that. I assume after cleaning out unnecessary stuff this could work.
+
+Of course the whole validation is to be based on json-schema with Ajv, so that would generally result to the same output anyways if one is not statically creating forms, in which case it may make more sense to use Modular Forms anyways.
+
+*** Validation
+Validation should be done by passing an Ajv Object. Currently working on this.

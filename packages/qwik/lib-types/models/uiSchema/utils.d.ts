@@ -1,0 +1,7 @@
+import { ControlTemplates, ControlWidgets, DefaultControlTemplates, DefaultControlWidgets, DefaultHorizontalTemplates, DefaultVerticalTemplates, HorizontalTemplates, TemplateType, Templates, VerticalTemplates, Widgets } from "../../types";
+export declare function getTemplate<V extends VerticalTemplates | DefaultVerticalTemplates = VerticalTemplates | DefaultVerticalTemplates, H extends HorizontalTemplates | DefaultHorizontalTemplates = HorizontalTemplates | DefaultHorizontalTemplates, C extends ControlTemplates | DefaultControlTemplates = ControlTemplates | DefaultControlTemplates>(type: TemplateType, templates: Templates<V, H, C>, template: string | number | undefined): NonNullable<(V | H | C)[keyof V & keyof H & keyof C]>;
+export declare function getWidget<W extends ControlWidgets | DefaultControlWidgets = ControlWidgets | DefaultControlWidgets>({ type, widgets, widget, }: {
+    type: TemplateType.CONTROL;
+    widgets: Widgets<W>;
+    widget: string | number | undefined;
+}): import("@builder.io/qwik").Component<import("../../types").ControlWidgetProps<any>>;

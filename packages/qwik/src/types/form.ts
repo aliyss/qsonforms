@@ -20,7 +20,8 @@ import { FieldStore } from "./field";
 
 type JSONSchema7 = JSONSchemaDirect;
 
-export type FromData<T extends JSONSchema7> =
+// eslint-disable-next-line
+export type FromData<_ extends JSONSchema7> =
   | Record<string, unknown>
   | string
   | undefined;
@@ -81,6 +82,8 @@ export type InternalFormStore<T> = {
 export type FormStore<T, TResponseData extends ResponseData<T>> = {
   internal: InternalFormStore<T>;
 
+  schema: any;
+  uiSchema: UiSchema;
   element: HTMLFormElement | undefined;
   submitCount: number;
   submitting: boolean;

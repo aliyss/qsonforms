@@ -26,11 +26,7 @@
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import { decode } from "./path";
-import {
-  JSONSchema7,
-  JSONSchema7Definition,
-  JSONSchema7Object,
-} from "json-schema";
+import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.

@@ -46,6 +46,8 @@ export function useQJSONFormStore<
         validateOn,
         revalidateOn,
       },
+      schema,
+      uiSchema: options.uiSchema,
       // FIXME: Set state based on `action`
       element: undefined,
       submitCount: 0,

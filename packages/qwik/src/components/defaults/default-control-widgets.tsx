@@ -1,5 +1,5 @@
-import { component$, $, QwikChangeEvent } from "@builder.io/qwik";
-import { ControlWidgetProps } from "../widgets";
+import { component$ } from "@builder.io/qwik";
+import { ControlWidgetProps } from "../../types";
 
 export const DefaultControlWidget = component$<ControlWidgetProps>(() => {
   return (

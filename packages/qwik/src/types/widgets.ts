@@ -2,6 +2,7 @@ import { Component } from "@builder.io/qwik";
 import { ElementLayout } from "./layout";
 import { JSONSchema7Type } from "json-schema";
 import { TemplateType } from "./tempates";
+import { FieldElementProps } from "../components/Field";
 
 export enum WidgetType {
   CONTROL = "Control",
