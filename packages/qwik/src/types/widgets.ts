@@ -9,13 +9,14 @@ export enum WidgetType {
 }
 
 export interface WidgetProps {
-  layout: ElementLayout;
+  layout: ElementLayout & {
+    "ui:widget:class"?: string;
+  };
 }
 
 export interface ControlWidgetProps<I = any> extends WidgetProps {
   subSchema: JSONSchema7Type;
   initialData: I;
-  onChange$: (value: I) => void;
   additionalProps: FieldElementProps<any, any>;
 }
 

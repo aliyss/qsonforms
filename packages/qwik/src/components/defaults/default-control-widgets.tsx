@@ -1,26 +1,40 @@
 import { component$ } from "@builder.io/qwik";
 import { ControlWidgetProps } from "../../types";
 
-export const DefaultControlWidget = component$<ControlWidgetProps>(() => {
-  return (
-    <>
-      <div>Error no Widget found.</div>
-    </>
-  );
-});
-
-export const DefaultStringWidget = component$<ControlWidgetProps>(
-  ({ initialData, additionalProps }) => {
+export const DefaultControlWidget = component$<ControlWidgetProps>(
+  ({ layout }) => {
     return (
       <>
-        <input value={initialData} {...additionalProps} />
+        <div
+          class={`form-control-widget ${
+            layout["ui:widget:class"] || "form-control-widget-default"
+          }`}
+        >
+          Error no Widget found.
+        </div>
+      </>
+    );
+  },
+);
+
+export const DefaultStringWidget = component$<ControlWidgetProps>(
+  ({ initialData, layout, additionalProps }) => {
+    return (
+      <>
+        <input
+          value={initialData}
+          {...additionalProps}
+          class={`form-control-widget ${
+            layout["ui:widget:class"] || "form-control-widget-default"
+          }`}
+        />
       </>
     );
   },
 );
 
 export const DefaultBooleanWidget = component$<ControlWidgetProps>(
-  ({ initialData, additionalProps }) => {
+  ({ initialData, layout, additionalProps }) => {
     return (
       <>
         <input
@@ -28,6 +42,9 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
           checked={initialData}
           value={initialData}
           {...additionalProps}
+          class={`form-control-widget ${
+            layout["ui:widget:class"] || "form-control-widget-default"
+          }`}
         />
       </>
     );
@@ -35,10 +52,17 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
 );
 
 export const DefaultNumberWidget = component$<ControlWidgetProps>(
-  ({ initialData, additionalProps }) => {
+  ({ initialData, layout, additionalProps }) => {
     return (
       <>
-        <input type="number" value={initialData} {...additionalProps} />
+        <input
+          type="number"
+          value={initialData}
+          {...additionalProps}
+          class={`form-control-widget ${
+            layout["ui:widget:class"] || "form-control-widget-default"
+          }`}
+        />
       </>
     );
   },

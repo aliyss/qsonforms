@@ -8,10 +8,12 @@ import {
   DefaultNumberWidget,
   DefaultStringWidget,
 } from "../../components/defaults/default-control-widgets";
+import { DefaultArray } from "../../components/defaults/default-array";
 
 export const defaultTemplates: DefaultTemplates = {
   [TemplateType.VERTICAL_LAYOUT]: { defaultVertical: DefaultVertical },
   [TemplateType.HORIZONTAL_LAYOUT]: { defaultHorizontal: DefaultHorizontal },
+  [TemplateType.ARRAY]: { defaultArray: DefaultArray },
   [TemplateType.CONTROL]: { defaultControl: DefaultControl },
 };
 

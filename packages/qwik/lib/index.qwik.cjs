@@ -258,38 +258,49 @@ function reset(form, arg2, arg3) {
 }
 exports.TemplateType = void 0;
 (function(TemplateType2) {
-  TemplateType2["CONTROL"] = "Control";
-  TemplateType2["HORIZONTAL_LAYOUT"] = "HorizontalLayout";
   TemplateType2["VERTICAL_LAYOUT"] = "VerticalLayout";
+  TemplateType2["HORIZONTAL_LAYOUT"] = "HorizontalLayout";
+  TemplateType2["ARRAY"] = "Array";
+  TemplateType2["CONTROL"] = "Control";
 })(exports.TemplateType || (exports.TemplateType = {}));
 exports.WidgetType = void 0;
 (function(WidgetType2) {
   WidgetType2["CONTROL"] = "Control";
 })(exports.WidgetType || (exports.WidgetType = {}));
-const DefaultVertical = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+const DefaultVertical = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxQ("div", null, {
-      class: "form-vertical-default"
+      class: qwik._fnSignal((p0) => `form-vertical ${p0.layout["ui:class"] || "form-vertical-default"}`, [
+        props
+      ], '`form-vertical ${p0.layout["ui:class"]||"form-vertical-default"}`')
     }, /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "cd_0"), 1, null)
   }, 1, "cd_1");
 }, "DefaultVertical_component_UY9oBhsK8n8"));
-const DefaultHorizontal = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+const DefaultHorizontal = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxQ("div", null, {
-      class: "form-horizontal-default"
+      class: qwik._fnSignal((p0) => `form-horizontal ${p0.layout["ui:class"] || "form-horizontal-default"}`, [
+        props
+      ], '`form-horizontal ${p0.layout["ui:class"]||"form-horizontal-default"}`')
     }, /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "ze_0"), 1, null)
   }, 1, "ze_1");
 }, "DefaultHorizontal_component_UG9M04fl0Zs"));
-const DefaultControl = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+const DefaultControl = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxQ("div", null, {
-      class: "form-control-default"
+      class: qwik._fnSignal((p0) => `form-control ${p0.layout["ui:class"] || "form-control-default"}`, [
+        props
+      ], '`form-control ${p0.layout["ui:class"]||"form-control-default"}`')
     }, /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "Tj_0"), 1, null)
   }, 1, "Tj_1");
 }, "DefaultControl_component_6ykl2XdCces"));
-const DefaultControlWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+const DefaultControlWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
-    children: /* @__PURE__ */ qwik._jsxQ("div", null, null, "Error no Widget found.", 3, null)
+    children: /* @__PURE__ */ qwik._jsxQ("div", null, {
+      class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+        props
+      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`')
+    }, "Error no Widget found.", 3, null)
   }, 3, "O9_0");
 }, "DefaultControlWidget_component_6y2CbsAOhVI"));
 const DefaultStringWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
@@ -297,6 +308,9 @@ const DefaultStringWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qw
     children: /* @__PURE__ */ qwik._jsxS("input", {
       ...props.additionalProps
     }, {
+      class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+        props
+      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
       value: qwik._fnSignal((p0) => p0.initialData, [
         props
       ], "p0.initialData")
@@ -311,6 +325,9 @@ const DefaultBooleanWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
       checked: qwik._fnSignal((p0) => p0.initialData, [
         props
       ], "p0.initialData"),
+      class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+        props
+      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
       type: "checkbox",
       value: qwik._fnSignal((p0) => p0.initialData, [
         props
@@ -323,6 +340,9 @@ const DefaultNumberWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qw
     children: /* @__PURE__ */ qwik._jsxS("input", {
       ...props.additionalProps
     }, {
+      class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+        props
+      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
       type: "number",
       value: qwik._fnSignal((p0) => p0.initialData, [
         props
@@ -330,12 +350,24 @@ const DefaultNumberWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qw
     }, 0, null)
   }, 1, "O9_3");
 }, "DefaultNumberWidget_component_iwjisttKp2E"));
+const DefaultArray = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+    children: /* @__PURE__ */ qwik._jsxQ("div", null, {
+      class: qwik._fnSignal((p0) => `form-array ${p0.layout["ui:class"] || "form-array-default"}`, [
+        props
+      ], '`form-array ${p0.layout["ui:class"]||"form-array-default"}`')
+    }, /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "CN_0"), 1, null)
+  }, 1, "CN_1");
+}, "DefaultArray_component_R4SqZX2sFjE"));
 const defaultTemplates = {
   [exports.TemplateType.VERTICAL_LAYOUT]: {
     defaultVertical: DefaultVertical
   },
   [exports.TemplateType.HORIZONTAL_LAYOUT]: {
     defaultHorizontal: DefaultHorizontal
+  },
+  [exports.TemplateType.ARRAY]: {
+    defaultArray: DefaultArray
   },
   [exports.TemplateType.CONTROL]: {
     defaultControl: DefaultControl
@@ -355,6 +387,8 @@ function getTemplate(type, templates, template) {
     template = "defaultVertical";
   else if (!template && type === exports.TemplateType.HORIZONTAL_LAYOUT)
     template = "defaultHorizontal";
+  else if (!template && type === exports.TemplateType.ARRAY)
+    template = "defaultArray";
   else if (!template && type === exports.TemplateType.CONTROL)
     template = "defaultControl";
   if (templates[type]) {
@@ -531,12 +565,16 @@ function Field({ children, name, type, ...props }) {
   }, 0, name);
 }
 const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
-  const subSchema = resolveSchema(props.formData.schema, props.layout.scope, props.formData.schema);
-  const dataPath = toDataPathSegments(props.layout.scope);
+  let layoutScope = props.layout.scope;
+  let newOverrideScope = props.overrideScope;
+  if (props.itemScope) {
+    layoutScope = layoutScope.replace(/\{scope\}/g, props.itemScope);
+    if (newOverrideScope && props.layout.scope.includes("{scope}"))
+      newOverrideScope = props.layout.scope.replace(/\{scope\}\/?/g, newOverrideScope);
+  }
+  const subSchema = resolveSchema(props.formData.schema, layoutScope, props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope, props.formData.schema) : {});
+  const dataPath = toDataPathSegments(layoutScope);
   const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
-  const handleChange = /* @__PURE__ */ qwik.inlinedQrl(async (value) => {
-    console.log(value);
-  }, "ControlTemplateMaker_component_handleChange_8TRUIg3Zn6I");
   const widget = (value, props1) => {
     const FormWidget = getWidget({
       type: props.layout.type,
@@ -549,21 +587,22 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
       },
       additionalProps: props1,
       initialData: value,
-      onChange$: /* @__PURE__ */ qwik.inlinedQrl((value2) => {
-        const [handleChange2] = qwik.useLexicalScope();
-        return handleChange2(value2);
-      }, "ControlTemplateMaker_component_widget_FormWidget_onChange_DqpfFtpNBTE", [
-        handleChange
-      ]),
       subSchema,
       [qwik._IMMUTABLE]: {
         layout: qwik._fnSignal((p0) => p0.layout, [
           props
-        ], "p0.layout"),
-        onChange$: qwik._IMMUTABLE
+        ], "p0.layout")
       }
     }, 3, "2l_0");
   };
+  qwik.useTaskQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+    const [dataPath2, props2] = qwik.useLexicalScope();
+    if (!props2.formData.internal.fields[dataPath2.join(".")])
+      props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."));
+  }, "ControlTemplateMaker_component_useTask_kTWfUL1dnQM", [
+    dataPath,
+    props
+  ]));
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxC(Field, {
       name: dataPath.join("."),
@@ -591,7 +630,110 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
     }, 3, "2l_2")
   }, 1, "2l_3");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
-const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n  padding: 6px;\n  background: rgba(0, 255, 0, 0.5);\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n  padding: 6px;\n  background: rgba(0, 0, 255, 0.5);\n}\n\n.form-control-default {\n  padding: 6px;\n  background: rgba(255, 0, 0, 0.5);\n}\n";
+const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  padding: 4px;\n}\n";
+function inferUiSchemaSingle(schema, scope) {
+  if (typeof schema === "boolean" || Array.isArray(schema) || !schema)
+    return {
+      type: exports.TemplateType.CONTROL,
+      scope
+    };
+  switch (schema.type) {
+    case "array":
+      return {
+        type: exports.TemplateType.ARRAY,
+        scope
+      };
+    case "null":
+    case "string":
+    case "integer":
+    case "boolean":
+    case "number":
+    default:
+      return {
+        type: exports.TemplateType.CONTROL,
+        scope
+      };
+  }
+}
+const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  let layoutScope = props.layout.scope;
+  let newOverrideScope = props.overrideScope;
+  if (props.itemScope) {
+    layoutScope = layoutScope.replace(/\{scope\}/g, props.itemScope);
+    if (newOverrideScope)
+      newOverrideScope = props.layout.scope.replace(/\{scope\}\/?/g, newOverrideScope);
+  }
+  const subSchema = resolveSchema(props.formData.schema, newOverrideScope || layoutScope, props.formData.schema);
+  const dataPath = toDataPathSegments(layoutScope);
+  const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
+  const addItem = /* @__PURE__ */ qwik.inlinedQrl(() => {
+    const [dataPath2, props2] = qwik.useLexicalScope();
+    const newItemPath = dataPath2.join(".");
+    if (!props2.formData.internal.fields[newItemPath])
+      props2.formData.internal.fields[newItemPath] = getInitialFieldStore(dataPath2.join("."));
+    if (!props2.formData.internal.fields[newItemPath].value)
+      props2.formData.internal.fields[newItemPath].value = [];
+    props2.formData.internal.fields[newItemPath].value.push(void 0);
+  }, "ArrayTemplateMaker_component_addItem_Foc1VYIcn6Q", [
+    dataPath,
+    props
+  ]);
+  qwik.useTaskQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+    const [dataPath2, props2] = qwik.useLexicalScope();
+    if (!props2.formData.internal.fields[dataPath2.join(".")])
+      props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."));
+  }, "ArrayTemplateMaker_component_useTask_Csvxd5Rb3s8", [
+    dataPath,
+    props
+  ]));
+  return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+    children: /* @__PURE__ */ qwik._jsxC(FormTemplate, {
+      get layout() {
+        return props.layout;
+      },
+      children: [
+        (props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+          children: /* @__PURE__ */ qwik._jsxC(SchemaParser, {
+            itemScope: layoutScope + `/items/${i}`,
+            layout: {
+              ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
+            },
+            overrideScope: (newOverrideScope || layoutScope) + `/items/`,
+            get templates() {
+              return props.formData.uiSchema.templates;
+            },
+            get formData() {
+              return props.formData;
+            },
+            [qwik._IMMUTABLE]: {
+              formData: qwik._fnSignal((p0) => p0.formData, [
+                props
+              ], "p0.formData"),
+              templates: qwik._fnSignal((p0) => p0.formData.uiSchema.templates, [
+                props
+              ], "p0.formData.uiSchema.templates")
+            }
+          }, 3, dataPath.join(".") + "-" + i)
+        }, 1, "92_0")),
+        /* @__PURE__ */ qwik._jsxQ("div", null, null, /* @__PURE__ */ qwik._jsxQ("button", null, {
+          onClick$: /* @__PURE__ */ qwik.inlinedQrl(() => {
+            const [addItem2] = qwik.useLexicalScope();
+            return addItem2();
+          }, "ArrayTemplateMaker_component__Fragment_FormTemplate_div_button_onClick_A6WpaY4Zk6A", [
+            addItem
+          ]),
+          type: "button"
+        }, "Add", 3, null), 3, null)
+      ],
+      subSchema,
+      [qwik._IMMUTABLE]: {
+        layout: qwik._fnSignal((p0) => p0.layout, [
+          props
+        ], "p0.layout")
+      }
+    }, 1, "92_1")
+  }, 1, "92_2");
+}, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   qwik._jsxBranch();
   qwik.useStylesQrl(/* @__PURE__ */ qwik.inlinedQrl(defaultClasses, "SchemaParser_component_useStyles_1bfC7AAj0Qw"));
@@ -606,10 +748,22 @@ const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
         get formData() {
           return props.formData;
         },
+        get overrideScope() {
+          return props.overrideScope;
+        },
+        get itemScope() {
+          return props.itemScope;
+        },
         [qwik._IMMUTABLE]: {
           formData: qwik._fnSignal((p0) => p0.formData, [
             props
           ], "p0.formData"),
+          itemScope: qwik._fnSignal((p0) => p0.itemScope, [
+            props
+          ], "p0.itemScope"),
+          overrideScope: qwik._fnSignal((p0) => p0.overrideScope, [
+            props
+          ], "p0.overrideScope"),
           templates: qwik._fnSignal((p0) => p0.templates, [
             props
           ], "p0.templates")
@@ -643,10 +797,22 @@ const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
         get formData() {
           return props.formData;
         },
+        get overrideScope() {
+          return props.overrideScope;
+        },
+        get itemScope() {
+          return props.itemScope;
+        },
         [qwik._IMMUTABLE]: {
           formData: qwik._fnSignal((p0) => p0.formData, [
             props
           ], "p0.formData"),
+          itemScope: qwik._fnSignal((p0) => p0.itemScope, [
+            props
+          ], "p0.itemScope"),
+          overrideScope: qwik._fnSignal((p0) => p0.overrideScope, [
+            props
+          ], "p0.overrideScope"),
           templates: qwik._fnSignal((p0) => p0.templates, [
             props
           ], "p0.templates")
@@ -667,23 +833,66 @@ const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
       }
     }, 1, "PK_1");
   }
-  if (props.layout.type === exports.TemplateType.CONTROL)
-    return /* @__PURE__ */ qwik._jsxC(ControlTemplateMaker, {
+  if (props.layout.type === exports.TemplateType.ARRAY)
+    return /* @__PURE__ */ qwik._jsxC(ArrayTemplateMaker, {
       get layout() {
         return props.layout;
       },
       get formData() {
         return props.formData;
       },
+      get overrideScope() {
+        return props.overrideScope;
+      },
+      get itemScope() {
+        return props.itemScope;
+      },
       [qwik._IMMUTABLE]: {
         formData: qwik._fnSignal((p0) => p0.formData, [
           props
         ], "p0.formData"),
+        itemScope: qwik._fnSignal((p0) => p0.itemScope, [
+          props
+        ], "p0.itemScope"),
         layout: qwik._fnSignal((p0) => p0.layout, [
           props
-        ], "p0.layout")
+        ], "p0.layout"),
+        overrideScope: qwik._fnSignal((p0) => p0.overrideScope, [
+          props
+        ], "p0.overrideScope")
       }
     }, 3, "PK_2");
+  if (props.layout.type === exports.TemplateType.CONTROL)
+    return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+      children: /* @__PURE__ */ qwik._jsxC(ControlTemplateMaker, {
+        get layout() {
+          return props.layout;
+        },
+        get formData() {
+          return props.formData;
+        },
+        get overrideScope() {
+          return props.overrideScope;
+        },
+        get itemScope() {
+          return props.itemScope;
+        },
+        [qwik._IMMUTABLE]: {
+          formData: qwik._fnSignal((p0) => p0.formData, [
+            props
+          ], "p0.formData"),
+          itemScope: qwik._fnSignal((p0) => p0.itemScope, [
+            props
+          ], "p0.itemScope"),
+          layout: qwik._fnSignal((p0) => p0.layout, [
+            props
+          ], "p0.layout"),
+          overrideScope: qwik._fnSignal((p0) => p0.overrideScope, [
+            props
+          ], "p0.overrideScope")
+        }
+      }, 3, "PK_3")
+    }, 1, "PK_4");
   throw new Error(`SchemaParser: Layout Type is invalid at: ${JSON.stringify(props.layout, null, 4)}`);
 }, "SchemaParser_component_FDQ3hr5ltMg"));
 function QJSONForm({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, reloadDocument, ...formProps }) {
@@ -698,19 +907,24 @@ function QJSONForm({ of: form, action, onSubmit$, responseDuration: duration, ke
   return /* @__PURE__ */ qwik._jsxS("form", {
     ...formProps,
     action: action?.actionPath,
-    children: /* @__PURE__ */ qwik._jsxC(SchemaParser, {
-      get layout() {
-        return form.uiSchema.layout;
-      },
-      get templates() {
-        return form.uiSchema.templates;
-      },
-      formData: form,
-      [qwik._IMMUTABLE]: {
-        layout: qwik._wrapProp(form.uiSchema, "layout"),
-        templates: qwik._wrapProp(form.uiSchema, "templates")
-      }
-    }, 3, "SK_0"),
+    children: [
+      /* @__PURE__ */ qwik._jsxC(SchemaParser, {
+        get layout() {
+          return form.uiSchema.layout;
+        },
+        get templates() {
+          return form.uiSchema.templates;
+        },
+        formData: form,
+        [qwik._IMMUTABLE]: {
+          layout: qwik._wrapProp(form.uiSchema, "layout"),
+          templates: qwik._wrapProp(form.uiSchema, "templates")
+        }
+      }, 3, "SK_0"),
+      /* @__PURE__ */ qwik._jsxQ("button", null, {
+        type: "submit"
+      }, "Test", 3, null)
+    ],
     onSubmit$: /* @__PURE__ */ qwik.inlinedQrl(async (event, element) => {
       const [action2, encType2, form2, keepResponse2, onSubmit$2, options2, reloadDocument2] = qwik.useLexicalScope();
       if (!keepResponse2)

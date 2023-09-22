@@ -1,6 +1,8 @@
 import {
+  ArrayTemplates,
   ControlTemplates,
   ControlWidgets,
+  DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
   DefaultHorizontalTemplates,
@@ -19,6 +21,9 @@ export function createUiSchema<
   H extends HorizontalTemplates | DefaultHorizontalTemplates =
     | HorizontalTemplates
     | DefaultHorizontalTemplates,
+  A extends ArrayTemplates | DefaultArrayTemplates =
+    | ArrayTemplates
+    | DefaultArrayTemplates,
   C extends ControlTemplates | DefaultControlTemplates =
     | ControlTemplates
     | DefaultControlTemplates,
@@ -30,13 +35,13 @@ export function createUiSchema<
   widgets,
   layout,
 }: {
-  templates: Templates<V, H, C>;
+  templates: Templates<V, H, A, C>;
   widgets: Widgets<W>;
-  layout: Layout<V, H, C, W>;
+  layout: Layout<V, H, A, C, W>;
 }): {
-  layout: Layout<V, H, C, W>;
+  layout: Layout<V, H, A, C, W>;
   widgets: Widgets<W>;
-  templates: Templates<V, H, C>;
+  templates: Templates<V, H, A, C>;
 } {
   return {
     layout,

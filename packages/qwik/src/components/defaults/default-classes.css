@@ -1,18 +1,17 @@
 .form-vertical-default {
   display: flex;
   flex-direction: column;
-  padding: 6px;
-  background: rgba(0, 255, 0, 0.5);
 }
 
 .form-horizontal-default {
   display: flex;
   flex-direction: row;
-  padding: 6px;
-  background: rgba(0, 0, 255, 0.5);
 }
 
 .form-control-default {
   padding: 6px;
-  background: rgba(255, 0, 0, 0.5);
+}
+
+.form-control-widget-default {
+  padding: 4px;
 }

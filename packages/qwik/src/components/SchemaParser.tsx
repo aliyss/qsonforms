@@ -1,7 +1,9 @@
 import { Component, component$, useStyles$ } from "@builder.io/qwik";
 import {
+  ArrayTemplates,
   ControlTemplates,
   ControlWidgets,
+  DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
   DefaultHorizontalTemplates,
@@ -19,6 +21,7 @@ import {
 import { getTemplate } from "../models/uiSchema/utils";
 import { ControlTemplateMaker } from "./ControlTemplateMaker";
 import defaultClasses from "./defaults/default-classes.css?inline";
+import { ArrayTemplateMaker } from "./ArrayTemplateMaker";
 
 export interface JSONFormParserProps<
   V extends VerticalTemplates | DefaultVerticalTemplates =
@@ -27,6 +30,9 @@ export interface JSONFormParserProps<
   H extends HorizontalTemplates | DefaultHorizontalTemplates =
     | HorizontalTemplates
     | DefaultHorizontalTemplates,
+  A extends ArrayTemplates | DefaultArrayTemplates =
+    | ArrayTemplates
+    | DefaultArrayTemplates,
   C extends ControlTemplates | DefaultControlTemplates =
     | ControlTemplates
     | DefaultControlTemplates,
@@ -34,13 +40,15 @@ export interface JSONFormParserProps<
     | ControlWidgets
     | DefaultControlWidgets,
 > {
-  templates: Templates<V, H, C>;
-  layout: Layout<V, H, C, W>;
+  templates: Templates<V, H, A, C>;
+  layout: Layout<V, H, A, C, W>;
   formData: FormStore<FromData<any>, any>;
+  overrideScope?: string;
+  itemScope?: string;
 }
 
 export const SchemaParser = component$<JSONFormParserProps>(
-  ({ layout, templates, formData }) => {
+  ({ layout, templates, formData, overrideScope, itemScope }) => {
     useStyles$(defaultClasses);
     if (layout.type === TemplateType.HORIZONTAL_LAYOUT) {
       const Template = getTemplate(
@@ -55,6 +63,8 @@ export const SchemaParser = component$<JSONFormParserProps>(
             layout={x}
             templates={templates}
             formData={formData}
+            overrideScope={overrideScope}
+            itemScope={itemScope}
           />
         );
       });
@@ -77,6 +87,8 @@ export const SchemaParser = component$<JSONFormParserProps>(
             layout={x}
             templates={templates}
             formData={formData}
+            overrideScope={overrideScope}
+            itemScope={itemScope}
           />
         );
       });
@@ -86,12 +98,26 @@ export const SchemaParser = component$<JSONFormParserProps>(
         </Template>
       );
     }
-    if (layout.type === TemplateType.CONTROL) {
+    if (layout.type === TemplateType.ARRAY) {
       return (
-        <ControlTemplateMaker
+        <ArrayTemplateMaker
           layout={layout}
           formData={formData}
-        ></ControlTemplateMaker>
+          overrideScope={overrideScope}
+          itemScope={itemScope}
+        ></ArrayTemplateMaker>
+      );
+    }
+    if (layout.type === TemplateType.CONTROL) {
+      return (
+        <>
+          <ControlTemplateMaker
+            layout={layout}
+            formData={formData}
+            overrideScope={overrideScope}
+            itemScope={itemScope}
+          ></ControlTemplateMaker>
+        </>
       );
     }
     throw new Error(

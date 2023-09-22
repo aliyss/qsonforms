@@ -1,6 +1,8 @@
 import {
+  ArrayTemplates,
   ControlTemplates,
   ControlWidgets,
+  DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
   DefaultHorizontalTemplates,
@@ -25,18 +27,23 @@ export function getTemplate<
   H extends HorizontalTemplates | DefaultHorizontalTemplates =
     | HorizontalTemplates
     | DefaultHorizontalTemplates,
+  A extends ArrayTemplates | DefaultArrayTemplates =
+    | ArrayTemplates
+    | DefaultArrayTemplates,
   C extends ControlTemplates | DefaultControlTemplates =
     | ControlTemplates
     | DefaultControlTemplates,
 >(
   type: TemplateType,
-  templates: Templates<V, H, C>,
+  templates: Templates<V, H, A, C>,
   template: string | number | undefined,
 ) {
   if (!template && type === TemplateType.VERTICAL_LAYOUT) {
     template = "defaultVertical";
   } else if (!template && type === TemplateType.HORIZONTAL_LAYOUT) {
     template = "defaultHorizontal";
+  } else if (!template && type === TemplateType.ARRAY) {
+    template = "defaultArray";
   } else if (!template && type === TemplateType.CONTROL) {
     template = "defaultControl";
   }

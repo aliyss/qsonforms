@@ -172,6 +172,7 @@ export function QJSONForm<
         templates={form.uiSchema.templates}
         formData={form}
       />
+      <button type="submit">Test</button>
     </form>
   );
 }
