@@ -2,6 +2,7 @@ import {
   ArrayTemplates,
   ControlTemplates,
   ControlWidgets,
+  DefaultAdditionals,
   DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
@@ -35,13 +36,13 @@ export function createUiSchema<
   widgets,
   layout,
 }: {
-  templates: Templates<V, H, A, C>;
+  templates: Templates<V, H, A, C> & DefaultAdditionals;
   widgets: Widgets<W>;
   layout: Layout<V, H, A, C, W>;
 }): {
   layout: Layout<V, H, A, C, W>;
   widgets: Widgets<W>;
-  templates: Templates<V, H, A, C>;
+  templates: Templates<V, H, A, C> & DefaultAdditionals;
 } {
   return {
     layout,

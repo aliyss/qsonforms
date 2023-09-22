@@ -18,11 +18,11 @@ export const DefaultControlWidget = component$<ControlWidgetProps>(
 );
 
 export const DefaultStringWidget = component$<ControlWidgetProps>(
-  ({ initialData, layout, additionalProps }) => {
+  ({ field, layout, additionalProps }) => {
     return (
       <>
         <input
-          value={initialData}
+          value={field.value}
           {...additionalProps}
           class={`form-control-widget ${
             layout["ui:widget:class"] || "form-control-widget-default"
@@ -34,13 +34,13 @@ export const DefaultStringWidget = component$<ControlWidgetProps>(
 );
 
 export const DefaultBooleanWidget = component$<ControlWidgetProps>(
-  ({ initialData, layout, additionalProps }) => {
+  ({ field, layout, additionalProps }) => {
     return (
       <>
         <input
           type="checkbox"
-          checked={initialData}
-          value={initialData}
+          checked={field.value}
+          value={field.value}
           {...additionalProps}
           class={`form-control-widget ${
             layout["ui:widget:class"] || "form-control-widget-default"
@@ -52,12 +52,12 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
 );
 
 export const DefaultNumberWidget = component$<ControlWidgetProps>(
-  ({ initialData, layout, additionalProps }) => {
+  ({ field, layout, additionalProps }) => {
     return (
       <>
         <input
           type="number"
-          value={initialData}
+          value={field.value}
           {...additionalProps}
           class={`form-control-widget ${
             layout["ui:widget:class"] || "form-control-widget-default"

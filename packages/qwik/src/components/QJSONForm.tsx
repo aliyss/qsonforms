@@ -23,6 +23,7 @@ import type {
 } from "../types";
 import { JSONSchema7 } from "json-schema";
 import { SchemaParser } from "./SchemaParser";
+import { setErrorResponse } from "../utils";
 
 /**
  * Function type to handle the submission of the form.
@@ -131,12 +132,12 @@ export function QJSONForm<
 
             // Set form action result if necessary
             if (actionResult?.value) {
-              const { response } = actionResult.value;
+              const { errors, response } = actionResult.value;
               // setFieldErrors(form, errors, { ...options, shouldFocus: false });
               if (Object.keys(response).length) {
                 setResponse(form, response, options);
               } else {
-                // setErrorResponse(form, errors, options);
+                setErrorResponse(form, errors, options);
               }
             }
           }

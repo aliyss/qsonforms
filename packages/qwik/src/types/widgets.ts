@@ -3,6 +3,7 @@ import { ElementLayout } from "./layout";
 import { JSONSchema7Type } from "json-schema";
 import { TemplateType } from "./tempates";
 import { FieldElementProps } from "../components/Field";
+import { FieldStore } from "./field";
 
 export enum WidgetType {
   CONTROL = "Control",
@@ -14,9 +15,10 @@ export interface WidgetProps {
   };
 }
 
-export interface ControlWidgetProps<I = any> extends WidgetProps {
+export interface ControlWidgetProps<I = FieldStore<any, any>>
+  extends WidgetProps {
   subSchema: JSONSchema7Type;
-  initialData: I;
+  field: I;
   additionalProps: FieldElementProps<any, any>;
 }
 

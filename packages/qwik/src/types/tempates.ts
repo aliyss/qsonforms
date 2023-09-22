@@ -1,7 +1,7 @@
 import { Component } from "@builder.io/qwik";
 import { ElementLayout } from "./layout";
 import { JSONSchema7Type } from "json-schema";
-import { FormStore } from "./form";
+import { FieldStore } from "./field";
 
 export enum TemplateType {
   VERTICAL_LAYOUT = "VerticalLayout",
@@ -36,7 +36,7 @@ export interface HorizontalTemplates<
 }
 
 export interface ArrayTemplateProps extends TemplateProps {
-  formData: FormStore<any, undefined>;
+  subSchema: JSONSchema7Type;
 }
 
 export interface ArrayTemplates<
@@ -46,6 +46,7 @@ export interface ArrayTemplates<
 }
 
 export interface ControlTemplateProps extends TemplateProps {
+  field: FieldStore<any, any>;
   subSchema: JSONSchema7Type;
 }
 

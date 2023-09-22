@@ -1,7 +1,9 @@
 import {
+  AdditionalTemplateType,
   ArrayTemplates,
   ControlTemplates,
   ControlWidgets,
+  DefaultAdditionals,
   DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
@@ -13,7 +15,11 @@ import {
   VerticalTemplates,
   Widgets,
 } from "../../types";
-import { defaultTemplates, defaultWidgets } from "./defaults";
+import {
+  defaultAdditionals,
+  defaultTemplates,
+  defaultWidgets,
+} from "./defaults";
 
 const getKeyValue =
   <U extends keyof T, T extends object>(key: U) =>
@@ -119,4 +125,36 @@ export function getWidget<
     }
   }
   throw new Error(`GetWidget: Widget ${widget} is invalid.`);
+}
+
+export function getAdditionalTemplate(
+  type: AdditionalTemplateType,
+  additionals: DefaultAdditionals,
+  template: string,
+) {
+  if (additionals[type]) {
+    const defaultAdditional = additionals[type];
+    const templateData = getKeyValue<
+      keyof typeof defaultAdditional,
+      // @ts-ignore
+      typeof defaultAdditional
+    >(template as never)(defaultAdditional);
+    if (templateData) {
+      return templateData;
+    }
+  }
+  if (defaultAdditionals[type]) {
+    const defaultAdditional = defaultAdditionals[type];
+    const templateData = getKeyValue<
+      keyof typeof defaultAdditional,
+      // @ts-ignore
+      typeof defaultAdditional
+    >(template as never)(defaultAdditional);
+    if (templateData) {
+      return templateData;
+    }
+  }
+  throw new Error(
+    `GetAdditionalTemplate: AdditionalTemplate ${template.toString()} is invalid.`,
+  );
 }

@@ -1,5 +1,6 @@
 import { Component, component$, useTask$ } from "@builder.io/qwik";
 import {
+  AdditionalTemplateType,
   ControlElement,
   ControlTemplateProps,
   ControlTemplates,
@@ -7,13 +8,19 @@ import {
   ControlWidgets,
   DefaultControlTemplates,
   DefaultControlWidgets,
+  ErrorTemplateProps,
+  FieldStore,
   FormStore,
 } from "../types";
 import { resolveSchema } from "../models/schema/utils/resolvers";
 import { toDataPathSegments } from "../models/schema/utils/path";
-import { getTemplate, getWidget } from "../models/uiSchema/utils";
+import {
+  getAdditionalTemplate,
+  getTemplate,
+  getWidget,
+} from "../models/uiSchema/utils";
 import { Field, FieldElementProps } from "./Field";
-import { JSONSchema7Object } from "json-schema";
+import { JSONSchema7, JSONSchema7Object } from "json-schema";
 import { getInitialFieldStore } from "../utils/getInitialFieldStore";
 
 interface ControlTemplateMakerProps<
@@ -45,9 +52,17 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
     }
 
     const subSchema =
-      resolveSchema(formData.schema, layoutScope, formData.schema) ||
+      resolveSchema(
+        formData.schema as JSONSchema7,
+        layoutScope,
+        formData.schema as JSONSchema7,
+      ) ||
       (newOverrideScope
-        ? resolveSchema(formData.schema, newOverrideScope, formData.schema)
+        ? resolveSchema(
+            formData.schema as JSONSchema7,
+            newOverrideScope,
+            formData.schema as JSONSchema7,
+          )
         : {});
 
     const dataPath = toDataPathSegments(layoutScope);
@@ -58,7 +73,16 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
       layout["ui:template"],
     ) as Component<ControlTemplateProps>;
 
-    const widget = (value: any, props: FieldElementProps<any, any>) => {
+    const ErrorTemplate = getAdditionalTemplate(
+      AdditionalTemplateType.ERROR,
+      formData.uiSchema.templates,
+      "defaultError",
+    ) as Component<ErrorTemplateProps>;
+
+    const widget = (
+      field: FieldStore<any, any>,
+      props: FieldElementProps<any, any>,
+    ) => {
       const FormWidget = getWidget({
         type: layout.type,
         widgets: formData.uiSchema.widgets,
@@ -70,7 +94,7 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
         <FormWidget
           layout={layout}
           subSchema={subSchema as JSONSchema7Object}
-          initialData={value}
+          field={field}
           additionalProps={props}
         />
       );
@@ -93,10 +117,12 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
         >
           {(field, props) => (
             <FormTemplate
+              field={field}
               layout={layout}
               subSchema={subSchema as JSONSchema7Object}
             >
-              {widget(field.value, props)}
+              {widget(field, props)}
+              <ErrorTemplate q:slot="errors" errors={field.error} />
             </FormTemplate>
           )}
         </Field>

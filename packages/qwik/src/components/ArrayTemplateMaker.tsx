@@ -1,8 +1,16 @@
-import { $, Component, component$, useTask$ } from "@builder.io/qwik";
 import {
+  $,
+  Component,
+  QwikIntrinsicElements,
+  component$,
+  useTask$,
+} from "@builder.io/qwik";
+import {
+  AdditionalTemplateType,
   ArrayLayout,
+  ArrayTemplateProps,
   ArrayTemplates,
-  ControlTemplateProps,
+  ButtonTemplateProps,
   ControlTemplates,
   ControlWidgets,
   DefaultArrayTemplates,
@@ -16,8 +24,8 @@ import {
 } from "../types";
 import { resolveSchema } from "../models/schema/utils/resolvers";
 import { toDataPathSegments } from "../models/schema/utils/path";
-import { getTemplate } from "../models/uiSchema/utils";
-import { JSONSchema7Object } from "json-schema";
+import { getAdditionalTemplate, getTemplate } from "../models/uiSchema/utils";
+import { JSONSchema7, JSONSchema7Object } from "json-schema";
 import { getInitialFieldStore } from "../utils/getInitialFieldStore";
 import { SchemaParser } from "./SchemaParser";
 import { inferUiSchemaSingle } from "../models/uiSchema";
@@ -60,9 +68,9 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps>(
     }
 
     const subSchema = resolveSchema(
-      formData.schema,
+      formData.schema as JSONSchema7,
       newOverrideScope || layoutScope,
-      formData.schema,
+      formData.schema as JSONSchema7,
     );
     const dataPath = toDataPathSegments(layoutScope);
 
@@ -70,7 +78,7 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps>(
       layout.type,
       formData.uiSchema.templates,
       layout["ui:template"],
-    ) as Component<ControlTemplateProps>;
+    ) as Component<ArrayTemplateProps>;
 
     const addItem = $(() => {
       const newItemPath = dataPath.join(".");
@@ -93,6 +101,12 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps>(
       }
     });
 
+    const ButtonTemplate = getAdditionalTemplate(
+      AdditionalTemplateType.BUTTON,
+      formData.uiSchema.templates,
+      "addButton",
+    ) as Component<ButtonTemplateProps & QwikIntrinsicElements["button"]>;
+
     return (
       <>
         <FormTemplate
@@ -101,29 +115,25 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps>(
         >
           {(formData.internal.fields[dataPath.join(".")]?.value || []).map(
             (_item: any, i: number) => (
-              <>
-                <SchemaParser
-                  key={dataPath.join(".") + "-" + i}
-                  layout={{
-                    ...(layout["ui:items"] ||
-                      inferUiSchemaSingle(
-                        subSchema?.items,
-                        layoutScope + `/items/${i}`,
-                      )),
-                  }}
-                  itemScope={layoutScope + `/items/${i}`}
-                  overrideScope={(newOverrideScope || layoutScope) + `/items/`}
-                  templates={formData.uiSchema.templates}
-                  formData={formData}
-                />
-              </>
+              <SchemaParser
+                key={dataPath.join(".") + "-" + i}
+                layout={{
+                  ...(layout["ui:items"] ||
+                    inferUiSchemaSingle(
+                      subSchema?.items,
+                      layoutScope + `/items/${i}`,
+                    )),
+                }}
+                itemScope={layoutScope + `/items/${i}`}
+                overrideScope={(newOverrideScope || layoutScope) + `/items/`}
+                templates={formData.uiSchema.templates}
+                formData={formData}
+              />
             ),
           )}
-          <div>
-            <button type="button" onClick$={() => addItem()}>
-              Add
-            </button>
-          </div>
+          <ButtonTemplate props={{ type: "button", onClick$: addItem }}>
+            Add
+          </ButtonTemplate>
         </FormTemplate>
       </>
     );

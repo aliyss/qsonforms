@@ -1,4 +1,4 @@
-import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _jsxS, useVisibleTaskQrl, useLexicalScope, useTaskQrl, _IMMUTABLE, _jsxBranch, useStylesQrl, _wrapProp, useStore } from "@builder.io/qwik";
+import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, useVisibleTaskQrl, useLexicalScope, useTaskQrl, _wrapProp, _jsxBranch, useStylesQrl, useStore } from "@builder.io/qwik";
 import { Fragment } from "@builder.io/qwik/jsx-runtime";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
@@ -46,7 +46,7 @@ function isFieldDirty(startValue, currentValue) {
 function getInitialFieldStore(name, { value, initialValue, error } = {
   value: void 0,
   initialValue: void 0,
-  error: ""
+  error: []
 }) {
   const dirty = isFieldDirty(initialValue, value);
   return {
@@ -88,6 +88,14 @@ function getInitialStores({ loader, action }) {
   return createInitialStores([
     {}
   ], loader.value);
+}
+function setErrorResponse(form, formErrors, { duration }) {
+  setResponse(form, {
+    status: "error",
+    message: formErrors
+  }, {
+    duration
+  });
 }
 function getFieldAndArrayStores(form) {
   return [
@@ -188,25 +196,38 @@ async function validate(form, arg2, arg3) {
     shouldActive
   })) : [];
   let valid = typeof arg2 !== "string" && !Array.isArray(arg2) ? !formErrors?.length : true;
+  if (!formErrors)
+    return true;
+  const fieldPaths = formErrors.reduce((result, item) => {
+    let fieldSchemaPath = item.instancePath;
+    if (item.keyword === "required")
+      fieldSchemaPath = `${item.instancePath}/${item.params.missingProperty}`;
+    const fieldPath = fieldSchemaPath.replace(/\//g, ".").slice(1);
+    if (!result[fieldPath])
+      result[fieldPath] = [];
+    result[fieldPath].push(item);
+    return result;
+  }, {});
   const [errorFields] = await Promise.all([
     // Validate each field in list
     Promise.all(fieldNames.map(async (name) => {
       const field = getFieldStore(form, name);
       if (!shouldActive || field.active) {
-        let localError;
-        for (const validation of field.internal.validate) {
-          localError = await validation(field.value);
-          if (localError)
-            break;
-        }
-        const fieldError = localError || formErrors?.toString() || "";
+        let fieldError = false;
+        if (fieldPaths[name]) {
+          field.error = fieldPaths[name];
+          fieldError = true;
+        } else
+          field.error = [];
         if (fieldError)
           valid = false;
-        field.error = fieldError;
         return fieldError ? name : null;
       }
     }))
   ]);
+  setErrorResponse(form, formErrors, {
+    shouldActive
+  });
   if (shouldFocus) {
     const name = errorFields.find((name2) => name2);
     if (name)
@@ -242,7 +263,7 @@ function reset(form, arg2, arg3) {
     if (!keepDirty && !keepValues && !keepDirtyValue)
       field.dirty = false;
     if (!keepErrors)
-      field.error = "";
+      field.error = [];
   });
   if (resetEntireForm) {
     if (!keepResponse)
@@ -261,6 +282,11 @@ let TemplateType;
   TemplateType2["ARRAY"] = "Array";
   TemplateType2["CONTROL"] = "Control";
 })(TemplateType || (TemplateType = {}));
+let AdditionalTemplateType;
+(function(AdditionalTemplateType2) {
+  AdditionalTemplateType2["BUTTON"] = "Button";
+  AdditionalTemplateType2["ERROR"] = "Error";
+})(AdditionalTemplateType || (AdditionalTemplateType = {}));
 let WidgetType;
 (function(WidgetType2) {
   WidgetType2["CONTROL"] = "Control";
@@ -289,8 +315,16 @@ const DefaultControl = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((
       class: _fnSignal((p0) => `form-control ${p0.layout["ui:class"] || "form-control-default"}`, [
         props
       ], '`form-control ${p0.layout["ui:class"]||"form-control-default"}`')
-    }, /* @__PURE__ */ _jsxC(Slot, null, 3, "Tj_0"), 1, null)
-  }, 1, "Tj_1");
+    }, [
+      /* @__PURE__ */ _jsxC(Slot, null, 3, "Tj_0"),
+      /* @__PURE__ */ _jsxC(Slot, {
+        name: "errors",
+        [_IMMUTABLE]: {
+          name: _IMMUTABLE
+        }
+      }, 3, "Tj_1")
+    ], 1, null)
+  }, 1, "Tj_2");
 }, "DefaultControl_component_6ykl2XdCces"));
 const DefaultControlWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -309,9 +343,9 @@ const DefaultStringWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
       class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
         props
       ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
-      value: _fnSignal((p0) => p0.initialData, [
+      value: _fnSignal((p0) => p0.field.value, [
         props
-      ], "p0.initialData")
+      ], "p0.field.value")
     }, 0, null)
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
@@ -320,16 +354,16 @@ const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
     children: /* @__PURE__ */ _jsxS("input", {
       ...props.additionalProps
     }, {
-      checked: _fnSignal((p0) => p0.initialData, [
+      checked: _fnSignal((p0) => p0.field.value, [
         props
-      ], "p0.initialData"),
+      ], "p0.field.value"),
       class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
         props
       ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
       type: "checkbox",
-      value: _fnSignal((p0) => p0.initialData, [
+      value: _fnSignal((p0) => p0.field.value, [
         props
-      ], "p0.initialData")
+      ], "p0.field.value")
     }, 0, null)
   }, 1, "O9_2");
 }, "DefaultBooleanWidget_component_gxYt1twyeJo"));
@@ -342,9 +376,9 @@ const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
         props
       ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
       type: "number",
-      value: _fnSignal((p0) => p0.initialData, [
+      value: _fnSignal((p0) => p0.field.value, [
         props
-      ], "p0.initialData")
+      ], "p0.field.value")
     }, 0, null)
   }, 1, "O9_3");
 }, "DefaultNumberWidget_component_iwjisttKp2E"));
@@ -354,9 +388,32 @@ const DefaultArray = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((pr
       class: _fnSignal((p0) => `form-array ${p0.layout["ui:class"] || "form-array-default"}`, [
         props
       ], '`form-array ${p0.layout["ui:class"]||"form-array-default"}`')
-    }, /* @__PURE__ */ _jsxC(Slot, null, 3, "CN_0"), 1, null)
-  }, 1, "CN_1");
+    }, [
+      /* @__PURE__ */ _jsxC(Slot, null, 3, "CN_0"),
+      /* @__PURE__ */ _jsxC(Slot, {
+        name: "add-button",
+        [_IMMUTABLE]: {
+          name: _IMMUTABLE
+        }
+      }, 3, "CN_1")
+    ], 1, null)
+  }, 1, "CN_2");
 }, "DefaultArray_component_R4SqZX2sFjE"));
+const DefaultButton = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  return /* @__PURE__ */ _jsxC(Fragment, {
+    children: /* @__PURE__ */ _jsxS("button", {
+      ...props.props,
+      children: /* @__PURE__ */ _jsxC(Slot, null, 3, "g2_0")
+    }, null, 0, null)
+  }, 1, "g2_1");
+}, "DefaultButton_component_0Mp2z3Gj9kY"));
+const DefaultError = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  return /* @__PURE__ */ _jsxC(Fragment, {
+    children: /* @__PURE__ */ _jsxQ("div", null, {
+      style: "color: red;"
+    }, props.errors && props.errors.length > 0 ? props.errors[0].message : /* @__PURE__ */ _jsxC(Fragment, null, 3, "jB_0"), 1, null)
+  }, 1, "jB_1");
+}, "DefaultError_component_r0fcZemJgRY"));
 const defaultTemplates = {
   [TemplateType.VERTICAL_LAYOUT]: {
     defaultVertical: DefaultVertical
@@ -369,6 +426,17 @@ const defaultTemplates = {
   },
   [TemplateType.CONTROL]: {
     defaultControl: DefaultControl
+  }
+};
+const defaultAdditionals = {
+  [AdditionalTemplateType.BUTTON]: {
+    addButton: DefaultButton,
+    removeButton: DefaultButton,
+    moveUpButton: DefaultButton,
+    moveDownButton: DefaultButton
+  },
+  [AdditionalTemplateType.ERROR]: {
+    defaultError: DefaultError
   }
 };
 const defaultWidgets = {
@@ -428,6 +496,21 @@ function getWidget({ type, widgets, widget }) {
   }
   throw new Error(`GetWidget: Widget ${widget} is invalid.`);
 }
+function getAdditionalTemplate(type, additionals, template) {
+  if (additionals[type]) {
+    const defaultAdditional = additionals[type];
+    const templateData = getKeyValue(template)(defaultAdditional);
+    if (templateData)
+      return templateData;
+  }
+  if (defaultAdditionals[type]) {
+    const defaultAdditional = defaultAdditionals[type];
+    const templateData = getKeyValue(template)(defaultAdditional);
+    if (templateData)
+      return templateData;
+  }
+  throw new Error(`GetAdditionalTemplate: AdditionalTemplate ${template.toString()} is invalid.`);
+}
 const decode = (pointerSegment) => pointerSegment?.replace(/~1/g, "/").replace(/~0/, "~");
 const toDataPathSegments = (schemaPath) => {
   const s = schemaPath.replace(/(anyOf|allOf|oneOf)\/[\d]\//g, "").replace(/(then|else)\//g, "");
@@ -481,9 +564,6 @@ const resolveSchemaWithSegments = (schema, pathSegments, rootSchema) => {
 const Lifecycle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   useVisibleTaskQrl(/* @__PURE__ */ inlinedQrl(({ cleanup }) => {
     const [props2] = useLexicalScope();
-    props2.store.internal.validate = props2.validate ? Array.isArray(props2.validate) ? props2.validate : [
-      props2.validate
-    ] : [];
     if ("value" in props2.store)
       props2.store.internal.transform = props2.transform ? Array.isArray(props2.transform) ? props2.transform : [
         props2.transform
@@ -573,7 +653,8 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
   const subSchema = resolveSchema(props.formData.schema, layoutScope, props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope, props.formData.schema) : {});
   const dataPath = toDataPathSegments(layoutScope);
   const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
-  const widget = (value, props1) => {
+  const ErrorTemplate = getAdditionalTemplate(AdditionalTemplateType.ERROR, props.formData.uiSchema.templates, "defaultError");
+  const widget = (field, props1) => {
     const FormWidget = getWidget({
       type: props.layout.type,
       widgets: props.formData.uiSchema.widgets,
@@ -584,7 +665,7 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         return props.layout;
       },
       additionalProps: props1,
-      initialData: value,
+      field,
       subSchema,
       [_IMMUTABLE]: {
         layout: _fnSignal((p0) => p0.layout, [
@@ -608,25 +689,38 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         return props.formData;
       },
       children: (field, props1) => /* @__PURE__ */ _jsxC(FormTemplate, {
+        field,
         get layout() {
           return props.layout;
         },
-        children: widget(field.value, props1),
+        children: [
+          widget(field, props1),
+          /* @__PURE__ */ _jsxC(ErrorTemplate, {
+            "q:slot": "errors",
+            get errors() {
+              return field.error;
+            },
+            [_IMMUTABLE]: {
+              errors: _wrapProp(field, "error"),
+              "q:slot": _IMMUTABLE
+            }
+          }, 3, "2l_1")
+        ],
         subSchema,
         [_IMMUTABLE]: {
           layout: _fnSignal((p0) => p0.layout, [
             props
           ], "p0.layout")
         }
-      }, 1, "2l_1"),
+      }, 1, "2l_2"),
       type: subSchema?.type,
       [_IMMUTABLE]: {
         of: _fnSignal((p0) => p0.formData, [
           props
         ], "p0.formData")
       }
-    }, 3, "2l_2")
-  }, 1, "2l_3");
+    }, 3, "2l_3")
+  }, 1, "2l_4");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
 const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  padding: 4px;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
@@ -684,44 +778,51 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
     dataPath,
     props
   ]));
+  const ButtonTemplate = getAdditionalTemplate(AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
   return /* @__PURE__ */ _jsxC(Fragment, {
     children: /* @__PURE__ */ _jsxC(FormTemplate, {
       get layout() {
         return props.layout;
       },
       children: [
-        (props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxC(Fragment, {
-          children: /* @__PURE__ */ _jsxC(SchemaParser, {
-            itemScope: layoutScope + `/items/${i}`,
-            layout: {
-              ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
-            },
-            overrideScope: (newOverrideScope || layoutScope) + `/items/`,
-            get templates() {
-              return props.formData.uiSchema.templates;
-            },
-            get formData() {
-              return props.formData;
-            },
-            [_IMMUTABLE]: {
-              formData: _fnSignal((p0) => p0.formData, [
-                props
-              ], "p0.formData"),
-              templates: _fnSignal((p0) => p0.formData.uiSchema.templates, [
-                props
-              ], "p0.formData.uiSchema.templates")
-            }
-          }, 3, dataPath.join(".") + "-" + i)
-        }, 1, "92_0")),
-        /* @__PURE__ */ _jsxQ("div", null, null, /* @__PURE__ */ _jsxQ("button", null, {
-          onClick$: /* @__PURE__ */ inlinedQrl(() => {
-            const [addItem2] = useLexicalScope();
-            return addItem2();
-          }, "ArrayTemplateMaker_component__Fragment_FormTemplate_div_button_onClick_A6WpaY4Zk6A", [
-            addItem
-          ]),
-          type: "button"
-        }, "Add", 3, null), 3, null)
+        (props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxC(SchemaParser, {
+          itemScope: layoutScope + `/items/${i}`,
+          layout: {
+            ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
+          },
+          overrideScope: (newOverrideScope || layoutScope) + `/items/`,
+          get templates() {
+            return props.formData.uiSchema.templates;
+          },
+          get formData() {
+            return props.formData;
+          },
+          [_IMMUTABLE]: {
+            formData: _fnSignal((p0) => p0.formData, [
+              props
+            ], "p0.formData"),
+            templates: _fnSignal((p0) => p0.formData.uiSchema.templates, [
+              props
+            ], "p0.formData.uiSchema.templates")
+          }
+        }, 3, dataPath.join(".") + "-" + i)),
+        /* @__PURE__ */ _jsxC(ButtonTemplate, {
+          get props() {
+            return {
+              type: "button",
+              onClick$: addItem
+            };
+          },
+          children: "Add",
+          [_IMMUTABLE]: {
+            props: _fnSignal((p0) => ({
+              type: "button",
+              onClick$: p0
+            }), [
+              addItem
+            ], '{type:"button",onClick$:p0}')
+          }
+        }, 3, "92_0")
       ],
       subSchema,
       [_IMMUTABLE]: {
@@ -939,9 +1040,11 @@ function QJSONForm({ of: form, action, onSubmit$, responseDuration: duration, ke
             onSubmit$2?.(values, event)
           ]);
           if (actionResult?.value) {
-            const { response } = actionResult.value;
+            const { errors, response } = actionResult.value;
             if (Object.keys(response).length)
               setResponse(form2, response, options2);
+            else
+              setErrorResponse(form2, errors, options2);
           }
         }
       } catch (error) {
@@ -1018,6 +1121,7 @@ function createUiSchema({ templates, widgets, layout }) {
   };
 }
 export {
+  AdditionalTemplateType,
   QJSONForm,
   TemplateType,
   WidgetType,

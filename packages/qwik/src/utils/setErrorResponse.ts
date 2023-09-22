@@ -31,31 +31,8 @@ type ErrorResponseOptions = SetResponseOptions &
  */
 export function setErrorResponse<T, TResponseData extends ResponseData<T>>(
   form: FormStore<T, TResponseData>,
-  _formErrors: FormErrors,
+  formErrors: FormErrors,
   { duration }: ErrorResponseOptions,
 ): void {
-  // Combine errors that were not set for any field or field array into one
-  // general form error response message
-  // const message = formErrors
-  //   .reduce<string[]>((errors, [name, error]) => {
-  //     if (
-  //       [
-  //         getFieldStore(form, name as FieldPath<T>),
-  //         getFieldArrayStore(form, name as FieldArrayPath<T>),
-  //       ].every(
-  //         (fieldOrFieldArray) =>
-  //           !fieldOrFieldArray || (shouldActive && !fieldOrFieldArray.active),
-  //       )
-  //     ) {
-  //       errors.push(error!);
-  //     }
-  //     return errors;
-  //   }, [])
-  //   .join(" ");
-
-  // If there is a error message, set it as form response
-  const message = "";
-  if (message) {
-    setResponse(form, { status: "error", message }, { duration });
-  }
+  setResponse(form, { status: "error", message: formErrors }, { duration });
 }

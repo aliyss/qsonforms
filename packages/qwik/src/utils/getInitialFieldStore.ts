@@ -10,13 +10,14 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+import { ErrorObject } from "ajv";
 import type { FieldPath, FieldPathValue, FieldStore } from "../types";
 import { isFieldDirty } from "./isFieldDirty";
 
 type InitialFieldState<T, TFieldName extends FieldPath<T>> = {
   value: FieldPathValue<T, TFieldName> | undefined;
   initialValue: FieldPathValue<T, TFieldName> | undefined;
-  error: string;
+  error: ErrorObject[];
 };
 
 export function getInitialFieldStore<T, TFieldName extends FieldPath<T>>(
@@ -24,7 +25,7 @@ export function getInitialFieldStore<T, TFieldName extends FieldPath<T>>(
   { value, initialValue, error }: InitialFieldState<T, TFieldName> = {
     value: undefined,
     initialValue: undefined,
-    error: "",
+    error: [],
   },
 ): FieldStore<T, TFieldName> {
   const dirty = isFieldDirty(

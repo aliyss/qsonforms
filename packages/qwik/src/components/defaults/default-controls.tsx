@@ -8,6 +8,7 @@ export const DefaultControl = component$<ControlTemplateProps>(({ layout }) => {
         class={`form-control ${layout["ui:class"] || "form-control-default"}`}
       >
         <Slot />
+        <Slot name="errors" />
       </div>
     </>
   );

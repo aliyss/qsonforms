@@ -64,7 +64,6 @@ export const Lifecycle: <
   <T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>({
     of: form,
     store,
-    validate,
     transform,
     keepActive,
     keepState,
@@ -72,12 +71,6 @@ export const Lifecycle: <
     // TODO: Switch back to `useTask$` once issue #3193 is fixed
     useVisibleTask$(({ cleanup }) => {
       // Add validation functions
-      // @ts-ignore
-      store.internal.validate = validate
-        ? Array.isArray(validate)
-          ? validate
-          : ([validate] as QRL<ValidateField<FieldPathValue<T, TFieldName>>>[])
-        : [];
 
       // Add transformation functions
       if ("value" in store) {

@@ -161,7 +161,7 @@ export function reset<
 
     // Reset error if it is not to be kept
     if (!keepErrors) {
-      field.error = "";
+      field.error = [];
     }
   });
 

@@ -10,8 +10,8 @@ export type FromData<_ extends JSONSchema7> = Record<string, unknown> | string |
 export type ValidationMode = "touched" | "input" | "change" | "blur" | "submit" | "none";
 export type ResponseStatus = "info" | "error" | "success";
 export type ResponseData<T> = T | undefined;
-export type FormErrors = ErrorObject[] | undefined;
-export type ValidateForm<T> = (values: Partial<T>) => Promise<ErrorObject[] | undefined>;
+export type FormErrors = ErrorObject[] | null | undefined;
+export type ValidateForm<T> = (values: Partial<T>) => ErrorObject<string, Record<string, any>, unknown>[] | null | undefined;
 export type FormActionStore<T, TResponseData extends ResponseData<T>> = {
     values: Partial<T>;
     errors: FormErrors;
@@ -27,7 +27,7 @@ export type FormOptions<T, TResponseData extends ResponseData<T>> = {
 };
 export type FormResponse<TResponseData> = Partial<{
     status: ResponseStatus;
-    message: string;
+    message: FormErrors;
     data: TResponseData;
 }>;
 export type FieldsStore<T> = {
@@ -42,7 +42,7 @@ export type InternalFormStore<T> = {
 };
 export type FormStore<T, TResponseData extends ResponseData<T>> = {
     internal: InternalFormStore<T>;
-    schema: any;
+    schema: unknown;
     uiSchema: UiSchema;
     element: HTMLFormElement | undefined;
     submitCount: number;

@@ -1,7 +1,15 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
-import { TemplateType, createUiSchema, useQJSONForm } from ".";
+import {
+  AdditionalTemplateType,
+  TemplateType,
+  createUiSchema,
+  useQJSONForm,
+} from ".";
 import { UiSchema } from "./models/uiSchema/build";
 import { JSONSchema7 } from "json-schema";
+import Ajv from "ajv";
+import { DefaultButton } from "./components/defaults/default-button";
+const ajv = new Ajv({ allErrors: true });
 
 export default component$(() => {
   const formData = {
@@ -23,7 +31,6 @@ export default component$(() => {
       number: {
         title: "Number",
         type: "number",
-        min: 1,
       },
       object: {
         title: "Object",
@@ -86,17 +93,20 @@ export default component$(() => {
         },
       },
     },
-    required: ["input"],
+    required: ["input", "number"],
   } as JSONSchema7;
 
   const uiSchema = createUiSchema({
-    templates: {},
+    templates: {
+      [AdditionalTemplateType.BUTTON]: { removeButton: DefaultButton },
+    },
     widgets: {},
     layout: {
       type: TemplateType.VERTICAL_LAYOUT,
       elements: [
         {
           type: TemplateType.HORIZONTAL_LAYOUT,
+          ["ui:template"]: "defaultHorizontal",
           elements: [
             {
               type: TemplateType.CONTROL,
@@ -185,20 +195,34 @@ export default component$(() => {
     },
   }) as UiSchema;
 
+  const validate = $((values: any) => {
+    const validator = ajv.compile(schema);
+    const result = validator(values);
+    if (!result) {
+      console.log(validator.errors);
+      return validator.errors;
+    }
+    return [];
+  });
+
   const [, { QJSONForm }] = useQJSONForm(schema, {
     loader: useSignal(formData),
     uiSchema: uiSchema,
+    validate: validate,
+    validateOn: "input",
+    revalidateOn: "input",
   });
 
   const onSubmit = $((value: any) => {
     console.log(value);
   });
+
   return (
     <>
       <head>
         <meta charSet="utf-8" />
       </head>
-      <body lang="en">
+      <body lang="en" style="background: black;">
         <QJSONForm onSubmit$={onSubmit} />
       </body>
     </>

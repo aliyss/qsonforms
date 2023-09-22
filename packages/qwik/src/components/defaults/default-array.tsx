@@ -6,6 +6,7 @@ export const DefaultArray = component$<ArrayTemplateProps>(({ layout }) => {
     <>
       <div class={`form-array ${layout["ui:class"] || "form-array-default"}`}>
         <Slot />
+        <Slot name="add-button" />
       </div>
     </>
   );

@@ -17,6 +17,7 @@ import {
   QwikFocusEvent,
 } from "@builder.io/qwik";
 import { FieldPath, FieldPathValue } from "./path";
+import { ErrorObject } from "ajv";
 
 export type FieldElement =
   | HTMLInputElement
@@ -69,7 +70,7 @@ export type FieldStore<T, TFieldName extends FieldPath<T>> = {
   internal: InternalFieldStore<T, TFieldName>;
   name: TFieldName;
   value: FieldPathValue<T, TFieldName> | undefined;
-  error: string;
+  error: ErrorObject[];
   active: boolean;
   touched: boolean;
   dirty: boolean;

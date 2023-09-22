@@ -10,6 +10,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+import { ErrorObject } from "ajv";
 import type { ResponseData, FormStore, FieldPath, FormErrors } from "../types";
 
 import {
@@ -103,6 +104,26 @@ export async function validate<T, TResponseData extends ResponseData<T>>(
       ? !formErrors?.length
       : true;
 
+  if (!formErrors) {
+    return true;
+  }
+
+  const fieldPaths = formErrors.reduce(
+    (result, item) => {
+      let fieldSchemaPath = item.instancePath;
+      if (item.keyword === "required") {
+        fieldSchemaPath = `${item.instancePath}/${item.params.missingProperty}`;
+      }
+      const fieldPath = fieldSchemaPath.replace(/\//g, ".").slice(1);
+      if (!result[fieldPath]) {
+        result[fieldPath] = [];
+      }
+      result[fieldPath].push(item);
+      return result;
+    },
+    {} as { [key: string]: ErrorObject[] },
+  );
+
   const [errorFields] = await Promise.all([
     // Validate each field in list
     Promise.all(
@@ -113,28 +134,21 @@ export async function validate<T, TResponseData extends ResponseData<T>>(
         // Continue if field corresponds to filter options
         if (!shouldActive || field.active) {
           // Create local error variable
-          let localError: string | undefined;
+          let fieldError = false;
 
-          // Run each field validation functions
-          for (const validation of field.internal.validate) {
-            localError = await validation(field.value);
-
-            // Break loop if an error occurred
-            if (localError) {
-              break;
-            }
+          if (fieldPaths[name]) {
+            field.error = fieldPaths[name];
+            fieldError = true;
+          } else {
+            field.error = [];
           }
 
           // Create field error from local and global error
-          const fieldError = localError || formErrors?.toString() || "";
 
           // Set valid to "false" if an error occurred
           if (fieldError) {
             valid = false;
           }
-
-          // Update error state of field
-          field.error = fieldError;
 
           // Return name if field has an error
           return fieldError ? name : null;
