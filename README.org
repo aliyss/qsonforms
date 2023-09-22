@@ -51,7 +51,7 @@ I especially want to thank [[https://github.com/fabian-hiller][Fabian Hiller]] f
     uiSchema: uiSchema
   });
 
-  return <QSONFORM/>
+  return <QSONForm />
 #+end_src
 
 ** Vision
