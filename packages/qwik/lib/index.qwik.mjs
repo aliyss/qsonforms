@@ -1556,8 +1556,12 @@ export {
   TemplateType,
   WidgetType,
   createUiSchema,
+  getValues,
+  reset,
+  setResponse,
   toCustom$,
   toCustomQrl,
   useQSONForm,
-  useQSONFormStore
+  useQSONFormStore,
+  validate
 };

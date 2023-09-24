@@ -1554,7 +1554,11 @@ function createUiSchema({ templates, widgets, layout }) {
 }
 exports.QSONForm = QSONForm;
 exports.createUiSchema = createUiSchema;
+exports.getValues = getValues;
+exports.reset = reset;
+exports.setResponse = setResponse;
 exports.toCustom$ = toCustom$;
 exports.toCustomQrl = toCustomQrl;
 exports.useQSONForm = useQSONForm;
 exports.useQSONFormStore = useQSONFormStore;
+exports.validate = validate;
