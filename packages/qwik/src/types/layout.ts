@@ -1,3 +1,4 @@
+import { QRL } from "@builder.io/qwik";
 import type {
   DefaultArrayTemplates,
   DefaultControlTemplates,
@@ -6,10 +7,13 @@ import type {
   TemplateType,
 } from "./tempates";
 import type { DefaultControlWidgets } from "./widgets";
+import { TransformField } from "./field";
+import { FieldPathValue } from "./path";
 
 export interface ElementLayout {
   type: TemplateType;
   "ui:options"?: Record<string, any>;
+  "ui:title"?: string;
   "ui:class"?: string;
 }
 
@@ -38,6 +42,7 @@ export interface ArrayLayout<V, H, A, C, W> extends ElementLayout {
 
 export interface ControlElement<C, W> extends ElementLayout {
   type: TemplateType.CONTROL;
+  transform?: QRL<TransformField<FieldPathValue<any, any>>> | undefined;
   scope: string;
   "ui:template"?: keyof (C & DefaultControlTemplates);
   "ui:widget"?: keyof (W & DefaultControlWidgets);

@@ -9,7 +9,7 @@ export type FieldType<T> = T extends string | null | undefined ? "string" : T ex
 /**
  * Function type to transform a field.
  */
-export type TransformField<T> = (value: T | undefined, event: FieldEvent, element: FieldElement) => Promise<T | undefined> | undefined;
+export type TransformField<T> = (value: T | undefined, event: FieldEvent, element: FieldElement) => any | undefined;
 export type InternalFieldStore<T, TFieldName extends FieldPath<T>> = {
     initialValue: FieldPathValue<T, TFieldName> | undefined;
     startValue: FieldPathValue<T, TFieldName> | undefined;

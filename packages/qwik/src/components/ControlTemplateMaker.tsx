@@ -109,7 +109,9 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
         widgets: formData.uiSchema.widgets,
         widget:
           layout["ui:widget"] ||
-          (subSchema?.type as "string" | "boolean" | "number"),
+          (subSchema?.enum
+            ? "enum"
+            : (subSchema?.type as "string" | "boolean" | "number")),
       }) as Component<ControlWidgetProps>;
       return (
         <FormWidget
@@ -135,6 +137,7 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
           name={dataPath.join(".")}
           of={formData}
           type={subSchema?.type as "string" | "boolean" | "number"}
+          selectOptions={subSchema?.enum}
           min={subSchema?.type === "number" ? subSchema.minimum : undefined}
           max={subSchema?.type === "number" ? subSchema.maximum : undefined}
           step={subSchema?.type === "number" ? subSchema.multipleOf : undefined}
@@ -148,6 +151,7 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
             >
               <TitleTemplate
                 q:slot="title"
+                layout={layout}
                 subSchema={subSchema as JSONSchema7Object}
                 required={parentSchema?.required?.includes(
                   dataPath[dataPath.length - 1],
@@ -155,7 +159,11 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
                 field={field}
               />
               {widget(field, props)}
-              <ErrorTemplate q:slot="errors" errors={field.error} />
+              <ErrorTemplate
+                q:slot="errors"
+                errors={field.error}
+                dirty={field.dirty}
+              />
             </FormTemplate>
           )}
         </Field>

@@ -33,6 +33,42 @@ export const DefaultStringWidget = component$<ControlWidgetProps>(
   },
 );
 
+export const DefaultSelectWidget = component$<ControlWidgetProps>(
+  ({ field, layout, additionalProps }) => {
+    return (
+      <>
+        <select
+          value={field.value}
+          {...additionalProps}
+          class={`form-control-widget ${
+            layout["ui:widget:class"] || "form-control-widget-default"
+          }`}
+        >
+          <option
+            disabled
+            selected={
+              !field.value ||
+              !additionalProps.selectOptions?.includes(field.value)
+            }
+            value={undefined}
+          >
+            {!additionalProps.selectOptions?.includes(field.value)
+              ? field.value
+              : "-- select an option --"}
+          </option>
+          {additionalProps.selectOptions?.map((v, i) => {
+            return (
+              <option key={i} value={v} selected={v === field.value}>
+                {v}
+              </option>
+            );
+          })}
+        </select>
+      </>
+    );
+  },
+);
+
 export const DefaultPasswordWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
     return (

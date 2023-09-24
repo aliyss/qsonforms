@@ -47,6 +47,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
   max?: number | undefined;
   step?: number | undefined;
   default?: any | undefined;
+  selectOptions?: any[] | undefined;
 };
 
 /**
@@ -73,6 +74,7 @@ export type FieldProps<
   max?: number | undefined;
   step?: number | undefined;
   default?: any | undefined;
+  selectOptions?: any[] | undefined;
 };
 
 /**
@@ -138,6 +140,7 @@ export function Field<
         min: props.min,
         max: props.max,
         step: props.step,
+        selectOptions: props.selectOptions,
       })}
     </Lifecycle>
   );

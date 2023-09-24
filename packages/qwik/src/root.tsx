@@ -28,8 +28,14 @@ export default component$(() => {
         title: "Initial Value",
         type: "string",
       },
+      enum: {
+        title: "Enum",
+        type: "string",
+        enum: ["test", "test2", "test3"],
+        default: "test",
+      },
       default: {
-        title: "Default Value",
+        title: "Default",
         type: "string",
         default: "Current Value",
       },
@@ -129,7 +135,12 @@ export default component$(() => {
       elements: [
         {
           type: TemplateType.CONTROL,
+          ["ui:title"]: "Override Control Title",
           scope: "#/properties/default",
+        },
+        {
+          type: TemplateType.CONTROL,
+          scope: "#/properties/enum",
         },
         {
           type: TemplateType.HORIZONTAL_LAYOUT,

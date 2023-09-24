@@ -2,6 +2,7 @@ import type { Component, QwikIntrinsicElements } from "@builder.io/qwik";
 import type { FormErrors } from "./form";
 import { FieldStore } from "./field";
 import { JSONSchema7Object } from "json-schema";
+import { ElementLayout } from "./layout";
 export declare enum AdditionalTemplateType {
     BUTTON = "Button",
     ERROR = "Error",
@@ -12,9 +13,11 @@ export interface ButtonTemplateProps {
 }
 export interface ErrorTemplateProps {
     errors: FormErrors;
+    dirty: boolean;
 }
 export interface DefaultFieldTemplateProps {
     field: FieldStore<any, any>;
+    layout: ElementLayout;
     subSchema: JSONSchema7Object;
     required?: boolean | undefined;
 }

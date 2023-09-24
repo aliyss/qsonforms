@@ -55,7 +55,7 @@ export type TransformField<T> = (
   value: T | undefined,
   event: FieldEvent,
   element: FieldElement,
-) => Promise<T | undefined> | undefined;
+) => any | undefined;
 
 export type InternalFieldStore<T, TFieldName extends FieldPath<T>> = {
   initialValue: FieldPathValue<T, TFieldName> | undefined;

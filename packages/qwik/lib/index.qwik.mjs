@@ -1,4 +1,4 @@
-import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, useTaskQrl, useLexicalScope, useVisibleTaskQrl, _wrapProp, _jsxBranch, useStylesQrl, useStore } from "@builder.io/qwik";
+import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, useTaskQrl, useLexicalScope, useVisibleTaskQrl, _wrapProp, _jsxBranch, useStylesQrl, useStore, implicit$FirstArg } from "@builder.io/qwik";
 import { Fragment } from "@builder.io/qwik/jsx-runtime";
 import get from "lodash-es/get";
 import range from "lodash-es/range";
@@ -205,6 +205,11 @@ async function validate(form, arg2, arg3) {
     if (!result[fieldPath])
       result[fieldPath] = [];
     result[fieldPath].push(item);
+    if (shouldActive) {
+      const field = getFieldStore(form, fieldPath);
+      if (field.active)
+        field.error = result[fieldPath];
+    }
     return result;
   }, {});
   const [errorFields] = await Promise.all([
@@ -355,6 +360,35 @@ const DefaultStringWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
     }, 0, null)
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
+const DefaultSelectWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  return /* @__PURE__ */ _jsxC(Fragment, {
+    children: /* @__PURE__ */ _jsxS("select", {
+      ...props.additionalProps,
+      children: [
+        /* @__PURE__ */ _jsxQ("option", null, {
+          disabled: true,
+          selected: _fnSignal((p0) => !p0.field.value || !p0.additionalProps.selectOptions?.includes(p0.field.value), [
+            props
+          ], "!p0.field.value||!p0.additionalProps.selectOptions?.includes(p0.field.value)"),
+          value: void 0
+        }, !props.additionalProps.selectOptions?.includes(props.field.value) ? props.field.value : "-- select an option --", 1, null),
+        props.additionalProps.selectOptions?.map((v, i) => {
+          return /* @__PURE__ */ _jsxQ("option", {
+            selected: v === props.field.value,
+            value: v
+          }, null, v, 1, i);
+        })
+      ]
+    }, {
+      class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+        props
+      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
+      value: _fnSignal((p0) => p0.field.value, [
+        props
+      ], "p0.field.value")
+    }, 0, null)
+  }, 1, "O9_2");
+}, "DefaultSelectWidget_component_R00hlyZIuKE"));
 const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   useTaskQrl(/* @__PURE__ */ inlinedQrl(() => {
     const [props2] = useLexicalScope();
@@ -378,7 +412,7 @@ const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_3");
+  }, 1, "O9_4");
 }, "DefaultBooleanWidget_component_gxYt1twyeJo"));
 const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -393,7 +427,7 @@ const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_4");
+  }, 1, "O9_5");
 }, "DefaultNumberWidget_component_iwjisttKp2E"));
 const DefaultArray = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -436,7 +470,7 @@ const DefaultError = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((pr
   }, 1, "jB_1");
 }, "DefaultError_component_r0fcZemJgRY"));
 const DefaultTitle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
-  const title = `${props.subSchema.title}${props.required ? "*" : ""}`;
+  const title = `${props.layout["ui:title"] || props.subSchema.title}${props.required ? "*" : ""}`;
   return /* @__PURE__ */ _jsxC(Fragment, {
     children: /* @__PURE__ */ _jsxQ("span", null, null, title, 1, null)
   }, 1, "jB_2");
@@ -475,7 +509,8 @@ const defaultWidgets = {
     defaultControl: DefaultControlWidget,
     string: DefaultStringWidget,
     boolean: DefaultBooleanWidget,
-    number: DefaultNumberWidget
+    number: DefaultNumberWidget,
+    enum: DefaultSelectWidget
   }
 };
 const getKeyValue = (key) => (obj) => obj[key];
@@ -936,7 +971,7 @@ const Lifecycle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props
 function Field({ children, name, type, ...props }) {
   const { of: form } = props;
   const field = getFieldStore(form, name);
-  if (props.default && (!field.internal.initialValue || !field.internal.startValue))
+  if (props.default && (!field.internal.initialValue || !field.internal.startValue) && !field.value)
     field.value = props.default;
   return /* @__PURE__ */ _jsxC(Lifecycle, {
     store: field,
@@ -985,7 +1020,8 @@ function Field({ children, name, type, ...props }) {
       ]),
       min: props.min,
       max: props.max,
-      step: props.step
+      step: props.step,
+      selectOptions: props.selectOptions
     })
   }, 0, name);
 }
@@ -1007,7 +1043,7 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
     const FormWidget = getWidget({
       type: props.layout.type,
       widgets: props.formData.uiSchema.widgets,
-      widget: props.layout["ui:widget"] || subSchema?.type
+      widget: props.layout["ui:widget"] || (subSchema?.enum ? "enum" : subSchema?.type)
     });
     return /* @__PURE__ */ _jsxC(FormWidget, {
       get layout() {
@@ -1044,11 +1080,17 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         },
         children: [
           /* @__PURE__ */ _jsxC(TitleTemplate, {
-            field,
             "q:slot": "title",
+            get layout() {
+              return props.layout;
+            },
+            field,
             required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
             subSchema,
             [_IMMUTABLE]: {
+              layout: _fnSignal((p0) => p0.layout, [
+                props
+              ], "p0.layout"),
               "q:slot": _IMMUTABLE
             }
           }, 3, "2l_1"),
@@ -1058,7 +1100,11 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
             get errors() {
               return field.error;
             },
+            get dirty() {
+              return field.dirty;
+            },
             [_IMMUTABLE]: {
+              dirty: _wrapProp(field, "dirty"),
               errors: _wrapProp(field, "error"),
               "q:slot": _IMMUTABLE
             }
@@ -1074,6 +1120,7 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
       default: subSchema?.default,
       max: subSchema?.type === "number" ? subSchema.maximum : void 0,
       min: subSchema?.type === "number" ? subSchema.minimum : void 0,
+      selectOptions: subSchema?.enum,
       step: subSchema?.type === "number" ? subSchema.multipleOf : void 0,
       type: subSchema?.type,
       [_IMMUTABLE]: {
@@ -1486,6 +1533,16 @@ function useQSONForm(schema, options) {
     }
   ];
 }
+function toCustomQrl(action, { on: mode }) {
+  return /* @__PURE__ */ inlinedQrl((value, event, element) => {
+    const [action2, mode2] = useLexicalScope();
+    return event.type === mode2 ? action2(value, event, element) : value;
+  }, "toCustomQrl_F9sJpg7hClg", [
+    action,
+    mode
+  ]);
+}
+const toCustom$ = implicit$FirstArg(toCustomQrl);
 function createUiSchema({ templates, widgets, layout }) {
   return {
     layout,
@@ -1499,6 +1556,8 @@ export {
   TemplateType,
   WidgetType,
   createUiSchema,
+  toCustom$,
+  toCustomQrl,
   useQSONForm,
   useQSONFormStore
 };

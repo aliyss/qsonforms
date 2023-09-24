@@ -124,6 +124,12 @@ export async function validate<T, TResponseData extends ResponseData<T>>(
         result[fieldPath] = [];
       }
       result[fieldPath].push(item);
+      if (shouldActive) {
+        const field = getFieldStore(form, fieldPath)!;
+        if (field.active) {
+          field.error = result[fieldPath];
+        }
+      }
       return result;
     },
     {} as { [key: string]: FormError[] },

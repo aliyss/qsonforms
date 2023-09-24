@@ -15,6 +15,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
     max?: number | undefined;
     step?: number | undefined;
     default?: any | undefined;
+    selectOptions?: any[] | undefined;
 };
 /**
  * Value type of the field props.
@@ -33,6 +34,7 @@ export type FieldProps<T, TResponseData extends ResponseData<T>, TFieldName exte
     max?: number | undefined;
     step?: number | undefined;
     default?: any | undefined;
+    selectOptions?: any[] | undefined;
 };
 /**
  * Headless form field that provides reactive properties and state.

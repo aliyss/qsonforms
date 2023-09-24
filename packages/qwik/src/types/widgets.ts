@@ -42,6 +42,7 @@ export interface DefaultControlWidgets<
   string: Component<CP>;
   boolean: Component<CP>;
   number: Component<CP>;
+  enum: Component<CP>;
 }
 
 export interface DefaultWidgets {

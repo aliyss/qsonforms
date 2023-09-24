@@ -6,5 +6,5 @@ interface ControlTemplateMakerProps<C extends ControlTemplates | DefaultControlT
     overrideScope?: string;
     itemScope?: string;
 }
-export declare const ControlTemplateMaker: Component<ControlTemplateMakerProps<ControlTemplates<ControlTemplateProps> | DefaultControlTemplates<ControlTemplateProps>, ControlWidgets<ControlWidgetProps<FieldStore<any, any>>> | DefaultControlWidgets<ControlWidgetProps<FieldStore<any, any>>>>>;
+export declare const ControlTemplateMaker: Component<ControlTemplateMakerProps<DefaultControlTemplates<ControlTemplateProps> | ControlTemplates<ControlTemplateProps>, DefaultControlWidgets<ControlWidgetProps<FieldStore<any, any>>> | ControlWidgets<ControlWidgetProps<FieldStore<any, any>>>>>;
 export {};
