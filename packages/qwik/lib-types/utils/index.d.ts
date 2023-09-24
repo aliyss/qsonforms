@@ -1,4 +1,7 @@
 export * from "./getOptions";
+export * from "./updateFieldDirty";
+export * from "./validateIfRequired";
+export * from "./initializeFieldStore";
 export * from "./getFieldStore";
 export * from "./getFilteredNames";
 export * from "./getFieldNames";

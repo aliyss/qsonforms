@@ -6,8 +6,60 @@ import { isServer } from "@builder.io/qwik/build";
 function getOptions(arg1, arg2) {
   return (typeof arg1 !== "string" && !Array.isArray(arg1) ? arg1 : arg2) || {};
 }
+function isFieldDirty(startValue, currentValue) {
+  const toValue = (item) => item instanceof Blob ? item.size : item;
+  return Array.isArray(startValue) && Array.isArray(currentValue) ? startValue.map(toValue).join() !== currentValue.map(toValue).join() : startValue instanceof Date && currentValue instanceof Date ? startValue.getTime() !== currentValue.getTime() : Number.isNaN(startValue) && Number.isNaN(currentValue) ? false : startValue !== currentValue;
+}
+function getFieldAndArrayStores(form) {
+  return [
+    ...Object.values(form.internal.fields)
+  ];
+}
+function updateFormDirty(form, dirty) {
+  form.dirty = dirty || getFieldAndArrayStores(form).some((fieldOrFieldArray) => fieldOrFieldArray.active && fieldOrFieldArray.dirty);
+}
+function updateFieldDirty(form, field) {
+  const dirty = isFieldDirty(
+    // Actually Key of
+    field.internal.startValue,
+    field.value
+  );
+  if (dirty !== field.dirty) {
+    field.dirty = dirty;
+    updateFormDirty(form, dirty);
+  }
+}
+function validateIfRequired(form, fieldOrFieldArray, name, { on: modes, shouldFocus = false }) {
+  if (modes.includes((form.internal.validateOn === "submit" ? form.submitted : fieldOrFieldArray.error) ? form.internal.revalidateOn : form.internal.validateOn))
+    validate(form, name, {
+      shouldFocus
+    });
+}
 function getFieldStore(form, name) {
   return form.internal.fields[name];
+}
+function getInitialFieldStore(name, { value, initialValue, error } = {
+  value: void 0,
+  initialValue: void 0,
+  error: []
+}) {
+  const dirty = isFieldDirty(initialValue, value);
+  return {
+    internal: {
+      initialValue,
+      startValue: initialValue,
+      validate: [],
+      transform: [],
+      elements: [],
+      consumers: []
+    },
+    name,
+    value,
+    error,
+    active: false,
+    touched: dirty,
+    dirty
+  };
 }
 function getFieldNames(form, shouldValid = true) {
   const fieldNames = Object.keys(form.internal.fields);
@@ -37,33 +89,6 @@ function getPathValue(path, object) {
 let counter = 0;
 function getUniqueId() {
   return counter++;
-}
-function isFieldDirty(startValue, currentValue) {
-  const toValue = (item) => item instanceof Blob ? item.size : item;
-  return Array.isArray(startValue) && Array.isArray(currentValue) ? startValue.map(toValue).join() !== currentValue.map(toValue).join() : startValue instanceof Date && currentValue instanceof Date ? startValue.getTime() !== currentValue.getTime() : Number.isNaN(startValue) && Number.isNaN(currentValue) ? false : startValue !== currentValue;
-}
-function getInitialFieldStore(name, { value, initialValue, error } = {
-  value: void 0,
-  initialValue: void 0,
-  error: []
-}) {
-  const dirty = isFieldDirty(initialValue, value);
-  return {
-    internal: {
-      initialValue,
-      startValue: initialValue,
-      validate: [],
-      transform: [],
-      elements: [],
-      consumers: []
-    },
-    name,
-    value,
-    error,
-    active: false,
-    touched: dirty,
-    dirty
-  };
 }
 function getInitialStores({ loader, action }) {
   function getActionValue(name) {
@@ -96,11 +121,6 @@ function setErrorResponse(form, formErrors, { duration }) {
     duration
   });
 }
-function getFieldAndArrayStores(form) {
-  return [
-    ...Object.values(form.internal.fields)
-  ];
-}
 function updateFormInvalid(form, invalid) {
   form.invalid = invalid || getFieldAndArrayStores(form).some((fieldOrFieldArray) => fieldOrFieldArray.active && fieldOrFieldArray.error);
 }
@@ -121,26 +141,6 @@ function updateFormState(form) {
   form.touched = touched;
   form.dirty = dirty;
   form.invalid = invalid;
-}
-function updateFormDirty(form, dirty) {
-  form.dirty = dirty || getFieldAndArrayStores(form).some((fieldOrFieldArray) => fieldOrFieldArray.active && fieldOrFieldArray.dirty);
-}
-function updateFieldDirty(form, field) {
-  const dirty = isFieldDirty(
-    // Actually Key of
-    field.internal.startValue,
-    field.value
-  );
-  if (dirty !== field.dirty) {
-    field.dirty = dirty;
-    updateFormDirty(form, dirty);
-  }
-}
-function validateIfRequired(form, fieldOrFieldArray, name, { on: modes, shouldFocus = false }) {
-  if (modes.includes((form.internal.validateOn === "submit" ? form.submitted : fieldOrFieldArray.error) ? form.internal.revalidateOn : form.internal.validateOn))
-    validate(form, name, {
-      shouldFocus
-    });
 }
 async function handleFieldEvent(form, field, name, event, element, validationModes, inputValue) {
   if (inputValue !== void 0 && inputValue !== null)
