@@ -63,6 +63,11 @@ function getInitialFieldStore(name, { value, initialValue, error } = {
     dirty
   };
 }
+function initializeFieldStore(form, name) {
+  if (!getFieldStore(form, name))
+    form.internal.fields[name] = getInitialFieldStore(name);
+  return getFieldStore(form, name);
+}
 function getFieldNames(form, shouldValid = true) {
   const fieldNames = Object.keys(form.internal.fields);
   return fieldNames;
@@ -176,6 +181,33 @@ function getValues(form, arg2, arg3) {
     return values;
   }, typeof arg2 === "string" ? [] : {});
 }
+function getValue$2(form, name, { shouldActive = true, shouldTouched = false, shouldDirty = false, shouldValid = false } = {}) {
+  const field = getFieldStore(form, name);
+  if (field && (!shouldActive || field.active) && (!shouldTouched || field.touched) && (!shouldDirty || field.dirty) && (!shouldValid || !field.error))
+    return field.value;
+  return void 0;
+}
+function setValue(form, name, value, { shouldTouched = true, shouldDirty = true, shouldValidate = true, shouldFocus = true } = {}) {
+  const field = initializeFieldStore(form, name);
+  field.value = value;
+  if (shouldTouched) {
+    field.touched = true;
+    form.touched = true;
+  }
+  if (shouldDirty)
+    updateFieldDirty(form, field);
+  if (shouldValidate)
+    validateIfRequired(form, field, name, {
+      on: [
+        "touched",
+        "input"
+      ],
+      shouldFocus
+    });
+}
+function focus(form, name) {
+  getFieldStore(form, name)?.internal.elements[0]?.focus();
+}
 function setResponse(form, response, { duration } = {}) {
   form.response = response;
   if (duration)
@@ -183,9 +215,6 @@ function setResponse(form, response, { duration } = {}) {
       if (form.response === response)
         form.response = {};
     }, duration);
-}
-function focus(form, name) {
-  getFieldStore(form, name)?.internal.elements[0]?.focus();
 }
 async function validate(form, arg2, arg3) {
   const [fieldNames] = getFilteredNames(form, arg2);
@@ -1554,9 +1583,12 @@ function createUiSchema({ templates, widgets, layout }) {
 }
 exports.QSONForm = QSONForm;
 exports.createUiSchema = createUiSchema;
+exports.focus = focus;
+exports.getValue = getValue$2;
 exports.getValues = getValues;
 exports.reset = reset;
 exports.setResponse = setResponse;
+exports.setValue = setValue;
 exports.toCustom$ = toCustom$;
 exports.toCustomQrl = toCustomQrl;
 exports.useQSONForm = useQSONForm;
