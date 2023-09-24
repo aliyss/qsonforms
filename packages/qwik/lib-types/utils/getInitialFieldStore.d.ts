@@ -1,4 +1,4 @@
-import { ErrorObject } from "ajv";
+import type { ErrorObject } from "ajv";
 import type { FieldPath, FieldPathValue, FieldStore } from "../types";
 type InitialFieldState<T, TFieldName extends FieldPath<T>> = {
     value: FieldPathValue<T, TFieldName> | undefined;

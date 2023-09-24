@@ -1,4 +1,4 @@
-import { JSONSchema7, JSONSchema7Definition } from "json-schema";
+import type { JSONSchema7, JSONSchema7Definition } from "json-schema";
 /**
  * Map for storing refs and the respective schemas they are pointing to.
  */

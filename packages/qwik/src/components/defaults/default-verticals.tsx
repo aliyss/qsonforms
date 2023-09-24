@@ -1,5 +1,5 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { VerticalTemplateProps } from "../../types";
+import type { VerticalTemplateProps } from "../../types";
 
 export const DefaultVertical = component$<VerticalTemplateProps>(
   ({ layout }) => {

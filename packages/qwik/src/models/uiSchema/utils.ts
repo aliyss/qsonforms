@@ -1,4 +1,4 @@
-import {
+import type {
   AdditionalTemplateType,
   ArrayTemplates,
   ControlTemplates,
@@ -10,11 +10,11 @@ import {
   DefaultHorizontalTemplates,
   DefaultVerticalTemplates,
   HorizontalTemplates,
-  TemplateType,
   Templates,
   VerticalTemplates,
   Widgets,
 } from "../../types";
+import { TemplateType } from "../../types";
 import {
   defaultAdditionals,
   defaultTemplates,

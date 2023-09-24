@@ -1,6 +1,6 @@
 {
     "name": "qsonforms",
-    "version": "0.0.4",
+    "version": "0.0.7",
     "description": "Building json-schema forms with qwik.",
     "main": "./lib/index.qwik.mjs",
     "qwik": "./lib/index.qwik.mjs",
@@ -41,7 +41,6 @@
         "@builder.io/qwik-city": "^1.2.12",
         "@types/eslint": "8.44.1",
         "@types/json-schema": "^7.0.13",
-        "@types/lodash": "^4.14.198",
         "@types/node": "^20.4.5",
         "@typescript-eslint/eslint-plugin": "^6.7.2",
         "@typescript-eslint/parser": "6.2.0",
@@ -58,8 +57,9 @@
     "dependencies": {
         "@apidevtools/json-schema-ref-parser": "^11.1.0",
         "@modular-forms/qwik": "^0.20.2",
+        "@types/lodash-es": "^4.17.9",
         "ajv": "^8.12.0",
-        "lodash": "^4.17.21"
+        "lodash-es": "^4.17.21"
     },
     "keywords": ["qwik", "json-schema", "form", "json", "schema"],
     "author": "aliyss",

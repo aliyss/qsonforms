@@ -1,5 +1,5 @@
-import { Component, QwikIntrinsicElements } from "@builder.io/qwik";
-import { FormErrors } from "./form";
+import type { Component, QwikIntrinsicElements } from "@builder.io/qwik";
+import type { FormErrors } from "./form";
 
 export enum AdditionalTemplateType {
   BUTTON = "Button",
@@ -21,6 +21,7 @@ export interface DefaultButtonTemplates<
   removeButton?: Component<CP>;
   moveUpButton?: Component<CP>;
   moveDownButton?: Component<CP>;
+  submitButton?: Component<CP>;
 }
 
 export interface DefaultErrorTemplates<

@@ -1,2 +1,2 @@
-export * from "./useQJSONForm";
-export * from "./useQJSONFormStore";
+export * from "./useQSONForm";
+export * from "./useQSONFormStore";

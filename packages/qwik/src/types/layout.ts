@@ -1,11 +1,11 @@
-import {
+import type {
   DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultHorizontalTemplates,
   DefaultVerticalTemplates,
   TemplateType,
 } from "./tempates";
-import { DefaultControlWidgets } from "./widgets";
+import type { DefaultControlWidgets } from "./widgets";
 
 export interface ElementLayout {
   type: TemplateType;

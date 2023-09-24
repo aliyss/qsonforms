@@ -1,6 +1,6 @@
-import { NoSerialize, QRL, QwikChangeEvent, QwikFocusEvent } from "@builder.io/qwik";
-import { FieldPath, FieldPathValue } from "./path";
-import { ErrorObject } from "ajv";
+import type { NoSerialize, QRL, QwikChangeEvent, QwikFocusEvent } from "@builder.io/qwik";
+import type { FieldPath, FieldPathValue } from "./path";
+import type { FormError } from "./form";
 export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 export type FieldEvent = Event | QwikChangeEvent<FieldElement> | QwikFocusEvent<FieldElement>;
 export type PartialKey<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
@@ -22,7 +22,7 @@ export type FieldStore<T, TFieldName extends FieldPath<T>> = {
     internal: InternalFieldStore<T, TFieldName>;
     name: TFieldName;
     value: FieldPathValue<T, TFieldName> | undefined;
-    error: ErrorObject[];
+    error: FormError;
     active: boolean;
     touched: boolean;
     dirty: boolean;

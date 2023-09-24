@@ -10,14 +10,14 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import {
+import type {
   NoSerialize,
   QRL,
   QwikChangeEvent,
   QwikFocusEvent,
 } from "@builder.io/qwik";
-import { FieldPath, FieldPathValue } from "./path";
-import { ErrorObject } from "ajv";
+import type { FieldPath, FieldPathValue } from "./path";
+import type { FormError } from "./form";
 
 export type FieldElement =
   | HTMLInputElement
@@ -70,7 +70,7 @@ export type FieldStore<T, TFieldName extends FieldPath<T>> = {
   internal: InternalFieldStore<T, TFieldName>;
   name: TFieldName;
   value: FieldPathValue<T, TFieldName> | undefined;
-  error: ErrorObject[];
+  error: FormError;
   active: boolean;
   touched: boolean;
   dirty: boolean;

@@ -1,7 +1,7 @@
 import { type QwikSubmitEvent } from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
 import type { JSX } from "@builder.io/qwik/jsx-runtime";
-import type { FormActionStore, FormStore, FromData, FromDataSchema, ResponseData } from "../types";
+import { type FormActionStore, type FormStore, type FromData, type FromDataSchema, type ResponseData } from "../types";
 /**
  * Function type to handle the submission of the form.
  */

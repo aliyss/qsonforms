@@ -1,5 +1,5 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { ArrayTemplateProps } from "../../types";
+import type { ArrayTemplateProps } from "../../types";
 
 export const DefaultArray = component$<ArrayTemplateProps>(({ layout }) => {
   return (

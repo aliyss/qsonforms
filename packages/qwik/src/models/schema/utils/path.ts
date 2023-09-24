@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { range } from "lodash";
+import range from "lodash-es/range";
 
 export const decode = (pointerSegment: string) =>
   pointerSegment?.replace(/~1/g, "/").replace(/~0/, "~");

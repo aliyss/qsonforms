@@ -5,8 +5,7 @@ import {
   component$,
   useTask$,
 } from "@builder.io/qwik";
-import {
-  AdditionalTemplateType,
+import type {
   ArrayLayout,
   ArrayTemplateProps,
   ArrayTemplates,
@@ -22,10 +21,11 @@ import {
   HorizontalTemplates,
   VerticalTemplates,
 } from "../types";
+import { AdditionalTemplateType } from "../types";
 import { resolveSchema } from "../models/schema/utils/resolvers";
 import { toDataPathSegments } from "../models/schema/utils/path";
 import { getAdditionalTemplate, getTemplate } from "../models/uiSchema/utils";
-import { JSONSchema7, JSONSchema7Object } from "json-schema";
+import type { JSONSchema7, JSONSchema7Object } from "json-schema";
 import { getInitialFieldStore } from "../utils/getInitialFieldStore";
 import { SchemaParser } from "./SchemaParser";
 import { inferUiSchemaSingle } from "../models/uiSchema";

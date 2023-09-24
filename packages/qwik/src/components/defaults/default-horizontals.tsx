@@ -1,5 +1,5 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { HorizontalTemplateProps } from "../../types";
+import type { HorizontalTemplateProps } from "../../types";
 
 export const DefaultHorizontal = component$<HorizontalTemplateProps>(
   ({ layout }) => {

@@ -18,41 +18,7 @@ I especially want to thank [[https://github.com/fabian-hiller][Fabian Hiller]] f
 
 ** Usage
 
-*** Install
-#+begin_src bash
-  npm install qsonforms
-#+end_src
-
-*** Usage
-
-**** Define Data
-#+begin_src typescript
-  const schema = {
-    type: "object",
-    properties: {
-      first_name: {
-        type: "string"
-      },
-      last_name: {
-        type: "string"
-      }
-    }
-  }
-
-  const formData = useSignal({ first_name: "Aliyss", last_name: "Snow" })
-
-  const uiSchema = createUiSchema(...);
-#+end_src
-
-**** Create Form
-#+begin_src typescript
-  const [userForm, { QSONForm }] = useQSONForm(schema, {
-    loader: formData,
-    uiSchema: uiSchema
-  });
-
-  return <QSONForm />
-#+end_src
+Qwik: [[./packages/qwik][packages/qwik]]
 
 ** Vision
 
@@ -60,13 +26,3 @@ The key idea is to have dynamic forms. View controlled by data. JSON Schema is p
 
 *** Moving away from Modular Forms
 I do very much enjoy Modular Forms. However I want to only take what is necessary from it. Currently I copy pasted and adjusted as much as possible just to make it work. I will look into removing everything that is not necessary for the functionality of QSONForms.
-
-** Caveats
-
-*** Typesafety
-Typesafety is not really given. Theoretically it could quickly implemented with json-schema-to-ts, however when currently using it I get "type instantiation to deep" or something like that. I assume after cleaning out unnecessary stuff this could work.
-
-Of course the whole validation is to be based on json-schema with Ajv, so that would generally result to the same output anyways if one is not statically creating forms, in which case it may make more sense to use Modular Forms anyways.
-
-*** Validation
-Validation should be done by passing an Ajv Object. Currently working on this.

@@ -5,7 +5,9 @@
         "node": ">=15.0.0"
     },
     "private": true,
-    "trustedDependencies": ["sharp"],
+    "trustedDependencies": [
+        "sharp"
+    ],
     "scripts": {
         "build": "qwik build",
         "build.client": "vite build",
@@ -31,12 +33,13 @@
         "eslint": "8.45.0",
         "eslint-plugin-qwik": "^1.2.12",
         "prettier": "3.0.0",
+        "qsonforms": "file:../../packages/qwik",
         "typescript": "5.1.6",
         "undici": "5.22.1",
         "vite": "4.4.7",
         "vite-tsconfig-paths": "4.2.0"
     },
     "dependencies": {
-        "qsonforms": "file:../../packages/qwik"
+        "ajv": "^8.12.0"
     }
 }

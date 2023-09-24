@@ -10,20 +10,27 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import { type QwikSubmitEvent } from "@builder.io/qwik";
+import {
+  Component,
+  QwikIntrinsicElements,
+  type QwikSubmitEvent,
+} from "@builder.io/qwik";
 import type { ActionStore } from "@builder.io/qwik-city";
 import type { JSX } from "@builder.io/qwik/jsx-runtime";
 // import { FormError } from "../exceptions";
 import { getValues, setResponse, validate } from "../methods";
-import type {
-  FormActionStore,
-  FormStore,
-  FromData,
-  ResponseData,
+import {
+  AdditionalTemplateType,
+  ButtonTemplateProps,
+  type FormActionStore,
+  type FormStore,
+  type FromData,
+  type FromDataSchema,
+  type ResponseData,
 } from "../types";
-import { JSONSchema7 } from "json-schema";
 import { SchemaParser } from "./SchemaParser";
 import { setErrorResponse } from "../utils";
+import { getAdditionalTemplate } from "../models/uiSchema/utils";
 
 /**
  * Function type to handle the submission of the form.
@@ -65,8 +72,8 @@ export type FormProps<T, TResponseData extends ResponseData<T>> = {
 /**
  * Form element that takes care of validation and simplifies submission.
  */
-export function QJSONForm<
-  T extends JSONSchema7,
+export function QSONForm<
+  T extends FromDataSchema,
   TResponseData extends ResponseData<FromData<T>>,
 >({
   of: form,
@@ -92,6 +99,12 @@ export function QJSONForm<
     shouldDirty,
     shouldFocus,
   };
+
+  const SubmitButtonTemplate = getAdditionalTemplate(
+    AdditionalTemplateType.BUTTON,
+    form.uiSchema.templates,
+    "submitButton",
+  ) as Component<ButtonTemplateProps & QwikIntrinsicElements["button"]>;
 
   return (
     <form
@@ -173,7 +186,13 @@ export function QJSONForm<
         templates={form.uiSchema.templates}
         formData={form}
       />
-      <button type="submit">Test</button>
+      {!form.internal.hideSubmitButton ? (
+        <SubmitButtonTemplate props={{ type: "submit" }}>
+          Submit
+        </SubmitButtonTemplate>
+      ) : (
+        <></>
+      )}
     </form>
   );
 }

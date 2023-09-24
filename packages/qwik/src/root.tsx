@@ -1,12 +1,12 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import {
   AdditionalTemplateType,
+  FromDataSchema,
   TemplateType,
   createUiSchema,
-  useQJSONForm,
+  useQSONForm,
 } from ".";
-import { UiSchema } from "./models/uiSchema/build";
-import { JSONSchema7 } from "json-schema";
+import type { UiSchema } from "./models/uiSchema/build";
 import Ajv from "ajv";
 import { DefaultButton } from "./components/defaults/default-button";
 const ajv = new Ajv({ allErrors: true });
@@ -94,7 +94,7 @@ export default component$(() => {
       },
     },
     required: ["input", "number"],
-  } as JSONSchema7;
+  } as FromDataSchema;
 
   const uiSchema = createUiSchema({
     templates: {
@@ -205,7 +205,7 @@ export default component$(() => {
     return [];
   });
 
-  const [, { QJSONForm }] = useQJSONForm(schema, {
+  const [, { QSONForm }] = useQSONForm(schema, {
     loader: useSignal(formData),
     uiSchema: uiSchema,
     validate: validate,
@@ -223,7 +223,7 @@ export default component$(() => {
         <meta charSet="utf-8" />
       </head>
       <body lang="en" style="background: black;">
-        <QJSONForm onSubmit$={onSubmit} />
+        <QSONForm onSubmit$={onSubmit} />
       </body>
     </>
   );

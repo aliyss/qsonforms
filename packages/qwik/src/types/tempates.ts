@@ -1,7 +1,7 @@
-import { Component } from "@builder.io/qwik";
-import { ElementLayout } from "./layout";
-import { JSONSchema7Type } from "json-schema";
-import { FieldStore } from "./field";
+import type { Component } from "@builder.io/qwik";
+import type { ElementLayout } from "./layout";
+import type { JSONSchema7Type } from "json-schema";
+import type { FieldStore } from "./field";
 
 export enum TemplateType {
   VERTICAL_LAYOUT = "VerticalLayout",

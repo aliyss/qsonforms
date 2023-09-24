@@ -1,5 +1,5 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { ControlTemplateProps } from "../../types";
+import type { ControlTemplateProps } from "../../types";
 
 export const DefaultControl = component$<ControlTemplateProps>(({ layout }) => {
   return (

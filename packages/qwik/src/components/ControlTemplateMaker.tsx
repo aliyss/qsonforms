@@ -1,6 +1,5 @@
 import { Component, component$, useTask$ } from "@builder.io/qwik";
-import {
-  AdditionalTemplateType,
+import type {
   ControlElement,
   ControlTemplateProps,
   ControlTemplates,
@@ -12,6 +11,7 @@ import {
   FieldStore,
   FormStore,
 } from "../types";
+import { AdditionalTemplateType } from "../types";
 import { resolveSchema } from "../models/schema/utils/resolvers";
 import { toDataPathSegments } from "../models/schema/utils/path";
 import {
@@ -20,7 +20,7 @@ import {
   getWidget,
 } from "../models/uiSchema/utils";
 import { Field, FieldElementProps } from "./Field";
-import { JSONSchema7, JSONSchema7Object } from "json-schema";
+import type { JSONSchema7, JSONSchema7Object } from "json-schema";
 import { getInitialFieldStore } from "../utils/getInitialFieldStore";
 
 interface ControlTemplateMakerProps<

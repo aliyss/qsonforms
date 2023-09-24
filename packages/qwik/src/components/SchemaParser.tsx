@@ -1,5 +1,5 @@
 import { Component, component$, useStyles$ } from "@builder.io/qwik";
-import {
+import type {
   ArrayTemplates,
   ControlTemplates,
   ControlWidgets,
@@ -13,11 +13,11 @@ import {
   HorizontalTemplateProps,
   HorizontalTemplates,
   Layout,
-  TemplateType,
   Templates,
   VerticalTemplateProps,
   VerticalTemplates,
 } from "../types";
+import { TemplateType } from "../types";
 import { getTemplate } from "../models/uiSchema/utils";
 import { ControlTemplateMaker } from "./ControlTemplateMaker";
 import defaultClasses from "./defaults/default-classes.css?inline";

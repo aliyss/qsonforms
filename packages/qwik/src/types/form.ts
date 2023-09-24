@@ -10,19 +10,18 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import { QRL, Signal } from "@builder.io/qwik";
-import { UiSchema } from "../models/uiSchema/build";
-import { JSONSchema7 as JSONSchemaDirect } from "json-schema";
-import { ErrorObject } from "ajv";
-import { ActionStore } from "@builder.io/qwik-city";
-import { FieldPath } from "./path";
-import { FieldStore } from "./field";
+import type { QRL, Signal } from "@builder.io/qwik";
+import type { UiSchema } from "../models/uiSchema/build";
+import type { ErrorObject, Schema as ValidationSchema } from "ajv";
+import type { ActionStore } from "@builder.io/qwik-city";
+import type { FieldPath } from "./path";
+import type { FieldStore } from "./field";
 
-type JSONSchema7 = JSONSchemaDirect;
+export type FromDataSchema = ValidationSchema;
 
 // eslint-disable-next-line
-export type FromData<_ extends JSONSchema7> =
-  | Record<string, unknown>
+export type FromData<_ extends FromDataSchema> =
+  | Record<string, any>
   | string
   | undefined;
 
@@ -38,11 +37,11 @@ export type ResponseStatus = "info" | "error" | "success";
 
 export type ResponseData<T> = T | undefined;
 
-export type FormErrors = ErrorObject[] | null | undefined;
+export type FormError = ErrorObject<string, Record<string, any>, any>[] | any;
 
-export type ValidateForm<T> = (
-  values: Partial<T>,
-) => ErrorObject<string, Record<string, any>, unknown>[] | null | undefined;
+export type FormErrors = FormError | null | any | undefined;
+
+export type ValidateForm<T> = (values: Partial<T>) => FormErrors;
 
 export type FormActionStore<T, TResponseData extends ResponseData<T>> = {
   values: Partial<T>;
@@ -59,6 +58,7 @@ export type FormOptions<T, TResponseData extends ResponseData<T>> = {
   validate?: QRL<ValidateForm<T>> | undefined;
   validateOn?: ValidationMode | undefined;
   revalidateOn?: ValidationMode | undefined;
+  hideSubmitButton?: boolean | undefined;
 };
 
 export type FormResponse<TResponseData> = Partial<{
@@ -76,13 +76,14 @@ export type InternalFormStore<T> = {
   validate: QRL<ValidateForm<T>> | undefined;
   validators: number[];
   validateOn: ValidationMode;
+  hideSubmitButton: boolean | undefined;
   revalidateOn: ValidationMode;
 };
 
 export type FormStore<T, TResponseData extends ResponseData<T>> = {
   internal: InternalFormStore<T>;
 
-  schema: unknown;
+  schema: FromDataSchema;
   uiSchema: UiSchema;
   element: HTMLFormElement | undefined;
   submitCount: number;

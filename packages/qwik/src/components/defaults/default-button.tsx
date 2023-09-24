@@ -1,5 +1,5 @@
 import { Slot, component$ } from "@builder.io/qwik";
-import { ButtonTemplateProps } from "../../types";
+import type { ButtonTemplateProps } from "../../types";
 
 export const DefaultButton = component$<ButtonTemplateProps>(({ props }) => {
   return (
@@ -10,3 +10,15 @@ export const DefaultButton = component$<ButtonTemplateProps>(({ props }) => {
     </>
   );
 });
+
+export const DefaultSubmitButton = component$<ButtonTemplateProps>(
+  ({ props }) => {
+    return (
+      <>
+        <button {...props}>
+          <Slot />
+        </button>
+      </>
+    );
+  },
+);

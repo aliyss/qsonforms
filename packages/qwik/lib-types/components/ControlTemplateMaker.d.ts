@@ -1,5 +1,5 @@
 import { Component } from "@builder.io/qwik";
-import { ControlElement, ControlTemplateProps, ControlTemplates, ControlWidgetProps, ControlWidgets, DefaultControlTemplates, DefaultControlWidgets, FieldStore, FormStore } from "../types";
+import type { ControlElement, ControlTemplateProps, ControlTemplates, ControlWidgetProps, ControlWidgets, DefaultControlTemplates, DefaultControlWidgets, FieldStore, FormStore } from "../types";
 interface ControlTemplateMakerProps<C extends ControlTemplates | DefaultControlTemplates = ControlTemplates | DefaultControlTemplates, W extends ControlWidgets | DefaultControlWidgets = ControlWidgets | DefaultControlWidgets> {
     layout: ControlElement<C, W>;
     formData: FormStore<any, undefined>;

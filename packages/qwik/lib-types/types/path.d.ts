@@ -1,4 +1,4 @@
-import { FromData } from "./form";
+import type { FromData } from "./form";
 export type TupleKeys<T extends Array<any>> = Exclude<keyof T, keyof any[]>;
 export type IsTuple<T extends Array<any>> = number extends T["length"] ? false : true;
 type ValuePath<TKey extends string | number, TValue> = TValue extends string[] ? `${TKey}` | `${TKey}.${ValuePaths<TValue>}` : TValue extends FromData<any> | Blob ? `${TKey}` : `${TKey}.${ValuePaths<TValue>}`;

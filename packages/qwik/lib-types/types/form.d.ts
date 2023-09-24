@@ -1,17 +1,17 @@
-import { QRL, Signal } from "@builder.io/qwik";
-import { UiSchema } from "../models/uiSchema/build";
-import { JSONSchema7 as JSONSchemaDirect } from "json-schema";
-import { ErrorObject } from "ajv";
-import { ActionStore } from "@builder.io/qwik-city";
-import { FieldPath } from "./path";
-import { FieldStore } from "./field";
-type JSONSchema7 = JSONSchemaDirect;
-export type FromData<_ extends JSONSchema7> = Record<string, unknown> | string | undefined;
+import type { QRL, Signal } from "@builder.io/qwik";
+import type { UiSchema } from "../models/uiSchema/build";
+import type { ErrorObject, Schema as ValidationSchema } from "ajv";
+import type { ActionStore } from "@builder.io/qwik-city";
+import type { FieldPath } from "./path";
+import type { FieldStore } from "./field";
+export type FromDataSchema = ValidationSchema;
+export type FromData<_ extends FromDataSchema> = Record<string, any> | string | undefined;
 export type ValidationMode = "touched" | "input" | "change" | "blur" | "submit" | "none";
 export type ResponseStatus = "info" | "error" | "success";
 export type ResponseData<T> = T | undefined;
-export type FormErrors = ErrorObject[] | null | undefined;
-export type ValidateForm<T> = (values: Partial<T>) => ErrorObject<string, Record<string, any>, unknown>[] | null | undefined;
+export type FormError = ErrorObject<string, Record<string, any>, any>[] | any;
+export type FormErrors = FormError | null | any | undefined;
+export type ValidateForm<T> = (values: Partial<T>) => FormErrors;
 export type FormActionStore<T, TResponseData extends ResponseData<T>> = {
     values: Partial<T>;
     errors: FormErrors;
@@ -24,6 +24,7 @@ export type FormOptions<T, TResponseData extends ResponseData<T>> = {
     validate?: QRL<ValidateForm<T>> | undefined;
     validateOn?: ValidationMode | undefined;
     revalidateOn?: ValidationMode | undefined;
+    hideSubmitButton?: boolean | undefined;
 };
 export type FormResponse<TResponseData> = Partial<{
     status: ResponseStatus;
@@ -38,11 +39,12 @@ export type InternalFormStore<T> = {
     validate: QRL<ValidateForm<T>> | undefined;
     validators: number[];
     validateOn: ValidationMode;
+    hideSubmitButton: boolean | undefined;
     revalidateOn: ValidationMode;
 };
 export type FormStore<T, TResponseData extends ResponseData<T>> = {
     internal: InternalFormStore<T>;
-    schema: unknown;
+    schema: FromDataSchema;
     uiSchema: UiSchema;
     element: HTMLFormElement | undefined;
     submitCount: number;
@@ -54,4 +56,3 @@ export type FormStore<T, TResponseData extends ResponseData<T>> = {
     invalid: boolean;
     response: FormResponse<TResponseData>;
 };
-export {};

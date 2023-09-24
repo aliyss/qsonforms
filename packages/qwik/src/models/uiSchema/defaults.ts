@@ -1,9 +1,8 @@
-import {
-  AdditionalTemplateType,
+import { AdditionalTemplateType, TemplateType } from "../../types";
+import type {
   DefaultAdditionals,
   DefaultTemplates,
   DefaultWidgets,
-  TemplateType,
 } from "../../types";
 import { DefaultVertical } from "../../components/defaults/default-verticals";
 import { DefaultHorizontal } from "../../components/defaults/default-horizontals";
@@ -15,7 +14,10 @@ import {
   DefaultStringWidget,
 } from "../../components/defaults/default-control-widgets";
 import { DefaultArray } from "../../components/defaults/default-array";
-import { DefaultButton } from "../../components/defaults/default-button";
+import {
+  DefaultButton,
+  DefaultSubmitButton,
+} from "../../components/defaults/default-button";
 import { DefaultError } from "../../components/defaults/default-additional";
 
 export const defaultTemplates: DefaultTemplates = {
@@ -31,6 +33,7 @@ export const defaultAdditionals: DefaultAdditionals = {
     removeButton: DefaultButton,
     moveUpButton: DefaultButton,
     moveDownButton: DefaultButton,
+    submitButton: DefaultSubmitButton,
   },
   [AdditionalTemplateType.ERROR]: {
     defaultError: DefaultError,

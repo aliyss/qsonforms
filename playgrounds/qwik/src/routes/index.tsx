@@ -1,14 +1,21 @@
 import { component$, $, useSignal } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import Ajv from "ajv";
 import {
+  AdditionalTemplateType,
+  FromDataSchema,
   TemplateType,
-  UiSchema,
   createUiSchema,
-  useQJSONForm,
+  useQSONForm,
 } from "qsonforms";
+import type { UiSchema } from "qsonforms";
+const ajv = new Ajv();
 
 export default component$(() => {
-  const formData = { input: "hello", checkbox: true };
+  const formData = {
+    input: "hello",
+    checkbox: true,
+  };
   const schema = {
     type: "object",
     properties: {
@@ -24,7 +31,6 @@ export default component$(() => {
       number: {
         title: "Number",
         type: "number",
-        min: 1,
       },
       object: {
         title: "Object",
@@ -87,17 +93,20 @@ export default component$(() => {
         },
       },
     },
-    required: ["input"],
-  } as JSONSchema7;
+    required: ["input", "number"],
+  } as FromDataSchema;
 
   const uiSchema = createUiSchema({
-    templates: {},
+    templates: {
+      [AdditionalTemplateType.BUTTON]: {},
+    },
     widgets: {},
     layout: {
       type: TemplateType.VERTICAL_LAYOUT,
       elements: [
         {
           type: TemplateType.HORIZONTAL_LAYOUT,
+          ["ui:template"]: "defaultHorizontal",
           elements: [
             {
               type: TemplateType.CONTROL,
@@ -186,9 +195,22 @@ export default component$(() => {
     },
   }) as UiSchema;
 
-  const [, { QJSONForm }] = useQJSONForm(schema, {
+  const validate = $((values: any) => {
+    const validator = ajv.compile(schema);
+    const result = validator(values);
+    if (!result) {
+      console.log(validator.errors);
+      return validator.errors;
+    }
+    return [];
+  });
+
+  const [, { QSONForm }] = useQSONForm(schema, {
     loader: useSignal(formData),
     uiSchema: uiSchema,
+    validate: validate,
+    validateOn: "input",
+    revalidateOn: "input",
   });
 
   const onSubmit = $((value: any) => {
@@ -197,7 +219,7 @@ export default component$(() => {
 
   return (
     <>
-      <QJSONForm onSubmit$={onSubmit} />
+      <QSONForm onSubmit$={onSubmit} />
     </>
   );
 });

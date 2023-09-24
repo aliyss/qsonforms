@@ -1,9 +1,9 @@
-import { Component } from "@builder.io/qwik";
-import { ElementLayout } from "./layout";
-import { JSONSchema7Type } from "json-schema";
-import { TemplateType } from "./tempates";
-import { FieldElementProps } from "../components/Field";
-import { FieldStore } from "./field";
+import type { Component } from "@builder.io/qwik";
+import type { ElementLayout } from "./layout";
+import type { JSONSchema7Type } from "json-schema";
+import type { TemplateType } from "./tempates";
+import type { FieldElementProps } from "../components/Field";
+import type { FieldStore } from "./field";
 export declare enum WidgetType {
     CONTROL = "Control"
 }

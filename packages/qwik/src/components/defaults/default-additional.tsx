@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import { ErrorTemplateProps } from "../../types";
+import type { ErrorTemplateProps } from "../../types";
 
 export const DefaultError = component$<ErrorTemplateProps>(({ errors }) => {
   return (

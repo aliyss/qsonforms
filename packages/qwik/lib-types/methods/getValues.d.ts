@@ -1,4 +1,4 @@
-import { FormStore, ResponseData, FieldPath } from "../types";
+import type { FormStore, ResponseData, FieldPath } from "../types";
 export type GetValuesOptions = Partial<{
     shouldActive: boolean;
     shouldTouched: boolean;
