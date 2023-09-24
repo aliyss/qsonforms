@@ -11,6 +11,10 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
     onInput$: (event: Event, element: FieldElement) => void;
     onChange$: (event: QwikChangeEvent<FieldElement>, element: FieldElement) => void;
     onBlur$: (event: QwikFocusEvent<FieldElement>, element: FieldElement) => void;
+    min?: number | undefined;
+    max?: number | undefined;
+    step?: number | undefined;
+    default?: any | undefined;
 };
 /**
  * Value type of the field props.
@@ -25,6 +29,10 @@ export type FieldProps<T, TResponseData extends ResponseData<T>, TFieldName exte
     keepActive?: boolean | undefined;
     keepState?: boolean | undefined;
     key?: string | number | undefined;
+    min?: number | undefined;
+    max?: number | undefined;
+    step?: number | undefined;
+    default?: any | undefined;
 };
 /**
  * Headless form field that provides reactive properties and state.

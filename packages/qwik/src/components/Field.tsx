@@ -46,6 +46,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
   min?: number | undefined;
   max?: number | undefined;
   step?: number | undefined;
+  default?: any | undefined;
 };
 
 /**
@@ -71,6 +72,7 @@ export type FieldProps<
   min?: number | undefined;
   max?: number | undefined;
   step?: number | undefined;
+  default?: any | undefined;
 };
 
 /**
@@ -93,6 +95,13 @@ export function Field<
 
   // Get store of specified field
   const field = getFieldStore(form, name)!;
+  if (
+    props.default &&
+    (!field.internal.initialValue || !field.internal.startValue) &&
+    !field.value
+  ) {
+    field.value = props.default;
+  }
 
   return (
     <Lifecycle key={name} store={field} {...props}>

@@ -9,16 +9,30 @@ import {
 import type { UiSchema } from "./models/uiSchema/build";
 import Ajv from "ajv";
 import { DefaultButton } from "./components/defaults/default-button";
+import {
+  DefaultPasswordWidget,
+  DefaultStringWidget,
+} from "./components/defaults/default-control-widgets";
 const ajv = new Ajv({ allErrors: true });
 
 export default component$(() => {
   const formData = {
     input: "hello",
     checkbox: true,
+    initial: "empty",
   };
   const schema = {
     type: "object",
     properties: {
+      initial: {
+        title: "Initial Value",
+        type: "string",
+      },
+      default: {
+        title: "Default Value",
+        type: "string",
+        default: "Current Value",
+      },
       input: {
         title: "String",
         type: "string",
@@ -97,17 +111,26 @@ export default component$(() => {
         },
       },
     },
-    required: ["input", "number"],
+    required: ["input", "number", "initial"],
   } as FromDataSchema;
 
   const uiSchema = createUiSchema({
     templates: {
       [AdditionalTemplateType.BUTTON]: { removeButton: DefaultButton },
     },
-    widgets: {},
+    widgets: {
+      [TemplateType.CONTROL]: {
+        string: DefaultStringWidget,
+        password: DefaultPasswordWidget,
+      },
+    },
     layout: {
       type: TemplateType.VERTICAL_LAYOUT,
       elements: [
+        {
+          type: TemplateType.CONTROL,
+          scope: "#/properties/default",
+        },
         {
           type: TemplateType.HORIZONTAL_LAYOUT,
           ["ui:template"]: "defaultHorizontal",
@@ -128,6 +151,7 @@ export default component$(() => {
             {
               type: TemplateType.CONTROL,
               scope: "#/properties/input",
+              ["ui:widget"]: "password",
             },
           ],
         },
@@ -227,7 +251,7 @@ export default component$(() => {
         <meta charSet="utf-8" />
       </head>
       <body lang="en" style="background: black;">
-        <QSONForm onSubmit$={onSubmit} />
+        <QSONForm onSubmit$={onSubmit} shouldActive={false} />
       </body>
     </>
   );

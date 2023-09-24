@@ -1,4 +1,4 @@
-import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, useVisibleTaskQrl, useLexicalScope, useTaskQrl, _wrapProp, _jsxBranch, useStylesQrl, useStore } from "@builder.io/qwik";
+import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, useTaskQrl, useLexicalScope, useVisibleTaskQrl, _wrapProp, _jsxBranch, useStylesQrl, useStore } from "@builder.io/qwik";
 import { Fragment } from "@builder.io/qwik/jsx-runtime";
 import get from "lodash-es/get";
 import range from "lodash-es/range";
@@ -285,6 +285,7 @@ let AdditionalTemplateType;
 (function(AdditionalTemplateType2) {
   AdditionalTemplateType2["BUTTON"] = "Button";
   AdditionalTemplateType2["ERROR"] = "Error";
+  AdditionalTemplateType2["FIELD"] = "Field";
 })(AdditionalTemplateType || (AdditionalTemplateType = {}));
 let WidgetType;
 (function(WidgetType2) {
@@ -315,15 +316,21 @@ const DefaultControl = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((
         props
       ], '`form-control ${p0.layout["ui:class"]||"form-control-default"}`')
     }, [
-      /* @__PURE__ */ _jsxC(Slot, null, 3, "Tj_0"),
+      /* @__PURE__ */ _jsxC(Slot, {
+        name: "title",
+        [_IMMUTABLE]: {
+          name: _IMMUTABLE
+        }
+      }, 3, "Tj_0"),
+      /* @__PURE__ */ _jsxC(Slot, null, 3, "Tj_1"),
       /* @__PURE__ */ _jsxC(Slot, {
         name: "errors",
         [_IMMUTABLE]: {
           name: _IMMUTABLE
         }
-      }, 3, "Tj_1")
+      }, 3, "Tj_2")
     ], 1, null)
-  }, 1, "Tj_2");
+  }, 1, "Tj_3");
 }, "DefaultControl_component_6ykl2XdCces"));
 const DefaultControlWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -349,6 +356,13 @@ const DefaultStringWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
 const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  useTaskQrl(/* @__PURE__ */ inlinedQrl(() => {
+    const [props2] = useLexicalScope();
+    if (!props2.field.value)
+      props2.field.value = false;
+  }, "DefaultBooleanWidget_component_useTask_3DYSsYzXF3k", [
+    props
+  ]));
   return /* @__PURE__ */ _jsxC(Fragment, {
     children: /* @__PURE__ */ _jsxS("input", {
       ...props.additionalProps
@@ -364,7 +378,7 @@ const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_2");
+  }, 1, "O9_3");
 }, "DefaultBooleanWidget_component_gxYt1twyeJo"));
 const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -379,7 +393,7 @@ const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_3");
+  }, 1, "O9_4");
 }, "DefaultNumberWidget_component_iwjisttKp2E"));
 const DefaultArray = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -421,6 +435,12 @@ const DefaultError = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((pr
     }, props.errors && props.errors.length > 0 ? props.errors[0].message : /* @__PURE__ */ _jsxC(Fragment, null, 3, "jB_0"), 1, null)
   }, 1, "jB_1");
 }, "DefaultError_component_r0fcZemJgRY"));
+const DefaultTitle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  const title = `${props.subSchema.title}${props.required ? "*" : ""}`;
+  return /* @__PURE__ */ _jsxC(Fragment, {
+    children: /* @__PURE__ */ _jsxQ("span", null, null, title, 1, null)
+  }, 1, "jB_2");
+}, "DefaultTitle_component_fVzTY795bE0"));
 const defaultTemplates = {
   [TemplateType.VERTICAL_LAYOUT]: {
     defaultVertical: DefaultVertical
@@ -445,6 +465,9 @@ const defaultAdditionals = {
   },
   [AdditionalTemplateType.ERROR]: {
     defaultError: DefaultError
+  },
+  [AdditionalTemplateType.FIELD]: {
+    defaultTitle: DefaultTitle
   }
 };
 const defaultWidgets = {
@@ -913,6 +936,8 @@ const Lifecycle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props
 function Field({ children, name, type, ...props }) {
   const { of: form } = props;
   const field = getFieldStore(form, name);
+  if (props.default && (!field.internal.initialValue || !field.internal.startValue))
+    field.value = props.default;
   return /* @__PURE__ */ _jsxC(Lifecycle, {
     store: field,
     ...props,
@@ -957,7 +982,10 @@ function Field({ children, name, type, ...props }) {
         field,
         form,
         name
-      ])
+      ]),
+      min: props.min,
+      max: props.max,
+      step: props.step
     })
   }, 0, name);
 }
@@ -969,10 +997,12 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
     if (newOverrideScope && props.layout.scope.includes("{scope}"))
       newOverrideScope = props.layout.scope.replace(/\{scope\}\/?/g, newOverrideScope);
   }
+  const parentSchema = resolveSchema(props.formData.schema, layoutScope.split("/").slice(0, -2).join("/"), props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope.split("/").slice(0, -2).join("/"), props.formData.schema) : {});
   const subSchema = resolveSchema(props.formData.schema, layoutScope, props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope, props.formData.schema) : {});
   const dataPath = toDataPathSegments(layoutScope);
   const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
   const ErrorTemplate = getAdditionalTemplate(AdditionalTemplateType.ERROR, props.formData.uiSchema.templates, "defaultError");
+  const TitleTemplate = getAdditionalTemplate(AdditionalTemplateType.FIELD, props.formData.uiSchema.templates, "defaultTitle");
   const widget = (field, props1) => {
     const FormWidget = getWidget({
       type: props.layout.type,
@@ -1013,6 +1043,15 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
           return props.layout;
         },
         children: [
+          /* @__PURE__ */ _jsxC(TitleTemplate, {
+            field,
+            "q:slot": "title",
+            required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
+            subSchema,
+            [_IMMUTABLE]: {
+              "q:slot": _IMMUTABLE
+            }
+          }, 3, "2l_1"),
           widget(field, props1),
           /* @__PURE__ */ _jsxC(ErrorTemplate, {
             "q:slot": "errors",
@@ -1023,7 +1062,7 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
               errors: _wrapProp(field, "error"),
               "q:slot": _IMMUTABLE
             }
-          }, 3, "2l_1")
+          }, 3, "2l_2")
         ],
         subSchema,
         [_IMMUTABLE]: {
@@ -1031,17 +1070,21 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
             props
           ], "p0.layout")
         }
-      }, 1, "2l_2"),
+      }, 1, "2l_3"),
+      default: subSchema?.default,
+      max: subSchema?.type === "number" ? subSchema.maximum : void 0,
+      min: subSchema?.type === "number" ? subSchema.minimum : void 0,
+      step: subSchema?.type === "number" ? subSchema.multipleOf : void 0,
       type: subSchema?.type,
       [_IMMUTABLE]: {
         of: _fnSignal((p0) => p0.formData, [
           props
         ], "p0.formData")
       }
-    }, 3, "2l_3")
-  }, 1, "2l_4");
+    }, 3, "2l_4")
+  }, 1, "2l_5");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
-const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  padding: 4px;\n}\n";
+const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
   if (typeof schema === "boolean" || Array.isArray(schema) || !schema)
     return {

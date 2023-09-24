@@ -287,6 +287,7 @@ exports.AdditionalTemplateType = void 0;
 (function(AdditionalTemplateType2) {
   AdditionalTemplateType2["BUTTON"] = "Button";
   AdditionalTemplateType2["ERROR"] = "Error";
+  AdditionalTemplateType2["FIELD"] = "Field";
 })(exports.AdditionalTemplateType || (exports.AdditionalTemplateType = {}));
 exports.WidgetType = void 0;
 (function(WidgetType2) {
@@ -317,15 +318,21 @@ const DefaultControl = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.in
         props
       ], '`form-control ${p0.layout["ui:class"]||"form-control-default"}`')
     }, [
-      /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "Tj_0"),
+      /* @__PURE__ */ qwik._jsxC(qwik.Slot, {
+        name: "title",
+        [qwik._IMMUTABLE]: {
+          name: qwik._IMMUTABLE
+        }
+      }, 3, "Tj_0"),
+      /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "Tj_1"),
       /* @__PURE__ */ qwik._jsxC(qwik.Slot, {
         name: "errors",
         [qwik._IMMUTABLE]: {
           name: qwik._IMMUTABLE
         }
-      }, 3, "Tj_1")
+      }, 3, "Tj_2")
     ], 1, null)
-  }, 1, "Tj_2");
+  }, 1, "Tj_3");
 }, "DefaultControl_component_6ykl2XdCces"));
 const DefaultControlWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
@@ -351,6 +358,13 @@ const DefaultStringWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qw
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
 const DefaultBooleanWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  qwik.useTaskQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+    const [props2] = qwik.useLexicalScope();
+    if (!props2.field.value)
+      props2.field.value = false;
+  }, "DefaultBooleanWidget_component_useTask_3DYSsYzXF3k", [
+    props
+  ]));
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxS("input", {
       ...props.additionalProps
@@ -366,7 +380,7 @@ const DefaultBooleanWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_2");
+  }, 1, "O9_3");
 }, "DefaultBooleanWidget_component_gxYt1twyeJo"));
 const DefaultNumberWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
@@ -381,7 +395,7 @@ const DefaultNumberWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qw
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_3");
+  }, 1, "O9_4");
 }, "DefaultNumberWidget_component_iwjisttKp2E"));
 const DefaultArray = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
@@ -423,6 +437,12 @@ const DefaultError = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
     }, props.errors && props.errors.length > 0 ? props.errors[0].message : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "jB_0"), 1, null)
   }, 1, "jB_1");
 }, "DefaultError_component_r0fcZemJgRY"));
+const DefaultTitle = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  const title = `${props.subSchema.title}${props.required ? "*" : ""}`;
+  return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+    children: /* @__PURE__ */ qwik._jsxQ("span", null, null, title, 1, null)
+  }, 1, "jB_2");
+}, "DefaultTitle_component_fVzTY795bE0"));
 const defaultTemplates = {
   [exports.TemplateType.VERTICAL_LAYOUT]: {
     defaultVertical: DefaultVertical
@@ -447,6 +467,9 @@ const defaultAdditionals = {
   },
   [exports.AdditionalTemplateType.ERROR]: {
     defaultError: DefaultError
+  },
+  [exports.AdditionalTemplateType.FIELD]: {
+    defaultTitle: DefaultTitle
   }
 };
 const defaultWidgets = {
@@ -915,6 +938,8 @@ const Lifecycle = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlined
 function Field({ children, name, type, ...props }) {
   const { of: form } = props;
   const field = getFieldStore(form, name);
+  if (props.default && (!field.internal.initialValue || !field.internal.startValue))
+    field.value = props.default;
   return /* @__PURE__ */ qwik._jsxC(Lifecycle, {
     store: field,
     ...props,
@@ -959,7 +984,10 @@ function Field({ children, name, type, ...props }) {
         field,
         form,
         name
-      ])
+      ]),
+      min: props.min,
+      max: props.max,
+      step: props.step
     })
   }, 0, name);
 }
@@ -971,10 +999,12 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
     if (newOverrideScope && props.layout.scope.includes("{scope}"))
       newOverrideScope = props.layout.scope.replace(/\{scope\}\/?/g, newOverrideScope);
   }
+  const parentSchema = resolveSchema(props.formData.schema, layoutScope.split("/").slice(0, -2).join("/"), props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope.split("/").slice(0, -2).join("/"), props.formData.schema) : {});
   const subSchema = resolveSchema(props.formData.schema, layoutScope, props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope, props.formData.schema) : {});
   const dataPath = toDataPathSegments(layoutScope);
   const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
   const ErrorTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.ERROR, props.formData.uiSchema.templates, "defaultError");
+  const TitleTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.FIELD, props.formData.uiSchema.templates, "defaultTitle");
   const widget = (field, props1) => {
     const FormWidget = getWidget({
       type: props.layout.type,
@@ -1015,6 +1045,15 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
           return props.layout;
         },
         children: [
+          /* @__PURE__ */ qwik._jsxC(TitleTemplate, {
+            field,
+            "q:slot": "title",
+            required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
+            subSchema,
+            [qwik._IMMUTABLE]: {
+              "q:slot": qwik._IMMUTABLE
+            }
+          }, 3, "2l_1"),
           widget(field, props1),
           /* @__PURE__ */ qwik._jsxC(ErrorTemplate, {
             "q:slot": "errors",
@@ -1025,7 +1064,7 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
               errors: qwik._wrapProp(field, "error"),
               "q:slot": qwik._IMMUTABLE
             }
-          }, 3, "2l_1")
+          }, 3, "2l_2")
         ],
         subSchema,
         [qwik._IMMUTABLE]: {
@@ -1033,17 +1072,21 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
             props
           ], "p0.layout")
         }
-      }, 1, "2l_2"),
+      }, 1, "2l_3"),
+      default: subSchema?.default,
+      max: subSchema?.type === "number" ? subSchema.maximum : void 0,
+      min: subSchema?.type === "number" ? subSchema.minimum : void 0,
+      step: subSchema?.type === "number" ? subSchema.multipleOf : void 0,
       type: subSchema?.type,
       [qwik._IMMUTABLE]: {
         of: qwik._fnSignal((p0) => p0.formData, [
           props
         ], "p0.formData")
       }
-    }, 3, "2l_3")
-  }, 1, "2l_4");
+    }, 3, "2l_4")
+  }, 1, "2l_5");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
-const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  padding: 4px;\n}\n";
+const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
   if (typeof schema === "boolean" || Array.isArray(schema) || !schema)
     return {

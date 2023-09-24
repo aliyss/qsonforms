@@ -138,6 +138,7 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
           min={subSchema?.type === "number" ? subSchema.minimum : undefined}
           max={subSchema?.type === "number" ? subSchema.maximum : undefined}
           step={subSchema?.type === "number" ? subSchema.multipleOf : undefined}
+          default={subSchema?.default}
         >
           {(field, props) => (
             <FormTemplate

@@ -33,6 +33,23 @@ export const DefaultStringWidget = component$<ControlWidgetProps>(
   },
 );
 
+export const DefaultPasswordWidget = component$<ControlWidgetProps>(
+  ({ field, layout, additionalProps }) => {
+    return (
+      <>
+        <input
+          value={field.value}
+          {...additionalProps}
+          type={"password"}
+          class={`form-control-widget ${
+            layout["ui:widget:class"] || "form-control-widget-default"
+          }`}
+        />
+      </>
+    );
+  },
+);
+
 export const DefaultBooleanWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
     useTask$(() => {
