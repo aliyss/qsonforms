@@ -31,6 +31,9 @@ export default component$(() => {
       number: {
         title: "Number",
         type: "number",
+        minimum: 4,
+        maximum: 8,
+        multipleOf: 2,
       },
       object: {
         title: "Object",
@@ -90,6 +93,7 @@ export default component$(() => {
               },
             },
           },
+          required: ["checkbox"],
         },
       },
     },

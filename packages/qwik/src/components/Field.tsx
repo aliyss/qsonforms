@@ -43,6 +43,9 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
     element: FieldElement,
   ) => void;
   onBlur$: (event: QwikFocusEvent<FieldElement>, element: FieldElement) => void;
+  min?: number | undefined;
+  max?: number | undefined;
+  step?: number | undefined;
 };
 
 /**
@@ -65,6 +68,9 @@ export type FieldProps<
   keepActive?: boolean | undefined;
   keepState?: boolean | undefined;
   key?: string | number | undefined;
+  min?: number | undefined;
+  max?: number | undefined;
+  step?: number | undefined;
 };
 
 /**
@@ -120,6 +126,9 @@ export function Field<
             ]);
           },
         ),
+        min: props.min,
+        max: props.max,
+        step: props.step,
       })}
     </Lifecycle>
   );

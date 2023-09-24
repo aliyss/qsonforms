@@ -1,5 +1,8 @@
 import { component$ } from "@builder.io/qwik";
-import type { ErrorTemplateProps } from "../../types";
+import type {
+  DefaultFieldTemplateProps,
+  ErrorTemplateProps,
+} from "../../types";
 
 export const DefaultError = component$<ErrorTemplateProps>(({ errors }) => {
   return (
@@ -10,3 +13,14 @@ export const DefaultError = component$<ErrorTemplateProps>(({ errors }) => {
     </>
   );
 });
+
+export const DefaultTitle = component$<DefaultFieldTemplateProps>(
+  ({ subSchema, required }) => {
+    const title = `${subSchema.title}${required ? "*" : ""}`;
+    return (
+      <>
+        <span>{title}</span>
+      </>
+    );
+  },
+);

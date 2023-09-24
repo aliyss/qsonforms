@@ -18,7 +18,10 @@ import {
   DefaultButton,
   DefaultSubmitButton,
 } from "../../components/defaults/default-button";
-import { DefaultError } from "../../components/defaults/default-additional";
+import {
+  DefaultError,
+  DefaultTitle,
+} from "../../components/defaults/default-additional";
 
 export const defaultTemplates: DefaultTemplates = {
   [TemplateType.VERTICAL_LAYOUT]: { defaultVertical: DefaultVertical },
@@ -37,6 +40,9 @@ export const defaultAdditionals: DefaultAdditionals = {
   },
   [AdditionalTemplateType.ERROR]: {
     defaultError: DefaultError,
+  },
+  [AdditionalTemplateType.FIELD]: {
+    defaultTitle: DefaultTitle,
   },
 };
 

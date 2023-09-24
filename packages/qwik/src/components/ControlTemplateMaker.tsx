@@ -7,6 +7,7 @@ import type {
   ControlWidgets,
   DefaultControlTemplates,
   DefaultControlWidgets,
+  DefaultFieldTemplateProps,
   ErrorTemplateProps,
   FieldStore,
   FormStore,
@@ -51,6 +52,20 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
       }
     }
 
+    const parentSchema =
+      resolveSchema(
+        formData.schema as JSONSchema7,
+        layoutScope.split("/").slice(0, -2).join("/"),
+        formData.schema as JSONSchema7,
+      ) ||
+      (newOverrideScope
+        ? resolveSchema(
+            formData.schema as JSONSchema7,
+            newOverrideScope.split("/").slice(0, -2).join("/"),
+            formData.schema as JSONSchema7,
+          )
+        : {});
+
     const subSchema =
       resolveSchema(
         formData.schema as JSONSchema7,
@@ -78,6 +93,12 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
       formData.uiSchema.templates,
       "defaultError",
     ) as Component<ErrorTemplateProps>;
+
+    const TitleTemplate = getAdditionalTemplate(
+      AdditionalTemplateType.FIELD,
+      formData.uiSchema.templates,
+      "defaultTitle",
+    ) as Component<DefaultFieldTemplateProps>;
 
     const widget = (
       field: FieldStore<any, any>,
@@ -114,6 +135,9 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
           name={dataPath.join(".")}
           of={formData}
           type={subSchema?.type as "string" | "boolean" | "number"}
+          min={subSchema?.type === "number" ? subSchema.minimum : undefined}
+          max={subSchema?.type === "number" ? subSchema.maximum : undefined}
+          step={subSchema?.type === "number" ? subSchema.multipleOf : undefined}
         >
           {(field, props) => (
             <FormTemplate
@@ -121,6 +145,14 @@ export const ControlTemplateMaker = component$<ControlTemplateMakerProps>(
               layout={layout}
               subSchema={subSchema as JSONSchema7Object}
             >
+              <TitleTemplate
+                q:slot="title"
+                subSchema={subSchema as JSONSchema7Object}
+                required={parentSchema?.required?.includes(
+                  dataPath[dataPath.length - 1],
+                )}
+                field={field}
+              />
               {widget(field, props)}
               <ErrorTemplate q:slot="errors" errors={field.error} />
             </FormTemplate>

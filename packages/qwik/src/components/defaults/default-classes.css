@@ -13,5 +13,7 @@
 }
 
 .form-control-widget-default {
+  display: flex;
+  flex-direction: column;
   padding: 4px;
 }

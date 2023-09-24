@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, useTask$ } from "@builder.io/qwik";
 import type { ControlWidgetProps } from "../../types";
 
 export const DefaultControlWidget = component$<ControlWidgetProps>(
@@ -35,6 +35,11 @@ export const DefaultStringWidget = component$<ControlWidgetProps>(
 
 export const DefaultBooleanWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
+    useTask$(() => {
+      if (!field.value) {
+        field.value = false;
+      }
+    });
     return (
       <>
         <input
