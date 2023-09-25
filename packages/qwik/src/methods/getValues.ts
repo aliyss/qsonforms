@@ -20,19 +20,19 @@ export type GetValuesOptions = Partial<{
   shouldValid: boolean;
 }>;
 
-export function getValues<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function getValues<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   options?: GetValuesOptions | undefined,
 ): Partial<T>;
 
-export function getValues<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function getValues<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   names: FieldPath<T>[],
   options?: GetValuesOptions | undefined,
 ): Partial<T>;
 
-export function getValues<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function getValues<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   arg2?: FieldPath<T>[] | GetValuesOptions | undefined,
   arg3?: GetValuesOptions | undefined,
 ): Partial<T> {

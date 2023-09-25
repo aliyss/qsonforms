@@ -1057,6 +1057,7 @@ function Field({ children, name, type, ...props }) {
   }, 0, name);
 }
 const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  qwik._jsxBranch();
   let layoutScope = props.layout.scope;
   let newOverrideScope = props.overrideScope;
   if (props.itemScope) {
@@ -1066,15 +1067,25 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
   }
   const parentSchema = resolveSchema(props.formData.schema, layoutScope.split("/").slice(0, -2).join("/"), props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope.split("/").slice(0, -2).join("/"), props.formData.schema) : {});
   const subSchema = resolveSchema(props.formData.schema, layoutScope, props.formData.schema) || (newOverrideScope ? resolveSchema(props.formData.schema, newOverrideScope, props.formData.schema) : {});
+  if (!subSchema)
+    return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+      children: "No valid Schema found"
+    }, 3, "2l_0");
   const dataPath = toDataPathSegments(layoutScope);
   const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
   const ErrorTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.ERROR, props.formData.uiSchema.templates, "defaultError");
   const TitleTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.FIELD, props.formData.uiSchema.templates, "defaultTitle");
+  const schemaType = (() => {
+    if (subSchema.enum)
+      return "enum";
+    if (Array.isArray(subSchema.type))
+      return subSchema.type[0];
+  })();
   const widget = (field, props1) => {
     const FormWidget = getWidget({
       type: props.layout.type,
       widgets: props.formData.uiSchema.widgets,
-      widget: props.layout["ui:widget"] || (subSchema?.enum ? "enum" : subSchema?.type)
+      widget: props.layout["ui:widget"] || schemaType
     });
     return /* @__PURE__ */ qwik._jsxC(FormWidget, {
       get layout() {
@@ -1088,7 +1099,7 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
           props
         ], "p0.layout")
       }
-    }, 3, "2l_0");
+    }, 3, "2l_1");
   };
   qwik.useTaskQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
     const [dataPath2, props2] = qwik.useLexicalScope();
@@ -1124,7 +1135,10 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
               ], "p0.layout"),
               "q:slot": qwik._IMMUTABLE
             }
-          }, 3, "2l_1"),
+          }, 3, "2l_2"),
+          /* @__PURE__ */ qwik._jsxQ("span", {
+            "q:slot": "description"
+          }, null, props.layout["ui:description"] || subSchema?.description, 1, null),
           widget(field, props1),
           /* @__PURE__ */ qwik._jsxC(ErrorTemplate, {
             "q:slot": "errors",
@@ -1139,7 +1153,7 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
               errors: qwik._wrapProp(field, "error"),
               "q:slot": qwik._IMMUTABLE
             }
-          }, 3, "2l_2")
+          }, 3, "2l_3")
         ],
         subSchema,
         [qwik._IMMUTABLE]: {
@@ -1147,20 +1161,20 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
             props
           ], "p0.layout")
         }
-      }, 1, "2l_3"),
+      }, 1, "2l_4"),
       default: subSchema?.default,
       max: subSchema?.type === "number" ? subSchema.maximum : void 0,
       min: subSchema?.type === "number" ? subSchema.minimum : void 0,
       selectOptions: subSchema?.enum,
       step: subSchema?.type === "number" ? subSchema.multipleOf : void 0,
-      type: subSchema?.type,
+      type: schemaType,
       [qwik._IMMUTABLE]: {
         of: qwik._fnSignal((p0) => p0.formData, [
           props
         ], "p0.formData")
       }
-    }, 3, "2l_4")
-  }, 1, "2l_5");
+    }, 3, "2l_5")
+  }, 1, "2l_6");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
 const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n";
 function inferUiSchemaSingle(schema, scope) {

@@ -13,9 +13,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import type { FieldPath, FieldStore, FormStore, ResponseData } from "../types";
 
 export function getFieldAndArrayStores<
+  S,
   T,
   TResponseData extends ResponseData<T>,
->(form: FormStore<T, TResponseData>): FieldStore<T, FieldPath<T>>[] {
+>(form: FormStore<S, T, TResponseData>): FieldStore<T, FieldPath<T>>[] {
   return [...Object.values(form.internal.fields)] as FieldStore<
     T,
     FieldPath<T>

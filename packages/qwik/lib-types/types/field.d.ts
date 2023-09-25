@@ -5,7 +5,7 @@ export type FieldElement = HTMLInputElement | HTMLSelectElement | HTMLTextAreaEl
 export type FieldEvent = Event | QwikChangeEvent<FieldElement> | QwikFocusEvent<FieldElement>;
 export type PartialKey<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 export type ValidateField<T> = (value: T) => Promise<string> | undefined;
-export type FieldType<T> = T extends string | null | undefined ? "string" : T extends string[] | null | undefined ? "string[]" : T extends number | null | undefined ? "number" : T extends boolean | null | undefined ? "boolean" : T extends NoSerialize<Blob> | NoSerialize<File> | null | undefined ? "File" : T extends NoSerialize<Blob>[] | NoSerialize<File>[] | null | undefined ? "File[]" : T extends Date | null | undefined ? "Date" : never;
+export type FieldType<T> = T extends string | null | undefined ? "string" | "enum" | "const" : T extends string[] | null | undefined ? "string[]" | "array" : T extends number | null | undefined ? "number" | "integer" : T extends boolean | null | undefined ? "boolean" : T extends NoSerialize<Blob> | NoSerialize<File> | null | undefined ? "File" : T extends NoSerialize<Blob>[] | NoSerialize<File>[] | null | undefined ? "File[]" : T extends Date | null | undefined ? "Date" : T extends Record<string, unknown> | null | undefined ? "object" : T extends null | undefined ? "null" : never;
 /**
  * Function type to transform a field.
  */

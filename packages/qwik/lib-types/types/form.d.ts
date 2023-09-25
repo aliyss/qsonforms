@@ -5,7 +5,7 @@ import type { ActionStore } from "@builder.io/qwik-city";
 import type { FieldPath } from "./path";
 import type { FieldStore } from "./field";
 export type FromDataSchema = ValidationSchema;
-export type FromData<_ extends FromDataSchema> = Record<string, any> | string | undefined;
+export type FromData<T> = T;
 export type ValidationMode = "touched" | "input" | "change" | "blur" | "submit" | "none";
 export type ResponseStatus = "info" | "error" | "success";
 export type ResponseData<T> = T | undefined;
@@ -42,9 +42,9 @@ export type InternalFormStore<T> = {
     hideSubmitButton: boolean | undefined;
     revalidateOn: ValidationMode;
 };
-export type FormStore<T, TResponseData extends ResponseData<T>> = {
-    internal: InternalFormStore<T>;
-    schema: FromDataSchema;
+export type FormStore<T, S, TResponseData extends ResponseData<S>> = {
+    internal: InternalFormStore<S>;
+    schema: T;
     uiSchema: UiSchema;
     element: HTMLFormElement | undefined;
     submitCount: number;

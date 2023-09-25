@@ -35,11 +35,12 @@ import { validateIfRequired } from "./validateIfRequired";
  * @param inputValue The value of the input.
  */
 export async function handleFieldEvent<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<S, T, TResponseData>,
   field: FieldStore<T, TFieldName>,
   name: TFieldName,
   event: FieldEvent,

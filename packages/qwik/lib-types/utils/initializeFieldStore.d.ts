@@ -8,4 +8,4 @@ import type { FieldPath, FieldStore, FormStore, ResponseData } from "../types";
  *
  * @returns The reactive store.
  */
-export declare function initializeFieldStore<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<T, TResponseData>, name: TFieldName): FieldStore<T, TFieldName>;
+export declare function initializeFieldStore<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<S, T, TResponseData>, name: TFieldName): FieldStore<T, TFieldName>;

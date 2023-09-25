@@ -4,4 +4,4 @@ import type { FormStore, ResponseData } from "../types";
  *
  * @param form The store of the form.
  */
-export declare function updateFormState<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>): void;
+export declare function updateFormState<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>): void;

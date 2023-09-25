@@ -19,8 +19,8 @@ import { getFieldAndArrayStores } from "./getFieldAndArrayStores";
  * @param form The store of the form.
  * @param dirty Whether dirty state is true.
  */
-export function updateFormDirty<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function updateFormDirty<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   dirty?: boolean | undefined,
 ): void {
   form.dirty =

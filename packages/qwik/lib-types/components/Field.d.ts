@@ -20,8 +20,8 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
 /**
  * Value type of the field props.
  */
-export type FieldProps<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>> = {
-    of: FormStore<T, TResponseData>;
+export type FieldProps<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>> = {
+    of: FormStore<S, T, TResponseData>;
     name: TFieldName;
     type: FieldType<FieldPathValue<T, TFieldName>>;
     children: (store: FieldStore<T, TFieldName>, props: FieldElementProps<T, TFieldName>) => JSX.Element;
@@ -39,4 +39,4 @@ export type FieldProps<T, TResponseData extends ResponseData<T>, TFieldName exte
 /**
  * Headless form field that provides reactive properties and state.
  */
-export declare function Field<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>({ children, name, type, ...props }: FieldPathValue<T, TFieldName> extends string | null | undefined ? PartialKey<FieldProps<T, TResponseData, TFieldName>, "type"> : FieldProps<T, TResponseData, TFieldName>): JSX.Element;
+export declare function Field<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>({ children, name, type, ...props }: FieldPathValue<T, TFieldName> extends string | null | undefined ? PartialKey<FieldProps<S, T, TResponseData, TFieldName>, "type"> : FieldProps<S, T, TResponseData, TFieldName>): JSX.Element;

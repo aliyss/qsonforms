@@ -1,7 +1,6 @@
 import { component$, useSignal, $ } from "@builder.io/qwik";
 import {
   AdditionalTemplateType,
-  FromDataSchema,
   TemplateType,
   createUiSchema,
   useQSONForm,
@@ -118,7 +117,7 @@ export default component$(() => {
       },
     },
     required: ["input", "number", "initial"],
-  } as FromDataSchema;
+  } as const;
 
   const uiSchema = createUiSchema({
     templates: {

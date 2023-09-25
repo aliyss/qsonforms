@@ -12,8 +12,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 import type { FieldPath, FormStore, ResponseData } from "../types";
 
-export function getFieldNames<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function getFieldNames<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   shouldValid: boolean | undefined = true,
 ): FieldPath<T>[] {
   // Get name of every field

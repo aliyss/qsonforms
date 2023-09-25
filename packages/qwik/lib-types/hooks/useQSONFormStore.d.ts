@@ -1,4 +1,4 @@
-import type { FormOptions, FormStore, FromData, FromDataSchema, ResponseData } from "../types";
+import type { FormOptions, FormStore, FromData, ResponseData } from "../types";
 /**
  * Creates and returns the store of the form.
  *
@@ -8,4 +8,4 @@ import type { FormOptions, FormStore, FromData, FromDataSchema, ResponseData } f
  *
  * @returns The reactive store.
  */
-export declare function useQSONFormStore<T extends FromDataSchema, TResponseData extends ResponseData<FromData<T>> = undefined>(schema: T, { validate, validateOn, revalidateOn, hideSubmitButton, ...options }: FormOptions<FromData<T>, TResponseData>): FormStore<FromData<T>, TResponseData>;
+export declare function useQSONFormStore<T, S, TResponseData extends ResponseData<FromData<S>> = undefined>(schema: T, { validate, validateOn, revalidateOn, hideSubmitButton, ...options }: FormOptions<FromData<S>, TResponseData>): FormStore<T, FromData<S>, TResponseData>;

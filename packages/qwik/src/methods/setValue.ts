@@ -29,11 +29,12 @@ export type SetValueOptions = Partial<{
  * @param options The value options.
  */
 export function setValue<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<S, T, TResponseData>,
   name: TFieldName,
   value: FieldPathValue<T, TFieldName>,
   {

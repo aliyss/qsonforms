@@ -1,12 +1,16 @@
 import { QRL } from "@builder.io/qwik";
 import type {
+  ArrayTemplates,
+  ControlTemplates,
   DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultHorizontalTemplates,
   DefaultVerticalTemplates,
+  HorizontalTemplates,
   TemplateType,
+  VerticalTemplates,
 } from "./tempates";
-import type { DefaultControlWidgets } from "./widgets";
+import type { ControlWidgets, DefaultControlWidgets } from "./widgets";
 import { TransformField } from "./field";
 import { FieldPathValue } from "./path";
 
@@ -14,6 +18,7 @@ export interface ElementLayout {
   type: TemplateType;
   "ui:options"?: Record<string, any>;
   "ui:title"?: string;
+  "ui:description"?: string;
   "ui:class"?: string;
 }
 
@@ -54,3 +59,21 @@ export type Layout<V, H, A, C, W> =
   | HorizontalLayout<V, H, A, C, W>
   | ArrayLayout<V, H, A, C, W>
   | ControlElement<C, W>;
+
+export type UiLayout<
+  V extends VerticalTemplates | DefaultVerticalTemplates =
+    | VerticalTemplates
+    | DefaultVerticalTemplates,
+  H extends HorizontalTemplates | DefaultHorizontalTemplates =
+    | HorizontalTemplates
+    | DefaultHorizontalTemplates,
+  A extends ArrayTemplates | DefaultArrayTemplates =
+    | ArrayTemplates
+    | DefaultArrayTemplates,
+  C extends ControlTemplates | DefaultControlTemplates =
+    | ControlTemplates
+    | DefaultControlTemplates,
+  W extends ControlWidgets | DefaultControlWidgets =
+    | ControlWidgets
+    | DefaultControlWidgets,
+> = Layout<V, H, A, C, W>;

@@ -13,9 +13,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import type { FieldPath, FormStore, ResponseData } from "../types";
 import { getFieldStore } from "../utils";
 
-export function focus<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
-  name: FieldPath<T>,
+export function focus<T, S, TResponseData extends ResponseData<S>>(
+  form: FormStore<T, S, TResponseData>,
+  name: FieldPath<S>,
 ): void {
   getFieldStore(form, name)?.internal.elements[0]?.focus();
 }

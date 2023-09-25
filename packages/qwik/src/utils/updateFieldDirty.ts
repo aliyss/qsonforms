@@ -21,10 +21,11 @@ import { updateFormDirty } from "./updateFormDirty";
  * @param field The store of the field.
  */
 export function updateFieldDirty<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFielName extends FieldPath<T>,
->(form: FormStore<T, TResponseData>, field: FieldStore<T, TFielName>): void {
+>(form: FormStore<S, T, TResponseData>, field: FieldStore<T, TFielName>): void {
   // Check if field is dirty
   const dirty = isFieldDirty(
     // Actually Key of

@@ -13,6 +13,7 @@ import type {
   HorizontalTemplateProps,
   HorizontalTemplates,
   Layout,
+  ResponseData,
   Templates,
   VerticalTemplateProps,
   VerticalTemplates,
@@ -24,6 +25,9 @@ import defaultClasses from "./defaults/default-classes.css?inline";
 import { ArrayTemplateMaker } from "./ArrayTemplateMaker";
 
 export interface JSONFormParserProps<
+  S,
+  T,
+  TResponseData extends ResponseData<T> = ResponseData<T>,
   V extends VerticalTemplates | DefaultVerticalTemplates =
     | VerticalTemplates
     | DefaultVerticalTemplates,
@@ -42,12 +46,12 @@ export interface JSONFormParserProps<
 > {
   templates: Templates<V, H, A, C>;
   layout: Layout<V, H, A, C, W>;
-  formData: FormStore<FromData<any>, any>;
+  formData: FormStore<S, FromData<T>, TResponseData>;
   overrideScope?: string;
   itemScope?: string;
 }
 
-export const SchemaParser = component$<JSONFormParserProps>(
+export const SchemaParser = component$<JSONFormParserProps<any, any>>(
   ({ layout, templates, formData, overrideScope, itemScope }) => {
     useStyles$(defaultClasses);
     if (layout.type === TemplateType.HORIZONTAL_LAYOUT) {
@@ -105,7 +109,7 @@ export const SchemaParser = component$<JSONFormParserProps>(
           formData={formData}
           overrideScope={overrideScope}
           itemScope={itemScope}
-        ></ArrayTemplateMaker>
+        />
       );
     }
     if (layout.type === TemplateType.CONTROL) {
@@ -116,7 +120,7 @@ export const SchemaParser = component$<JSONFormParserProps>(
             formData={formData}
             overrideScope={overrideScope}
             itemScope={itemScope}
-          ></ControlTemplateMaker>
+          />
         </>
       );
     }

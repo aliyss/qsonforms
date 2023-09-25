@@ -33,11 +33,11 @@ export type PartialKey<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 export type ValidateField<T> = (value: T) => Promise<string> | undefined;
 
 export type FieldType<T> = T extends string | null | undefined
-  ? "string"
+  ? "string" | "enum" | "const"
   : T extends string[] | null | undefined
-  ? "string[]"
+  ? "string[]" | "array"
   : T extends number | null | undefined
-  ? "number"
+  ? "number" | "integer"
   : T extends boolean | null | undefined
   ? "boolean"
   : T extends NoSerialize<Blob> | NoSerialize<File> | null | undefined
@@ -46,6 +46,10 @@ export type FieldType<T> = T extends string | null | undefined
   ? "File[]"
   : T extends Date | null | undefined
   ? "Date"
+  : T extends Record<string, unknown> | null | undefined
+  ? "object"
+  : T extends null | undefined
+  ? "null"
   : never;
 
 /**

@@ -25,7 +25,6 @@ import {
   type FormActionStore,
   type FormStore,
   type FromData,
-  type FromDataSchema,
   type ResponseData,
 } from "../types";
 import { SchemaParser } from "./SchemaParser";
@@ -43,9 +42,9 @@ export type SubmitHandler<T> = (
 /**
  * Value type of the form properties.
  */
-export type FormProps<T, TResponseData extends ResponseData<T>> = {
+export type FormProps<S, T, TResponseData extends ResponseData<T>> = {
   // Custom props
-  of: FormStore<T, TResponseData>;
+  of: FormStore<S, T, TResponseData>;
   action?:
     | ActionStore<FormActionStore<T, TResponseData>, Partial<T>, true>
     | undefined;
@@ -73,7 +72,8 @@ export type FormProps<T, TResponseData extends ResponseData<T>> = {
  * Form element that takes care of validation and simplifies submission.
  */
 export function QSONForm<
-  T extends FromDataSchema,
+  S,
+  T,
   TResponseData extends ResponseData<FromData<T>>,
 >({
   of: form,
@@ -87,7 +87,7 @@ export function QSONForm<
   shouldFocus,
   reloadDocument,
   ...formProps
-}: FormProps<FromData<T>, TResponseData>): JSX.Element {
+}: FormProps<S, FromData<T>, TResponseData>): JSX.Element {
   // Destructure form props
   const { encType } = formProps;
 

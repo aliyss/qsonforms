@@ -14,11 +14,12 @@ import type { FieldPath, FieldStore, FormStore, ResponseData } from "../types";
 
 export function getFieldStore<
   T,
-  TResponseData extends ResponseData<T>,
-  TFieldName extends FieldPath<T>,
+  S,
+  TResponseData extends ResponseData<S>,
+  TFieldName extends FieldPath<S>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<T, S, TResponseData>,
   name: TFieldName,
-): FieldStore<T, TFieldName> | undefined {
+): FieldStore<S, TFieldName> | undefined {
   return form.internal.fields[name];
 }

@@ -10,4 +10,4 @@ import type { FieldElement, FieldEvent, FieldPath, FieldPathValue, FieldStore, F
  * @param validationModes The modes of the validation.
  * @param inputValue The value of the input.
  */
-export declare function handleFieldEvent<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<T, TResponseData>, field: FieldStore<T, TFieldName>, name: TFieldName, event: FieldEvent, element: FieldElement, validationModes: Exclude<ValidationMode, "submit">[], inputValue?: FieldPathValue<T, TFieldName>): Promise<void>;
+export declare function handleFieldEvent<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<S, T, TResponseData>, field: FieldStore<T, TFieldName>, name: TFieldName, event: FieldEvent, element: FieldElement, validationModes: Exclude<ValidationMode, "submit">[], inputValue?: FieldPathValue<T, TFieldName>): Promise<void>;

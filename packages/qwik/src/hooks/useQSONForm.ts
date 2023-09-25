@@ -13,13 +13,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import type { JSX } from "@builder.io/qwik/jsx-runtime";
 import type { FormProps } from "../components";
 import { QSONForm } from "../components";
-import type {
-  FormOptions,
-  FormStore,
-  FromData,
-  FromDataSchema,
-  ResponseData,
-} from "../types";
+import type { FormOptions, FormStore, FromData, ResponseData } from "../types";
 import { useQSONFormStore } from "./useQSONFormStore";
 
 /**
@@ -31,28 +25,29 @@ import { useQSONFormStore } from "./useQSONFormStore";
  * @returns The store and linked components.
  */
 export function useQSONForm<
-  T extends FromDataSchema = FromDataSchema,
-  TResponseData extends ResponseData<FromData<T>> = undefined,
+  T,
+  S,
+  TResponseData extends ResponseData<FromData<S>> = undefined,
 >(
   schema: T,
-  options: FormOptions<FromData<T>, TResponseData>,
+  options: FormOptions<FromData<S>, TResponseData>,
 ): [
-  FormStore<FromData<T>, TResponseData>,
+  FormStore<T, FromData<S>, TResponseData>,
   {
     QSONForm: (
-      props: Omit<FormProps<FromData<T>, TResponseData>, "of" | "action">,
+      props: Omit<FormProps<T, FromData<S>, TResponseData>, "of" | "action">,
     ) => JSX.Element;
   },
 ] {
   // Use form store
-  const form = useQSONFormStore<T, TResponseData>(schema, options);
+  const form = useQSONFormStore<T, S, TResponseData>(schema, options);
 
   // Return form store and linked components
   return [
     form,
     {
       QSONForm: (
-        props: Omit<FormProps<FromData<T>, TResponseData>, "of" | "action">,
+        props: Omit<FormProps<T, FromData<S>, TResponseData>, "of" | "action">,
       ) => QSONForm({ of: form, action: options.action, ...props }),
     },
   ];

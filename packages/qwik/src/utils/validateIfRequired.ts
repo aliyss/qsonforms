@@ -36,11 +36,12 @@ type ValidateOptions = {
  * @param options The validate options.
  */
 export function validateIfRequired<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<S, T, TResponseData>,
   fieldOrFieldArray: FieldStore<T, TFieldName>,
   name: TFieldName | T,
   { on: modes, shouldFocus = false }: ValidateOptions,

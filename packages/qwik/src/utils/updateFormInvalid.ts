@@ -13,8 +13,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 import type { FormStore, ResponseData } from "../types";
 import { getFieldAndArrayStores } from "./getFieldAndArrayStores";
 
-export function updateFormInvalid<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function updateFormInvalid<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   invalid?: boolean | undefined,
 ): void {
   form.invalid =

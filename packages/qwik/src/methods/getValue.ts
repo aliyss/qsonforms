@@ -26,11 +26,12 @@ export type GetValueOptions = Partial<{
  * @returns The value of the field.
  */
 export function getValue<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<S, T, TResponseData>,
   name: TFieldName,
   {
     shouldActive = true,

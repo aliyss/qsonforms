@@ -19,6 +19,7 @@ import type {
   DefaultVerticalTemplates,
   FormStore,
   HorizontalTemplates,
+  ResponseData,
   VerticalTemplates,
 } from "../types";
 import { AdditionalTemplateType } from "../types";
@@ -31,6 +32,9 @@ import { SchemaParser } from "./SchemaParser";
 import { inferUiSchemaSingle } from "../models/uiSchema";
 
 interface ArrayTemplateMakerProps<
+  S,
+  T,
+  TResponseData extends ResponseData<T> = ResponseData<T>,
   V extends VerticalTemplates | DefaultVerticalTemplates =
     | VerticalTemplates
     | DefaultVerticalTemplates,
@@ -48,12 +52,12 @@ interface ArrayTemplateMakerProps<
     | DefaultControlWidgets,
 > {
   layout: ArrayLayout<V, H, A, C, W>;
-  formData: FormStore<any, undefined>;
+  formData: FormStore<S, T, TResponseData>;
   overrideScope?: string;
   itemScope?: string;
 }
 
-export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps>(
+export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
   ({ layout, formData, overrideScope, itemScope }) => {
     let layoutScope = layout.scope;
     let newOverrideScope = overrideScope;

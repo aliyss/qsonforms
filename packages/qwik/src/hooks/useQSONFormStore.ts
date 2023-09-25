@@ -11,13 +11,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 import { useStore } from "@builder.io/qwik";
-import type {
-  FormOptions,
-  FormStore,
-  FromData,
-  FromDataSchema,
-  ResponseData,
-} from "../types";
+import type { FormOptions, FormStore, FromData, ResponseData } from "../types";
 import { getInitialStores } from "../utils";
 
 /**
@@ -30,8 +24,9 @@ import { getInitialStores } from "../utils";
  * @returns The reactive store.
  */
 export function useQSONFormStore<
-  T extends FromDataSchema,
-  TResponseData extends ResponseData<FromData<T>> = undefined,
+  T,
+  S,
+  TResponseData extends ResponseData<FromData<S>> = undefined,
 >(
   schema: T,
   {
@@ -40,8 +35,8 @@ export function useQSONFormStore<
     revalidateOn = "input",
     hideSubmitButton = undefined,
     ...options
-  }: FormOptions<FromData<T>, TResponseData>,
-): FormStore<FromData<T>, TResponseData> {
+  }: FormOptions<FromData<S>, TResponseData>,
+): FormStore<T, FromData<S>, TResponseData> {
   return useStore(() => {
     const [fields] = getInitialStores(options);
     return {

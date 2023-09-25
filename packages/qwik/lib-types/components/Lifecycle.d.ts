@@ -3,9 +3,9 @@ import type { FieldPath, FieldPathValue, FieldStore, FormStore, ResponseData, Tr
 /**
  * Value type of the lifecycle properties.
  */
-type LifecycleProps<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>> = {
+type LifecycleProps<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>> = {
     key: string | number;
-    of: FormStore<T, TResponseData>;
+    of: FormStore<S, T, TResponseData>;
     store: FieldStore<T, TFieldName>;
     validate?: QRL<ValidateField<FieldPathValue<T, TFieldName>>> | undefined;
     transform?: QRL<TransformField<FieldPathValue<T, TFieldName>>> | undefined;
@@ -16,5 +16,5 @@ type LifecycleProps<T, TResponseData extends ResponseData<T>, TFieldName extends
  * Component that handles the lifecycle dependent state of a field or field
  * array.
  */
-export declare const Lifecycle: <T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(props: PublicProps<LifecycleProps<T, TResponseData, TFieldName>>, key: string | null, flags: number) => JSXNode | null;
+export declare const Lifecycle: <S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(props: PublicProps<LifecycleProps<S, T, TResponseData, TFieldName>>, key: string | null, flags: number) => JSXNode | null;
 export {};

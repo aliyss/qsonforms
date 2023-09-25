@@ -35,12 +35,13 @@ import { getUniqueId, updateFormState } from "../utils";
  * Value type of the lifecycle properties.
  */
 type LifecycleProps<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 > = {
   key: string | number;
-  of: FormStore<T, TResponseData>;
+  of: FormStore<S, T, TResponseData>;
   store: FieldStore<T, TFieldName>;
   validate?: QRL<ValidateField<FieldPathValue<T, TFieldName>>> | undefined;
   transform?: QRL<TransformField<FieldPathValue<T, TFieldName>>> | undefined;
@@ -53,21 +54,27 @@ type LifecycleProps<
  * array.
  */
 export const Lifecycle: <
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 >(
-  props: PublicProps<LifecycleProps<T, TResponseData, TFieldName>>,
+  props: PublicProps<LifecycleProps<S, T, TResponseData, TFieldName>>,
   key: string | null,
   flags: number,
 ) => JSXNode | null = component$(
-  <T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>({
+  <
+    S,
+    T,
+    TResponseData extends ResponseData<T>,
+    TFieldName extends FieldPath<T>,
+  >({
     of: form,
     store,
     transform,
     keepActive,
     keepState,
-  }: LifecycleProps<T, TResponseData, TFieldName>): JSX.Element => {
+  }: LifecycleProps<S, T, TResponseData, TFieldName>): JSX.Element => {
     // TODO: Switch back to `useTask$` once issue #3193 is fixed
     useVisibleTask$(({ cleanup }) => {
       // Add validation functions

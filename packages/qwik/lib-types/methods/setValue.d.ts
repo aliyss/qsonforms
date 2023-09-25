@@ -16,4 +16,4 @@ export type SetValueOptions = Partial<{
  * @param value The value to bet set.
  * @param options The value options.
  */
-export declare function setValue<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<T, TResponseData>, name: TFieldName, value: FieldPathValue<T, TFieldName>, { shouldTouched, shouldDirty, shouldValidate, shouldFocus, }?: SetValueOptions | undefined): void;
+export declare function setValue<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<S, T, TResponseData>, name: TFieldName, value: FieldPathValue<T, TFieldName>, { shouldTouched, shouldDirty, shouldValidate, shouldFocus, }?: SetValueOptions | undefined): void;

@@ -14,5 +14,5 @@ type ErrorResponseOptions = SetResponseOptions & Partial<{
  * @param _formErrors The form errors.
  * @param options The error options.
  */
-export declare function setErrorResponse<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>, formErrors: FormErrors, { duration }: ErrorResponseOptions): void;
+export declare function setErrorResponse<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>, formErrors: FormErrors, { duration }: ErrorResponseOptions): void;
 export {};

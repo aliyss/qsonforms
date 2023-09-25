@@ -17,4 +17,4 @@ export type GetValueOptions = Partial<{
  *
  * @returns The value of the field.
  */
-export declare function getValue<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<T, TResponseData>, name: TFieldName, { shouldActive, shouldTouched, shouldDirty, shouldValid, }?: GetValueOptions | undefined): FieldPathValue<T, TFieldName> | undefined;
+export declare function getValue<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<S, T, TResponseData>, name: TFieldName, { shouldActive, shouldTouched, shouldDirty, shouldValid, }?: GetValueOptions | undefined): FieldPathValue<T, TFieldName> | undefined;

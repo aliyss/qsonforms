@@ -12,11 +12,12 @@ import { getInitialFieldStore } from "./getInitialFieldStore";
  * @returns The reactive store.
  */
 export function initializeFieldStore<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TFieldName extends FieldPath<T>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<S, T, TResponseData>,
   name: TFieldName,
 ): FieldStore<T, TFieldName> {
   if (!getFieldStore(form, name)) {

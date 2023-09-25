@@ -14,7 +14,7 @@ export type ValidateOptions = Partial<{
  *
  * @returns Whether the fields are valid.
  */
-export declare function validate<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>, options?: ValidateOptions | undefined): Promise<boolean>;
+export declare function validate<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>, options?: ValidateOptions | undefined): Promise<boolean>;
 /**
  * Validates a single field or field array.
  *
@@ -24,7 +24,7 @@ export declare function validate<T, TResponseData extends ResponseData<T>>(form:
  *
  * @returns Whether the fields are valid.
  */
-export declare function validate<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>, name: FieldPath<T>, options?: ValidateOptions | undefined): Promise<boolean>;
+export declare function validate<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>, name: FieldPath<T>, options?: ValidateOptions | undefined): Promise<boolean>;
 /**
  * Validates several fields and field arrays.
  *
@@ -34,4 +34,4 @@ export declare function validate<T, TResponseData extends ResponseData<T>>(form:
  *
  * @returns Whether the fields are valid.
  */
-export declare function validate<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>, names: FieldPath<T>[], options?: ValidateOptions | undefined): Promise<boolean>;
+export declare function validate<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>, names: FieldPath<T>[], options?: ValidateOptions | undefined): Promise<boolean>;

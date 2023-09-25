@@ -1,2 +1,2 @@
 import type { FieldPath, FieldStore, FormStore, ResponseData } from "../types";
-export declare function getFieldStore<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<T, TResponseData>, name: TFieldName): FieldStore<T, TFieldName> | undefined;
+export declare function getFieldStore<T, S, TResponseData extends ResponseData<S>, TFieldName extends FieldPath<S>>(form: FormStore<T, S, TResponseData>, name: TFieldName): FieldStore<S, TFieldName> | undefined;

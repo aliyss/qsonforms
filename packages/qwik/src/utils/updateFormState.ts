@@ -18,8 +18,8 @@ import { getFieldAndArrayStores } from "./getFieldAndArrayStores";
  *
  * @param form The store of the form.
  */
-export function updateFormState<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function updateFormState<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
 ): void {
   // Create state variables
   let touched = false,

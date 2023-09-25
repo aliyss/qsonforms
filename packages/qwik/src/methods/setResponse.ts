@@ -26,8 +26,8 @@ export type SetResponseOptions = Partial<{
  * @param response The response object.
  * @param options The response options.
  */
-export function setResponse<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export function setResponse<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   response: FormResponse<TResponseData>,
   { duration }: SetResponseOptions | undefined = {},
 ): void {

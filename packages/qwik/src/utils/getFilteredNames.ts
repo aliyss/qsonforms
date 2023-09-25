@@ -14,11 +14,12 @@ import type { FieldPath, FormStore, ResponseData } from "../types";
 import { getFieldNames } from "./getFieldNames";
 
 export function getFilteredNames<
+  S,
   T,
   TResponseData extends ResponseData<T>,
   TOptions extends Record<string, any>,
 >(
-  form: FormStore<T, TResponseData>,
+  form: FormStore<S, T, TResponseData>,
   arg2?: FieldPath<T> | FieldPath<T>[] | TOptions | undefined,
   shouldValid?: boolean | undefined,
 ): [FieldPath<T>[]] {

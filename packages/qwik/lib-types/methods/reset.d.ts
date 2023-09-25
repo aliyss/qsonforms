@@ -23,7 +23,7 @@ export type ResetOptions<T, TFieldName extends FieldPath<T>> = Partial<{
  * @param form The form to be reset.
  * @param options The reset options.
  */
-export declare function reset<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>, options?: ResetOptions<T, FieldPath<T>> | undefined): void;
+export declare function reset<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>, options?: ResetOptions<T, FieldPath<T>> | undefined): void;
 /**
  * Resets the entire form, several fields and field arrays or a singel field or
  * field array.
@@ -32,7 +32,7 @@ export declare function reset<T, TResponseData extends ResponseData<T>>(form: Fo
  * @param name The field or field array to be reset.
  * @param options The reset options.
  */
-export declare function reset<T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<T, TResponseData>, name: TFieldName, options?: ResetOptions<T, TFieldName> | undefined): void;
+export declare function reset<S, T, TResponseData extends ResponseData<T>, TFieldName extends FieldPath<T>>(form: FormStore<S, T, TResponseData>, name: TFieldName, options?: ResetOptions<T, TFieldName> | undefined): void;
 /**
  * Resets the entire form, several fields and field arrays or a singel field or
  * field array.
@@ -41,4 +41,4 @@ export declare function reset<T, TResponseData extends ResponseData<T>, TFieldNa
  * @param names The fields and field arrays to be reset.
  * @param options The reset options.
  */
-export declare function reset<T, TResponseData extends ResponseData<T>>(form: FormStore<T, TResponseData>, names: FieldPath<T>[], options?: ResetOptions<T, FieldPath<T>> | undefined): void;
+export declare function reset<S, T, TResponseData extends ResponseData<T>>(form: FormStore<S, T, TResponseData>, names: FieldPath<T>[], options?: ResetOptions<T, FieldPath<T>> | undefined): void;

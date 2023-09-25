@@ -20,10 +20,7 @@ import type { FieldStore } from "./field";
 export type FromDataSchema = ValidationSchema;
 
 // eslint-disable-next-line
-export type FromData<_ extends FromDataSchema> =
-  | Record<string, any>
-  | string
-  | undefined;
+export type FromData<T> = T;
 
 export type ValidationMode =
   | "touched"
@@ -80,10 +77,10 @@ export type InternalFormStore<T> = {
   revalidateOn: ValidationMode;
 };
 
-export type FormStore<T, TResponseData extends ResponseData<T>> = {
-  internal: InternalFormStore<T>;
+export type FormStore<T, S, TResponseData extends ResponseData<S>> = {
+  internal: InternalFormStore<S>;
 
-  schema: FromDataSchema;
+  schema: T;
   uiSchema: UiSchema;
   element: HTMLFormElement | undefined;
   submitCount: number;

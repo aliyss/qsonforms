@@ -45,8 +45,8 @@ export type ValidateOptions = Partial<{
  *
  * @returns Whether the fields are valid.
  */
-export async function validate<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export async function validate<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   options?: ValidateOptions | undefined,
 ): Promise<boolean>;
 
@@ -59,8 +59,8 @@ export async function validate<T, TResponseData extends ResponseData<T>>(
  *
  * @returns Whether the fields are valid.
  */
-export async function validate<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export async function validate<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   name: FieldPath<T>,
   options?: ValidateOptions | undefined,
 ): Promise<boolean>;
@@ -74,14 +74,14 @@ export async function validate<T, TResponseData extends ResponseData<T>>(
  *
  * @returns Whether the fields are valid.
  */
-export async function validate<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export async function validate<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   names: FieldPath<T>[],
   options?: ValidateOptions | undefined,
 ): Promise<boolean>;
 
-export async function validate<T, TResponseData extends ResponseData<T>>(
-  form: FormStore<T, TResponseData>,
+export async function validate<S, T, TResponseData extends ResponseData<T>>(
+  form: FormStore<S, T, TResponseData>,
   arg2?: FieldPath<T> | FieldPath<T>[] | ValidateOptions | undefined,
   arg3?: ValidateOptions | undefined,
 ): Promise<boolean> {
