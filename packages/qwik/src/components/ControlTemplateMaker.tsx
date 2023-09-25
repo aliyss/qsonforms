@@ -108,6 +108,7 @@ export const ControlTemplateMaker = component$<
     if (Array.isArray(subSchema.type)) {
       return subSchema.type[0];
     }
+    return subSchema.type;
   })();
 
   const widget = (

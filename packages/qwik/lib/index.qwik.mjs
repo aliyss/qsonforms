@@ -1078,6 +1078,7 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
       return "enum";
     if (Array.isArray(subSchema.type))
       return subSchema.type[0];
+    return subSchema.type;
   })();
   const widget = (field, props1) => {
     const FormWidget = getWidget({

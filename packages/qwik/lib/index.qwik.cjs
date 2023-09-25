@@ -1080,6 +1080,7 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
       return "enum";
     if (Array.isArray(subSchema.type))
       return subSchema.type[0];
+    return subSchema.type;
   })();
   const widget = (field, props1) => {
     const FormWidget = getWidget({
