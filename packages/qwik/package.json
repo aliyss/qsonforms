@@ -1,6 +1,6 @@
 {
     "name": "qsonforms",
-    "version": "0.0.19",
+    "version": "0.0.21",
     "description": "Building json-schema forms with qwik.",
     "main": "./lib/index.qwik.mjs",
     "qwik": "./lib/index.qwik.mjs",

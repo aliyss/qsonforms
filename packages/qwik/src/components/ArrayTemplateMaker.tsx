@@ -176,9 +176,13 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
               />
             </>
           ))}
-          <ButtonTemplate props={{ type: "button", onClick$: addItem }}>
-            Add
-          </ButtonTemplate>
+          {!testUniqueEnum ? (
+            <ButtonTemplate props={{ type: "button", onClick$: addItem }}>
+              Add
+            </ButtonTemplate>
+          ) : (
+            <></>
+          )}
         </FormTemplate>
       </>
     );
