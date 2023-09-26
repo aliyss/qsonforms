@@ -1,4 +1,4 @@
-import { $, component$, noSerialize, useTask$ } from "@builder.io/qwik";
+import { $, component$, useTask$ } from "@builder.io/qwik";
 import type { ControlWidgetProps, FieldElement } from "../../types";
 
 export const DefaultControlWidget = component$<ControlWidgetProps>(
@@ -90,16 +90,13 @@ export const DefaultUniqueItemEnumWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
     const checkboxValue = !!field.value;
     const { onInput$, ...props } = additionalProps;
-    const inputChange = noSerialize(onInput$);
     const onInput = $((event: Event, element: FieldElement) => {
       if (!checkboxValue) {
         field.value = field.internal.startValue;
       } else {
         field.value = undefined;
       }
-      if (inputChange) {
-        inputChange(event, element);
-      }
+      onInput$(event, element);
     });
     return (
       <>
@@ -108,7 +105,7 @@ export const DefaultUniqueItemEnumWidget = component$<ControlWidgetProps>(
             type="checkbox"
             checked={checkboxValue}
             value={field.value}
-            onInput$={(...args) => onInput(...args)}
+            onInput$={onInput}
             {...props}
             class={`form-control-widget ${
               layout["ui:widget:class"] || "form-control-widget-default"

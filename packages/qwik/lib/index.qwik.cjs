@@ -431,18 +431,15 @@ const DefaultUniqueItemEnumWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE
   const props1 = qwik._restProps(props.additionalProps, [
     "onInput$"
   ]);
-  const inputChange = qwik.noSerialize(props.additionalProps.onInput$);
   const onInput = /* @__PURE__ */ qwik.inlinedQrl((event, element) => {
-    const [checkboxValue2, inputChange2, props2] = qwik.useLexicalScope();
+    const [checkboxValue2, props2] = qwik.useLexicalScope();
     if (!checkboxValue2)
       props2.field.value = props2.field.internal.startValue;
     else
       props2.field.value = void 0;
-    if (inputChange2)
-      inputChange2(event, element);
+    props2.additionalProps.onInput$(event, element);
   }, "DefaultUniqueItemEnumWidget_component_onInput_8cnEa1aFeOE", [
     checkboxValue,
-    inputChange,
     props
   ]);
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
@@ -454,12 +451,7 @@ const DefaultUniqueItemEnumWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE
       /* @__PURE__ */ qwik._jsxS("input", {
         checked: checkboxValue,
         ...props1,
-        onInput$: /* @__PURE__ */ qwik.inlinedQrl((...args) => {
-          const [onInput2] = qwik.useLexicalScope();
-          return onInput2(...args);
-        }, "DefaultUniqueItemEnumWidget_component__Fragment_div_input_onInput_a7Ni2tkwzbY", [
-          onInput
-        ])
+        onInput$: onInput
       }, {
         class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
           props

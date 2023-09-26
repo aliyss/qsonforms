@@ -1,4 +1,4 @@
-import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, _restProps, useLexicalScope, useTaskQrl, useVisibleTaskQrl, _jsxBranch, _wrapProp, useStylesQrl, useStore, implicit$FirstArg } from "@builder.io/qwik";
+import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, _restProps, useTaskQrl, useLexicalScope, useVisibleTaskQrl, _jsxBranch, _wrapProp, useStylesQrl, useStore, implicit$FirstArg } from "@builder.io/qwik";
 import { Fragment } from "@builder.io/qwik/jsx-runtime";
 import get from "lodash-es/get";
 import range from "lodash-es/range";
@@ -429,18 +429,15 @@ const DefaultUniqueItemEnumWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */
   const props1 = _restProps(props.additionalProps, [
     "onInput$"
   ]);
-  const inputChange = noSerialize(props.additionalProps.onInput$);
   const onInput = /* @__PURE__ */ inlinedQrl((event, element) => {
-    const [checkboxValue2, inputChange2, props2] = useLexicalScope();
+    const [checkboxValue2, props2] = useLexicalScope();
     if (!checkboxValue2)
       props2.field.value = props2.field.internal.startValue;
     else
       props2.field.value = void 0;
-    if (inputChange2)
-      inputChange2(event, element);
+    props2.additionalProps.onInput$(event, element);
   }, "DefaultUniqueItemEnumWidget_component_onInput_8cnEa1aFeOE", [
     checkboxValue,
-    inputChange,
     props
   ]);
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -452,12 +449,7 @@ const DefaultUniqueItemEnumWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */
       /* @__PURE__ */ _jsxS("input", {
         checked: checkboxValue,
         ...props1,
-        onInput$: /* @__PURE__ */ inlinedQrl((...args) => {
-          const [onInput2] = useLexicalScope();
-          return onInput2(...args);
-        }, "DefaultUniqueItemEnumWidget_component__Fragment_div_input_onInput_a7Ni2tkwzbY", [
-          onInput
-        ])
+        onInput$: onInput
       }, {
         class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
           props

@@ -8,7 +8,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
     name: TFieldName;
     autoFocus: boolean;
     ref: (element: Element) => void;
-    onInput$: (event: Event, element: FieldElement) => void;
+    onInput$: QRL<(event: Event, element: FieldElement) => void>;
     onChange$: (event: QwikChangeEvent<FieldElement>, element: FieldElement) => void;
     onBlur$: (event: QwikFocusEvent<FieldElement>, element: FieldElement) => void;
     min?: number | undefined;
