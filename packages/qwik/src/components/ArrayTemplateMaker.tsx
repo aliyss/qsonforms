@@ -3,6 +3,7 @@ import {
   Component,
   QwikIntrinsicElements,
   component$,
+  noSerialize,
   useTask$,
 } from "@builder.io/qwik";
 import type {
@@ -76,6 +77,11 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
       newOverrideScope || layoutScope,
       formData.schema as JSONSchema7,
     );
+
+    if (!subSchema) {
+      return <>No Schema found for array.</>;
+    }
+
     const dataPath = toDataPathSegments(layoutScope);
 
     const FormTemplate = getTemplate(
@@ -97,11 +103,42 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
       formData.internal.fields[newItemPath]!.value.push(undefined);
     });
 
+    const testUniqueEnum =
+      subSchema.uniqueItems &&
+      subSchema.items &&
+      typeof subSchema.items !== "boolean" &&
+      !Array.isArray(subSchema.items)
+        ? noSerialize(subSchema.items.enum)
+        : undefined;
+
     useTask$(() => {
       if (!formData.internal.fields[dataPath.join(".")]) {
         formData.internal.fields[dataPath.join(".")] = getInitialFieldStore(
           dataPath.join("."),
         );
+      }
+      if (testUniqueEnum) {
+        for (let i = 0; i < testUniqueEnum.length; i++) {
+          formData.internal.fields[[...dataPath, i].join(".")] =
+            getInitialFieldStore([...dataPath, i].join("."), {
+              value: formData.internal.fields[
+                dataPath.join(".")
+              ]?.value.includes(testUniqueEnum[i])
+                ? (testUniqueEnum[i] as any)
+                : undefined,
+              initialValue: formData.internal.fields[
+                dataPath.join(".")
+              ]?.value.includes(testUniqueEnum[i])
+                ? (testUniqueEnum[i] as any)
+                : undefined,
+              error: [],
+              isUniqueEnum: true,
+            });
+          formData.internal.fields[
+            [...dataPath, i].join(".")
+          ]!.internal.startValue = testUniqueEnum[i];
+        }
+        formData.internal.fields[dataPath.join(".")]!.value = undefined;
       }
     });
 
@@ -117,8 +154,12 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
           layout={layout}
           subSchema={subSchema as JSONSchema7Object}
         >
-          {(formData.internal.fields[dataPath.join(".")]?.value || []).map(
-            (_item: any, i: number) => (
+          {(
+            testUniqueEnum ||
+            formData.internal.fields[dataPath.join(".")]?.value ||
+            []
+          ).map((_item: any, i: number) => (
+            <>
               <SchemaParser
                 key={dataPath.join(".") + "-" + i}
                 layout={{
@@ -133,8 +174,8 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
                 templates={formData.uiSchema.templates}
                 formData={formData}
               />
-            ),
-          )}
+            </>
+          ))}
           <ButtonTemplate props={{ type: "button", onClick$: addItem }}>
             Add
           </ButtonTemplate>

@@ -16,13 +16,9 @@ export const DefaultError = component$<ErrorTemplateProps>(({ errors }) => {
 
 export const DefaultTitle = component$<DefaultFieldTemplateProps>(
   ({ subSchema, required, layout }) => {
-    const title = `${layout["ui:title"] || subSchema.title}${
-      required ? "*" : ""
-    }`;
+    const title = layout["ui:title"] || subSchema.title;
     return (
-      <>
-        <span>{title}</span>
-      </>
+      <>{title ? <span>{`${title}${required ? "*" : ""}`}</span> : <></>}</>
     );
   },
 );

@@ -33,7 +33,7 @@ export type PartialKey<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 export type ValidateField<T> = (value: T) => Promise<string> | undefined;
 
 export type FieldType<T> = T extends string | null | undefined
-  ? "string" | "enum" | "const"
+  ? "string" | "enum" | "const" | "uniqueItemEnum"
   : T extends string[] | null | undefined
   ? "string[]" | "array"
   : T extends number | null | undefined
@@ -73,6 +73,7 @@ export type InternalFieldStore<T, TFieldName extends FieldPath<T>> = {
 export type FieldStore<T, TFieldName extends FieldPath<T>> = {
   internal: InternalFieldStore<T, TFieldName>;
   name: TFieldName;
+  isUniqueEnum?: boolean | undefined;
   value: FieldPathValue<T, TFieldName> | undefined;
   error: FormError;
   active: boolean;

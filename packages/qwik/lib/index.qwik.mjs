@@ -1,4 +1,4 @@
-import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, useTaskQrl, useLexicalScope, useVisibleTaskQrl, _jsxBranch, _wrapProp, useStylesQrl, useStore, implicit$FirstArg } from "@builder.io/qwik";
+import { noSerialize, componentQrl, inlinedQrl, _jsxC, _jsxQ, _fnSignal, Slot, _IMMUTABLE, _jsxS, _restProps, useLexicalScope, useTaskQrl, useVisibleTaskQrl, _jsxBranch, _wrapProp, useStylesQrl, useStore, implicit$FirstArg } from "@builder.io/qwik";
 import { Fragment } from "@builder.io/qwik/jsx-runtime";
 import get from "lodash-es/get";
 import range from "lodash-es/range";
@@ -38,10 +38,11 @@ function validateIfRequired(form, fieldOrFieldArray, name, { on: modes, shouldFo
 function getFieldStore(form, name) {
   return form.internal.fields[name];
 }
-function getInitialFieldStore(name, { value, initialValue, error } = {
+function getInitialFieldStore(name, { value, initialValue, error, isUniqueEnum } = {
   value: void 0,
   initialValue: void 0,
-  error: []
+  error: [],
+  isUniqueEnum: void 0
 }) {
   const dirty = isFieldDirty(initialValue, value);
   return {
@@ -54,6 +55,7 @@ function getInitialFieldStore(name, { value, initialValue, error } = {
       consumers: []
     },
     name,
+    isUniqueEnum,
     value,
     error,
     active: false,
@@ -174,8 +176,12 @@ function getValues(form, arg2, arg3) {
   const { shouldActive = true, shouldTouched = false, shouldDirty = false, shouldValid = false } = getOptions(arg2, arg3);
   return getFilteredNames(form, arg2)[0].reduce((values, name) => {
     const field = getFieldStore(form, name);
-    if ((!shouldActive || field.active) && (!shouldTouched || field.touched) && (!shouldDirty || field.dirty) && (!shouldValid || !field.error))
-      (typeof arg2 === "string" ? name.replace(`${arg2}.`, "") : name).split(".").reduce((object, key, index, keys) => object[key] = index === keys.length - 1 ? field.value : typeof object[key] === "object" && object[key] || (isNaN(+keys[index + 1]) ? {} : []), values);
+    if ((!shouldActive || field.active) && (!shouldTouched || field.touched) && (!shouldDirty || field.dirty) && (!shouldValid || !field.error) && (!field.isUniqueEnum || field.isUniqueEnum && field.value))
+      (typeof arg2 === "string" ? name.replace(`${arg2}.`, "") : name).split(".").reduce((object, key, index, keys) => {
+        if (field.isUniqueEnum && Array.isArray(object))
+          key = object.length;
+        return object[key] = index === keys.length - 1 ? field.value : typeof object[key] === "object" && object[key] || (isNaN(+keys[index + 1]) ? {} : []);
+      }, values);
     return values;
   }, typeof arg2 === "string" ? [] : {});
 }
@@ -418,6 +424,55 @@ const DefaultSelectWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
     }, 0, null)
   }, 1, "O9_2");
 }, "DefaultSelectWidget_component_R00hlyZIuKE"));
+const DefaultUniqueItemEnumWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  const checkboxValue = !!props.field.value;
+  const props1 = _restProps(props.additionalProps, [
+    "onInput$"
+  ]);
+  const inputChange = noSerialize(props.additionalProps.onInput$);
+  const onInput = /* @__PURE__ */ inlinedQrl((event, element) => {
+    const [checkboxValue2, inputChange2, props2] = useLexicalScope();
+    if (!checkboxValue2)
+      props2.field.value = props2.field.internal.startValue;
+    else
+      props2.field.value = void 0;
+    if (inputChange2)
+      inputChange2(event, element);
+  }, "DefaultUniqueItemEnumWidget_component_onInput_8cnEa1aFeOE", [
+    checkboxValue,
+    inputChange,
+    props
+  ]);
+  return /* @__PURE__ */ _jsxC(Fragment, {
+    children: /* @__PURE__ */ _jsxQ("div", null, {
+      class: _fnSignal((p0) => p0.layout["ui:class"] || "default-uniqueitem-enum-widget", [
+        props
+      ], 'p0.layout["ui:class"]||"default-uniqueitem-enum-widget"')
+    }, [
+      /* @__PURE__ */ _jsxS("input", {
+        checked: checkboxValue,
+        ...props1,
+        onInput$: /* @__PURE__ */ inlinedQrl((...args) => {
+          const [onInput2] = useLexicalScope();
+          return onInput2(...args);
+        }, "DefaultUniqueItemEnumWidget_component__Fragment_div_input_onInput_a7Ni2tkwzbY", [
+          onInput
+        ])
+      }, {
+        class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+          props
+        ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
+        type: "checkbox",
+        value: _fnSignal((p0) => p0.field.value, [
+          props
+        ], "p0.field.value")
+      }, 0, null),
+      _fnSignal((p0) => p0.field.internal.startValue, [
+        props
+      ], "p0.field.internal.startValue")
+    ], 1, null)
+  }, 1, "O9_4");
+}, "DefaultUniqueItemEnumWidget_component_CkNLTERFdTI"));
 const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   useTaskQrl(/* @__PURE__ */ inlinedQrl(() => {
     const [props2] = useLexicalScope();
@@ -441,7 +496,7 @@ const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_4");
+  }, 1, "O9_5");
 }, "DefaultBooleanWidget_component_gxYt1twyeJo"));
 const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -456,7 +511,7 @@ const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlined
         props
       ], "p0.field.value")
     }, 0, null)
-  }, 1, "O9_5");
+  }, 1, "O9_6");
 }, "DefaultNumberWidget_component_iwjisttKp2E"));
 const DefaultArray = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -499,10 +554,10 @@ const DefaultError = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((pr
   }, 1, "jB_1");
 }, "DefaultError_component_r0fcZemJgRY"));
 const DefaultTitle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
-  const title = `${props.layout["ui:title"] || props.subSchema.title}${props.required ? "*" : ""}`;
+  const title = props.layout["ui:title"] || props.subSchema.title;
   return /* @__PURE__ */ _jsxC(Fragment, {
-    children: /* @__PURE__ */ _jsxQ("span", null, null, title, 1, null)
-  }, 1, "jB_2");
+    children: title ? /* @__PURE__ */ _jsxQ("span", null, null, `${title}${props.required ? "*" : ""}`, 1, "jB_2") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "jB_3")
+  }, 1, "jB_4");
 }, "DefaultTitle_component_fVzTY795bE0"));
 const defaultTemplates = {
   [TemplateType.VERTICAL_LAYOUT]: {
@@ -539,7 +594,8 @@ const defaultWidgets = {
     string: DefaultStringWidget,
     boolean: DefaultBooleanWidget,
     number: DefaultNumberWidget,
-    enum: DefaultSelectWidget
+    enum: DefaultSelectWidget,
+    uniqueItemEnum: DefaultUniqueItemEnumWidget
   }
 };
 const getKeyValue = (key) => (obj) => obj[key];
@@ -1074,6 +1130,8 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
   const ErrorTemplate = getAdditionalTemplate(AdditionalTemplateType.ERROR, props.formData.uiSchema.templates, "defaultError");
   const TitleTemplate = getAdditionalTemplate(AdditionalTemplateType.FIELD, props.formData.uiSchema.templates, "defaultTitle");
   const schemaType = (() => {
+    if (parentSchema?.uniqueItems && subSchema.enum)
+      return "uniqueItemEnum";
     if (subSchema.enum)
       return "enum";
     if (Array.isArray(subSchema.type))
@@ -1175,7 +1233,7 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
     }, 3, "2l_5")
   }, 1, "2l_6");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
-const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n";
+const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n\n.default-uniqueitem-enum-widget {\n  display: flex;\n  flex-direction: row;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
   if (typeof schema === "boolean" || Array.isArray(schema) || !schema)
     return {
@@ -1201,6 +1259,7 @@ function inferUiSchemaSingle(schema, scope) {
   }
 }
 const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  _jsxBranch();
   let layoutScope = props.layout.scope;
   let newOverrideScope = props.overrideScope;
   if (props.itemScope) {
@@ -1209,6 +1268,10 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
       newOverrideScope = props.layout.scope.replace(/\{scope\}\/?/g, newOverrideScope);
   }
   const subSchema = resolveSchema(props.formData.schema, newOverrideScope || layoutScope, props.formData.schema);
+  if (!subSchema)
+    return /* @__PURE__ */ _jsxC(Fragment, {
+      children: "No Schema found for array."
+    }, 3, "92_0");
   const dataPath = toDataPathSegments(layoutScope);
   const FormTemplate = getTemplate(props.layout.type, props.formData.uiSchema.templates, props.layout["ui:template"]);
   const addItem = /* @__PURE__ */ inlinedQrl(() => {
@@ -1223,13 +1286,36 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
     dataPath,
     props
   ]);
+  const testUniqueEnum = subSchema.uniqueItems && subSchema.items && typeof subSchema.items !== "boolean" && !Array.isArray(subSchema.items) ? noSerialize(subSchema.items.enum) : void 0;
   useTaskQrl(/* @__PURE__ */ inlinedQrl(() => {
-    const [dataPath2, props2] = useLexicalScope();
+    const [dataPath2, props2, testUniqueEnum2] = useLexicalScope();
     if (!props2.formData.internal.fields[dataPath2.join(".")])
       props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."));
+    if (testUniqueEnum2) {
+      for (let i = 0; i < testUniqueEnum2.length; i++) {
+        props2.formData.internal.fields[[
+          ...dataPath2,
+          i
+        ].join(".")] = getInitialFieldStore([
+          ...dataPath2,
+          i
+        ].join("."), {
+          value: props2.formData.internal.fields[dataPath2.join(".")]?.value.includes(testUniqueEnum2[i]) ? testUniqueEnum2[i] : void 0,
+          initialValue: props2.formData.internal.fields[dataPath2.join(".")]?.value.includes(testUniqueEnum2[i]) ? testUniqueEnum2[i] : void 0,
+          error: [],
+          isUniqueEnum: true
+        });
+        props2.formData.internal.fields[[
+          ...dataPath2,
+          i
+        ].join(".")].internal.startValue = testUniqueEnum2[i];
+      }
+      props2.formData.internal.fields[dataPath2.join(".")].value = void 0;
+    }
   }, "ArrayTemplateMaker_component_useTask_Csvxd5Rb3s8", [
     dataPath,
-    props
+    props,
+    testUniqueEnum
   ]));
   const ButtonTemplate = getAdditionalTemplate(AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
   return /* @__PURE__ */ _jsxC(Fragment, {
@@ -1238,27 +1324,29 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
         return props.layout;
       },
       children: [
-        (props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxC(SchemaParser, {
-          itemScope: layoutScope + `/items/${i}`,
-          layout: {
-            ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
-          },
-          overrideScope: (newOverrideScope || layoutScope) + `/items/`,
-          get templates() {
-            return props.formData.uiSchema.templates;
-          },
-          get formData() {
-            return props.formData;
-          },
-          [_IMMUTABLE]: {
-            formData: _fnSignal((p0) => p0.formData, [
-              props
-            ], "p0.formData"),
-            templates: _fnSignal((p0) => p0.formData.uiSchema.templates, [
-              props
-            ], "p0.formData.uiSchema.templates")
-          }
-        }, 3, dataPath.join(".") + "-" + i)),
+        (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxC(Fragment, {
+          children: /* @__PURE__ */ _jsxC(SchemaParser, {
+            itemScope: layoutScope + `/items/${i}`,
+            layout: {
+              ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
+            },
+            overrideScope: (newOverrideScope || layoutScope) + `/items/`,
+            get templates() {
+              return props.formData.uiSchema.templates;
+            },
+            get formData() {
+              return props.formData;
+            },
+            [_IMMUTABLE]: {
+              formData: _fnSignal((p0) => p0.formData, [
+                props
+              ], "p0.formData"),
+              templates: _fnSignal((p0) => p0.formData.uiSchema.templates, [
+                props
+              ], "p0.formData.uiSchema.templates")
+            }
+          }, 3, dataPath.join(".") + "-" + i)
+        }, 1, "92_1")),
         /* @__PURE__ */ _jsxC(ButtonTemplate, {
           get props() {
             return {
@@ -1275,7 +1363,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
               addItem
             ], '{type:"button",onClick$:p0}')
           }
-        }, 3, "92_0")
+        }, 3, "92_2")
       ],
       subSchema,
       [_IMMUTABLE]: {
@@ -1283,8 +1371,8 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
           props
         ], "p0.layout")
       }
-    }, 1, "92_1")
-  }, 1, "92_2");
+    }, 1, "92_3")
+  }, 1, "92_4");
 }, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   _jsxBranch();

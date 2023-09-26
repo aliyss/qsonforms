@@ -18,14 +18,21 @@ type InitialFieldState<T, TFieldName extends FieldPath<T>> = {
   value: FieldPathValue<T, TFieldName> | undefined;
   initialValue: FieldPathValue<T, TFieldName> | undefined;
   error: ErrorObject[];
+  isUniqueEnum?: boolean | undefined;
 };
 
 export function getInitialFieldStore<T, TFieldName extends FieldPath<T>>(
   name: TFieldName,
-  { value, initialValue, error }: InitialFieldState<T, TFieldName> = {
+  {
+    value,
+    initialValue,
+    error,
+    isUniqueEnum,
+  }: InitialFieldState<T, TFieldName> = {
     value: undefined,
     initialValue: undefined,
     error: [],
+    isUniqueEnum: undefined,
   },
 ): FieldStore<T, TFieldName> {
   const dirty = isFieldDirty(
@@ -42,6 +49,7 @@ export function getInitialFieldStore<T, TFieldName extends FieldPath<T>>(
       consumers: [],
     },
     name,
+    isUniqueEnum,
     value,
     error,
     active: false,

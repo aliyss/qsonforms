@@ -102,6 +102,9 @@ export const ControlTemplateMaker = component$<
   ) as Component<DefaultFieldTemplateProps>;
 
   const schemaType = (() => {
+    if (parentSchema?.uniqueItems && subSchema.enum) {
+      return "uniqueItemEnum";
+    }
     if (subSchema.enum) {
       return "enum";
     }

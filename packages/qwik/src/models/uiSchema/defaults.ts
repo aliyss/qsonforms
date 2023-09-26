@@ -13,6 +13,7 @@ import {
   DefaultNumberWidget,
   DefaultSelectWidget,
   DefaultStringWidget,
+  DefaultUniqueItemEnumWidget,
 } from "../../components/defaults/default-control-widgets";
 import { DefaultArray } from "../../components/defaults/default-array";
 import {
@@ -54,5 +55,6 @@ export const defaultWidgets: DefaultWidgets = {
     boolean: DefaultBooleanWidget,
     number: DefaultNumberWidget,
     enum: DefaultSelectWidget,
+    uniqueItemEnum: DefaultUniqueItemEnumWidget,
   },
 };

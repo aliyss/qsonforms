@@ -55,25 +55,26 @@ export function getValues<S, T, TResponseData extends ResponseData<T>>(
         (!shouldActive || field.active) &&
         (!shouldTouched || field.touched) &&
         (!shouldDirty || field.dirty) &&
-        (!shouldValid || !field.error)
+        (!shouldValid || !field.error) &&
+        (!field.isUniqueEnum || (field.isUniqueEnum && field.value))
       ) {
         // Split name into keys to be able to add values of nested fields
         // @ts-ignore
         (typeof arg2 === "string" ? name.replace(`${arg2}.`, "") : name)
           .split(".")
-          .reduce<any>(
-            (object: any, key: any, index: any, keys: any) =>
-              (object[key] =
-                index === keys.length - 1
-                  ? // If it is last key, add value
-                    field.value
-                  : // Otherwise return object or array
-                    (typeof object[key] === "object" && object[key]) ||
-                    (isNaN(+keys[index + 1]) ? {} : [])),
-            values,
-          );
+          .reduce<any>((object: any, key: any, index: any, keys: any) => {
+            if (field.isUniqueEnum && Array.isArray(object)) {
+              key = object.length;
+            }
+            return (object[key] =
+              index === keys.length - 1
+                ? // If it is last key, add value
+                  field.value
+                : // Otherwise return object or array
+                  (typeof object[key] === "object" && object[key]) ||
+                  (isNaN(+keys[index + 1]) ? {} : []));
+          }, values);
       }
-
       // Return modified values object
       return values;
     },

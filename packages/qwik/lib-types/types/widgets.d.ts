@@ -29,6 +29,7 @@ export interface DefaultControlWidgets<CP extends ControlWidgetProps = ControlWi
     boolean: Component<CP>;
     number: Component<CP>;
     enum: Component<CP>;
+    uniqueItemEnum: Component<CP>;
 }
 export interface DefaultWidgets {
     [TemplateType.CONTROL]: DefaultControlWidgets;

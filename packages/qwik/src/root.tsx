@@ -19,6 +19,7 @@ export default component$(() => {
     input: "hello",
     checkbox: true,
     initial: "empty",
+    arrayUniqueEnum: ["test", "test2"],
   };
   const schema = {
     type: "object",
@@ -74,6 +75,15 @@ export default component$(() => {
         items: {
           title: "Number",
           type: "number",
+        },
+      },
+      arrayUniqueEnum: {
+        title: "Array Unique Enum",
+        type: "array",
+        uniqueItems: true,
+        items: {
+          type: "string",
+          enum: ["test4", "test", "test2", "test3"],
         },
       },
       arrayInArray: {
@@ -164,6 +174,11 @@ export default component$(() => {
               ["ui:widget"]: "password",
             },
           ],
+        },
+
+        {
+          type: TemplateType.ARRAY,
+          scope: "#/properties/arrayUniqueEnum",
         },
         {
           type: TemplateType.VERTICAL_LAYOUT,
