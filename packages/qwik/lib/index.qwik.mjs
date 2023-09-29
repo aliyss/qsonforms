@@ -974,6 +974,41 @@ const toDataPathSegments = (schemaPath) => {
   const startIndex = startFromRoot ? 2 : 1;
   return range(startIndex, decodedSegments.length, 2).map((idx) => decodedSegments[idx]);
 };
+const isObjectSchema = (schema) => {
+  return schema.properties !== void 0;
+};
+const isArraySchema = (schema) => {
+  return schema.type === "array" && schema.items !== void 0;
+};
+const resolveData = (instance, dataPathSegments) => {
+  if (dataPathSegments.length <= 0)
+    return instance;
+  return dataPathSegments.reduce((curInstance, decodedSegment) => {
+    if (!curInstance || !Object.prototype.hasOwnProperty.call(curInstance, decodedSegment))
+      return void 0;
+    return curInstance[decodedSegment];
+  }, instance);
+};
+const findAllRefs = (schema, result = {}, resolveTuples = false) => {
+  if (schema && typeof schema !== "boolean" && isObjectSchema(schema))
+    Object.keys(schema.properties || {}).forEach((key) => findAllRefs(schema.properties[key], result));
+  if (schema && typeof schema !== "boolean" && isArraySchema(schema)) {
+    if (Array.isArray(schema.items)) {
+      if (resolveTuples) {
+        const items = schema.items;
+        items.forEach((child) => findAllRefs(child, result));
+      }
+    } else
+      findAllRefs(schema.items, result);
+  }
+  if (schema && typeof schema !== "boolean" && Array.isArray(schema.anyOf)) {
+    const anyOf = schema.anyOf;
+    anyOf.forEach((child) => findAllRefs(child, result));
+  }
+  if (schema && typeof schema !== "boolean" && schema.$ref !== void 0)
+    result[schema.$ref] = schema;
+  return result;
+};
 const invalidSegment = (pathSegment) => pathSegment === "#" || pathSegment === void 0 || pathSegment === "";
 const resolveSchema = (schema, schemaPath, rootSchema) => {
   const segments = schemaPath?.split("/").map(decode);
@@ -1250,6 +1285,13 @@ function inferUiSchemaSingle(schema, scope) {
       };
   }
 }
+function createUiSchema({ templates, widgets, layout }) {
+  return {
+    layout,
+    widgets,
+    templates
+  };
+}
 const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   _jsxBranch();
   let layoutScope = props.layout.scope;
@@ -1339,7 +1381,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
             }
           }, 3, dataPath.join(".") + "-" + i)
         }, 1, "92_1")),
-        /* @__PURE__ */ _jsxC(ButtonTemplate, {
+        !testUniqueEnum ? /* @__PURE__ */ _jsxC(ButtonTemplate, {
           get props() {
             return {
               type: "button",
@@ -1355,7 +1397,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
               addItem
             ], '{type:"button",onClick$:p0}')
           }
-        }, 3, "92_2")
+        }, 3, "92_2") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_3")
       ],
       subSchema,
       [_IMMUTABLE]: {
@@ -1363,8 +1405,8 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
           props
         ], "p0.layout")
       }
-    }, 1, "92_3")
-  }, 1, "92_4");
+    }, 1, "92_4")
+  }, 1, "92_5");
 }, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   _jsxBranch();
@@ -1667,27 +1709,32 @@ function toCustomQrl(action, { on: mode }) {
   ]);
 }
 const toCustom$ = implicit$FirstArg(toCustomQrl);
-function createUiSchema({ templates, widgets, layout }) {
-  return {
-    layout,
-    widgets,
-    templates
-  };
-}
 export {
   AdditionalTemplateType,
   QSONForm,
   TemplateType,
   WidgetType,
   createUiSchema,
+  decode,
+  defaultAdditionals,
+  defaultTemplates,
+  defaultWidgets,
+  findAllRefs,
   focus,
+  getAdditionalTemplate,
+  getTemplate,
   getValue$2 as getValue,
   getValues,
+  getWidget,
+  inferUiSchemaSingle,
   reset,
+  resolveData,
+  resolveSchema,
   setResponse,
   setValue,
   toCustom$,
   toCustomQrl,
+  toDataPathSegments,
   useQSONForm,
   useQSONFormStore,
   validate
