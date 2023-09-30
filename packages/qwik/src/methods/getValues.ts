@@ -69,9 +69,7 @@ export function getValues<S, T, TResponseData extends ResponseData<T>>(
             return (object[key] =
               index === keys.length - 1
                 ? // If it is last key, add value
-                  Number.isNaN(field.value)
-                  ? undefined
-                  : field.value
+                  field.value
                 : // Otherwise return object or array
                   (typeof object[key] === "object" && object[key]) ||
                   (isNaN(+keys[index + 1]) ? {} : []));

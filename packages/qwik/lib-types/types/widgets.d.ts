@@ -28,6 +28,7 @@ export interface DefaultControlWidgets<CP extends ControlWidgetProps = ControlWi
     string: Component<CP>;
     boolean: Component<CP>;
     number: Component<CP>;
+    integer: Component<CP>;
     enum: Component<CP>;
     uniqueItemEnum: Component<CP>;
 }

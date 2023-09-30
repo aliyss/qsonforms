@@ -125,7 +125,6 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
         field.value = false;
       }
     });
-    console.log(field.value);
     return (
       <>
         <input
@@ -144,13 +143,24 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
 
 export const DefaultNumberWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
-    console.log(field.value);
+    const { onInput$, ...props } = additionalProps;
+    const onInput = $((event: Event, element: FieldElement) => {
+      const { valueAsNumber } = element as HTMLInputElement &
+        HTMLSelectElement &
+        HTMLTextAreaElement;
+      if (isNaN(valueAsNumber)) {
+        field.value = undefined;
+        element.value = "";
+      }
+      onInput$(event, element);
+    });
     return (
       <>
         <input
           type="number"
           value={field.value}
-          {...additionalProps}
+          onInput$={onInput}
+          {...props}
           class={`form-control-widget ${
             layout["ui:widget:class"] || "form-control-widget-default"
           }`}

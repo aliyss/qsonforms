@@ -147,11 +147,14 @@ export const ControlTemplateMaker = component$<
         name={dataPath.join(".")}
         of={formData}
         type={schemaType}
-        selectOptions={subSchema?.enum}
-        min={subSchema?.type === "number" ? subSchema.minimum : undefined}
-        max={subSchema?.type === "number" ? subSchema.maximum : undefined}
-        step={subSchema?.type === "number" ? subSchema.multipleOf : undefined}
-        default={subSchema?.default}
+        selectOptions={subSchema.enum}
+        min={subSchema.minimum}
+        max={subSchema.maximum}
+        step={subSchema.multipleOf}
+        default={subSchema.default}
+        required={parentSchema?.required?.includes(
+          dataPath[dataPath.length - 1],
+        )}
       >
         {(field, props) => (
           <FormTemplate

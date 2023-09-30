@@ -15,6 +15,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
     max?: number | undefined;
     step?: number | undefined;
     default?: any | undefined;
+    required?: boolean | undefined;
     selectOptions?: any[] | undefined;
 };
 /**
@@ -34,6 +35,7 @@ export type FieldProps<S, T, TResponseData extends ResponseData<T>, TFieldName e
     max?: number | undefined;
     step?: number | undefined;
     default?: any | undefined;
+    required?: boolean | undefined;
     selectOptions?: any[] | undefined;
 };
 /**

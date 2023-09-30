@@ -54,6 +54,7 @@ export const defaultWidgets: DefaultWidgets = {
     string: DefaultStringWidget,
     boolean: DefaultBooleanWidget,
     number: DefaultNumberWidget,
+    integer: DefaultNumberWidget,
     enum: DefaultSelectWidget,
     uniqueItemEnum: DefaultUniqueItemEnumWidget,
   },

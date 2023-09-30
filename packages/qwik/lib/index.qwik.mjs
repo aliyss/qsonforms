@@ -168,7 +168,7 @@ function getElementInput(element, field, type) {
   ].filter((e) => e.selected && !e.disabled).map((e) => e.value) : checked ? [
     ...field.value || [],
     value
-  ] : (field.value || []).filter((v) => v !== value) : type === "number" ? valueAsNumber : type === "boolean" ? checked : type === "File" && files ? noSerialize(files[0]) : type === "File[]" && files ? [
+  ] : (field.value || []).filter((v) => v !== value) : type === "number" ? Number.isNaN(valueAsNumber) ? void 0 : valueAsNumber : type === "integer" ? valueAsNumber : type === "boolean" ? checked : type === "File" && files ? noSerialize(files[0]) : type === "File[]" && files ? [
     ...files
   ].map((file) => noSerialize(file)) : type === "Date" && valueAsDate ? valueAsDate : field.value;
 }
@@ -484,16 +484,31 @@ const DefaultBooleanWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         props
       ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
       type: "checkbox",
-      value: _fnSignal((p0) => p0.field.value, [
+      value: _fnSignal((p0) => p0.field.value ? "on" : "off", [
         props
-      ], "p0.field.value")
+      ], 'p0.field.value?"on":"off"')
     }, 0, null)
   }, 1, "O9_5");
 }, "DefaultBooleanWidget_component_gxYt1twyeJo"));
 const DefaultNumberWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
+  const props1 = _restProps(props.additionalProps, [
+    "onInput$"
+  ]);
+  const onInput = /* @__PURE__ */ inlinedQrl((event, element) => {
+    const [props2] = useLexicalScope();
+    const { valueAsNumber } = element;
+    if (isNaN(valueAsNumber)) {
+      props2.field.value = void 0;
+      element.value = "";
+    }
+    props2.additionalProps.onInput$(event, element);
+  }, "DefaultNumberWidget_component_onInput_Q5lt73ZszUo", [
+    props
+  ]);
   return /* @__PURE__ */ _jsxC(Fragment, {
     children: /* @__PURE__ */ _jsxS("input", {
-      ...props.additionalProps
+      ...props1,
+      onInput$: onInput
     }, {
       class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
         props
@@ -586,6 +601,7 @@ const defaultWidgets = {
     string: DefaultStringWidget,
     boolean: DefaultBooleanWidget,
     number: DefaultNumberWidget,
+    integer: DefaultNumberWidget,
     enum: DefaultSelectWidget,
     uniqueItemEnum: DefaultUniqueItemEnumWidget
   }
@@ -1083,7 +1099,7 @@ const Lifecycle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props
 function Field({ children, name, type, ...props }) {
   const { of: form } = props;
   const field = getFieldStore(form, name);
-  if (props.default && (!field.internal.initialValue || !field.internal.startValue) && !field.value)
+  if (props.default && (!field.internal.initialValue || !field.internal.startValue) && field.value === void 0)
     field.value = props.default;
   return /* @__PURE__ */ _jsxC(Lifecycle, {
     store: field,
@@ -1133,7 +1149,8 @@ function Field({ children, name, type, ...props }) {
       min: props.min,
       max: props.max,
       step: props.step,
-      selectOptions: props.selectOptions
+      selectOptions: props.selectOptions,
+      required: props.required
     })
   }, 0, name);
 }
@@ -1199,6 +1216,22 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
       get of() {
         return props.formData;
       },
+      type: schemaType,
+      get selectOptions() {
+        return subSchema.enum;
+      },
+      get min() {
+        return subSchema.minimum;
+      },
+      get max() {
+        return subSchema.maximum;
+      },
+      get step() {
+        return subSchema.multipleOf;
+      },
+      get default() {
+        return subSchema.default;
+      },
       children: (field, props1) => /* @__PURE__ */ _jsxC(FormTemplate, {
         field,
         get layout() {
@@ -1246,16 +1279,16 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
           ], "p0.layout")
         }
       }, 1, "2l_4"),
-      default: subSchema?.default,
-      max: subSchema?.type === "number" ? subSchema.maximum : void 0,
-      min: subSchema?.type === "number" ? subSchema.minimum : void 0,
-      selectOptions: subSchema?.enum,
-      step: subSchema?.type === "number" ? subSchema.multipleOf : void 0,
-      type: schemaType,
+      required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
       [_IMMUTABLE]: {
+        default: _wrapProp(subSchema, "default"),
+        max: _wrapProp(subSchema, "maximum"),
+        min: _wrapProp(subSchema, "minimum"),
         of: _fnSignal((p0) => p0.formData, [
           props
-        ], "p0.formData")
+        ], "p0.formData"),
+        selectOptions: _wrapProp(subSchema, "enum"),
+        step: _wrapProp(subSchema, "multipleOf")
       }
     }, 3, "2l_5")
   }, 1, "2l_6");

@@ -12,7 +12,9 @@ import {
   DefaultPasswordWidget,
   DefaultStringWidget,
 } from "./components/defaults/default-control-widgets";
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv({
+  allErrors: true,
+});
 
 export default component$(() => {
   const formData = {
@@ -126,7 +128,7 @@ export default component$(() => {
         },
       },
     },
-    required: ["input", "initial"],
+    required: ["input", "initial", "number"],
   } as const;
 
   const uiSchema = createUiSchema({

@@ -47,6 +47,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
   max?: number | undefined;
   step?: number | undefined;
   default?: any | undefined;
+  required?: boolean | undefined;
   selectOptions?: any[] | undefined;
 };
 
@@ -75,6 +76,7 @@ export type FieldProps<
   max?: number | undefined;
   step?: number | undefined;
   default?: any | undefined;
+  required?: boolean | undefined;
   selectOptions?: any[] | undefined;
 };
 
@@ -102,7 +104,7 @@ export function Field<
   if (
     props.default &&
     (!field.internal.initialValue || !field.internal.startValue) &&
-    !field.value
+    field.value === undefined
   ) {
     field.value = props.default;
   }
@@ -143,6 +145,7 @@ export function Field<
         max: props.max,
         step: props.step,
         selectOptions: props.selectOptions,
+        required: props.required,
       })}
     </Lifecycle>
   );

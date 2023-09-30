@@ -48,6 +48,10 @@ export function getElementInput<T, TFieldName extends FieldPath<T>>(
         ? [...((field.value || []) as string[]), value]
         : ((field.value || []) as string[]).filter((v) => v !== value)
       : type === "number"
+      ? Number.isNaN(valueAsNumber)
+        ? undefined
+        : valueAsNumber
+      : type === "integer"
       ? valueAsNumber
       : type === "boolean"
       ? checked
