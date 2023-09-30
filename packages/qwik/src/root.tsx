@@ -17,7 +17,7 @@ const ajv = new Ajv({ allErrors: true });
 export default component$(() => {
   const formData = {
     input: "hello",
-    checkbox: true,
+    checkbox: false,
     initial: "empty",
     arrayUniqueEnum: ["test", "test2"],
   };
@@ -126,7 +126,7 @@ export default component$(() => {
         },
       },
     },
-    required: ["input", "number", "initial"],
+    required: ["input", "initial"],
   } as const;
 
   const uiSchema = createUiSchema({
@@ -249,6 +249,7 @@ export default component$(() => {
   }) as UiSchema;
 
   const validate = $((values: any) => {
+    console.log(values);
     const validator = ajv.compile(schema);
     const result = validator(values);
     if (!result) {

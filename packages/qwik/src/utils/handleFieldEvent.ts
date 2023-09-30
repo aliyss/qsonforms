@@ -54,6 +54,13 @@ export async function handleFieldEvent<
     field.value = inputValue;
   }
 
+  const nan = Number.isNaN(field.value);
+  const nanValue = field.value;
+
+  if (nan) {
+    field.value = undefined;
+  }
+
   // Transform value state
   for (const transformation of field.internal.transform) {
     field.value = await transformation(field.value, event, element);
@@ -68,4 +75,8 @@ export async function handleFieldEvent<
 
   // Validate value if required
   validateIfRequired(form, field, name, { on: validationModes });
+
+  if (nan) {
+    field.value = nanValue;
+  }
 }

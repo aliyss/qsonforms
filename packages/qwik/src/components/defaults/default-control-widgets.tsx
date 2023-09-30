@@ -125,12 +125,13 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
         field.value = false;
       }
     });
+    console.log(field.value);
     return (
       <>
         <input
           type="checkbox"
           checked={field.value}
-          value={field.value}
+          value={field.value ? "on" : "off"}
           {...additionalProps}
           class={`form-control-widget ${
             layout["ui:widget:class"] || "form-control-widget-default"
@@ -143,6 +144,7 @@ export const DefaultBooleanWidget = component$<ControlWidgetProps>(
 
 export const DefaultNumberWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
+    console.log(field.value);
     return (
       <>
         <input
