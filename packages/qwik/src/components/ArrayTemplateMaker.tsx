@@ -6,6 +6,12 @@ import {
   noSerialize,
   useTask$,
 } from "@builder.io/qwik";
+import { resolveSchema } from "../models/schema/utils/resolvers";
+import { toDataPathSegments } from "../models/schema/utils/path";
+import { getAdditionalTemplate, getTemplate } from "../models/uiSchema/utils";
+import { getInitialFieldStore } from "../utils/getInitialFieldStore";
+import { inferUiSchemaSingle } from "../models/uiSchema";
+import type { JSONSchema7, JSONSchema7Object } from "json-schema";
 import type {
   ArrayLayout,
   ArrayTemplateProps,
@@ -25,13 +31,7 @@ import type {
   VerticalTemplates,
 } from "../types";
 import { AdditionalTemplateType } from "../types";
-import { resolveSchema } from "../models/schema/utils/resolvers";
-import { toDataPathSegments } from "../models/schema/utils/path";
-import { getAdditionalTemplate, getTemplate } from "../models/uiSchema/utils";
-import type { JSONSchema7, JSONSchema7Object } from "json-schema";
-import { getInitialFieldStore } from "../utils/getInitialFieldStore";
 import { SchemaParser } from "./SchemaParser";
-import { inferUiSchemaSingle } from "../models/uiSchema";
 
 interface ArrayTemplateMakerProps<
   S,
@@ -62,21 +62,42 @@ interface ArrayTemplateMakerProps<
 function shiftAndDelete(obj: Record<string, any>, index: number, path: string) {
   const keys = Object.keys(obj);
 
-  const filteredKeys = keys.filter(
-    (key) =>
-      key.startsWith(`${path}.`) && parseInt(key.split(`${path}.`)[1]) > index,
-  );
+  const deleteBeforeKeys: string[] = [];
 
+  const filteredKeys = keys.filter((key) => {
+    const keySplit = key.split(`${path}.`);
+    keySplit.shift();
+    const restKeys = keySplit.join(`${path}.`).split(".");
+    if (parseInt(restKeys[0]) === index) {
+      deleteBeforeKeys.push(key);
+    }
+    return key.startsWith(`${path}.`) && parseInt(restKeys[0]) > index;
+  });
+
+  let deleteAfterKeys: string[] = [];
+  let lastInt: number | undefined = undefined;
   const newObj = keys.reduce((acc: any, key: any) => {
     if (filteredKeys.includes(key)) {
-      const parts = key.split(`${path}.`);
-      const newKey = `${path}.` + (parseInt(parts[1]) - 1).toString();
+      const keySplit = key.split(`${path}.`);
+      keySplit.shift();
+      const restKeys = keySplit.join(`${path}.`).split(".");
+      const firstRestKey = restKeys.shift();
+      const newKey =
+        `${path}.` +
+        [(parseInt(firstRestKey) - 1).toString(), ...restKeys].join(".");
       acc[key] = newKey;
+      if (!lastInt || lastInt < firstRestKey) {
+        lastInt = firstRestKey;
+        deleteAfterKeys = [];
+      }
+      if (lastInt === firstRestKey) {
+        deleteAfterKeys.push(key);
+      }
     }
     return acc;
   }, {});
 
-  return { newObj };
+  return { newObj, deleteBeforeKeys, deleteAfterKeys };
 }
 
 export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
@@ -127,23 +148,44 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
     const removeItem = $((i: number) => {
       const newItemPath = dataPath.join(".");
 
-      const { newObj } = shiftAndDelete(
+      const { newObj, deleteBeforeKeys, deleteAfterKeys } = shiftAndDelete(
         formData.internal.fields,
         i,
         newItemPath,
       );
 
-      let lastKey;
+      const safeKeys: string[] = [];
       Object.entries(newObj).forEach(([k, v]: any) => {
-        formData.internal.fields[v] = formData.internal.fields[k];
-        formData.internal.fields[v]!.name = v;
-        lastKey = k;
+        if (formData.internal.fields[v]) {
+          formData.internal.fields[v]!.value =
+            formData.internal.fields[k]?.value;
+        } else {
+          formData.internal.fields[v] = formData.internal.fields[k];
+          formData.internal.fields[v]!.name = v;
+        }
+
+        safeKeys.push(v);
       });
 
-      if (lastKey) {
-        delete formData.internal.fields[lastKey];
+      deleteBeforeKeys
+        .filter((v) => !safeKeys.includes(v))
+        .forEach((v) => {
+          delete formData.internal.fields[v];
+        });
+
+      if (deleteAfterKeys.length <= 0) {
+        const path = [...dataPath, i].join(".");
+        const keys = Object.keys(formData.internal.fields);
+
+        keys.forEach((key) => {
+          if (key.startsWith(`${path}`)) {
+            delete formData.internal.fields[key];
+          }
+        });
       } else {
-        delete formData.internal.fields[[...dataPath, i].join(".")];
+        deleteAfterKeys.forEach((v) => {
+          delete formData.internal.fields[v];
+        });
       }
 
       formData.internal.fields[newItemPath]?.value.splice(i, 1);

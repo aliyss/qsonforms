@@ -386,19 +386,16 @@ const DefaultControlWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
 }, "DefaultControlWidget_component_6y2CbsAOhVI"));
 const DefaultStringWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
-    children: [
-      /* @__PURE__ */ qwik._jsxQ("pre", null, null, JSON.stringify(props.additionalProps), 1, null),
-      /* @__PURE__ */ qwik._jsxS("input", {
-        ...props.additionalProps
-      }, {
-        class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
-          props
-        ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
-        value: qwik._fnSignal((p0) => p0.field.value, [
-          props
-        ], "p0.field.value")
-      }, 0, null)
-    ]
+    children: /* @__PURE__ */ qwik._jsxS("input", {
+      ...props.additionalProps
+    }, {
+      class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+        props
+      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
+      value: qwik._fnSignal((p0) => p0.field.value, [
+        props
+      ], "p0.field.value")
+    }, 0, null)
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
 const DefaultSelectWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
@@ -1356,17 +1353,41 @@ function createUiSchema({ templates, widgets, layout }) {
 }
 function shiftAndDelete(obj, index, path) {
   const keys = Object.keys(obj);
-  const filteredKeys = keys.filter((key) => key.startsWith(`${path}.`) && parseInt(key.split(`${path}.`)[1]) > index);
+  const deleteBeforeKeys = [];
+  const filteredKeys = keys.filter((key) => {
+    const keySplit = key.split(`${path}.`);
+    keySplit.shift();
+    const restKeys = keySplit.join(`${path}.`).split(".");
+    if (parseInt(restKeys[0]) === index)
+      deleteBeforeKeys.push(key);
+    return key.startsWith(`${path}.`) && parseInt(restKeys[0]) > index;
+  });
+  let deleteAfterKeys = [];
+  let lastInt = void 0;
   const newObj = keys.reduce((acc, key) => {
     if (filteredKeys.includes(key)) {
-      const parts = key.split(`${path}.`);
-      const newKey = `${path}.` + (parseInt(parts[1]) - 1).toString();
+      const keySplit = key.split(`${path}.`);
+      keySplit.shift();
+      const restKeys = keySplit.join(`${path}.`).split(".");
+      const firstRestKey = restKeys.shift();
+      const newKey = `${path}.` + [
+        (parseInt(firstRestKey) - 1).toString(),
+        ...restKeys
+      ].join(".");
       acc[key] = newKey;
+      if (!lastInt || lastInt < firstRestKey) {
+        lastInt = firstRestKey;
+        deleteAfterKeys = [];
+      }
+      if (lastInt === firstRestKey)
+        deleteAfterKeys.push(key);
     }
     return acc;
   }, {});
   return {
-    newObj
+    newObj,
+    deleteBeforeKeys,
+    deleteAfterKeys
   };
 }
 const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
@@ -1400,20 +1421,34 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
   const removeItem = /* @__PURE__ */ qwik.inlinedQrl((i) => {
     const [dataPath2, props2] = qwik.useLexicalScope();
     const newItemPath = dataPath2.join(".");
-    const { newObj } = shiftAndDelete(props2.formData.internal.fields, i, newItemPath);
-    let lastKey;
+    const { newObj, deleteBeforeKeys, deleteAfterKeys } = shiftAndDelete(props2.formData.internal.fields, i, newItemPath);
+    const safeKeys = [];
     Object.entries(newObj).forEach(([k, v]) => {
-      props2.formData.internal.fields[v] = props2.formData.internal.fields[k];
-      props2.formData.internal.fields[v].name = v;
-      lastKey = k;
+      if (props2.formData.internal.fields[v])
+        props2.formData.internal.fields[v].value = props2.formData.internal.fields[k]?.value;
+      else {
+        props2.formData.internal.fields[v] = props2.formData.internal.fields[k];
+        props2.formData.internal.fields[v].name = v;
+      }
+      safeKeys.push(v);
     });
-    if (lastKey)
-      delete props2.formData.internal.fields[lastKey];
-    else
-      delete props2.formData.internal.fields[[
+    deleteBeforeKeys.filter((v) => !safeKeys.includes(v)).forEach((v) => {
+      delete props2.formData.internal.fields[v];
+    });
+    if (deleteAfterKeys.length <= 0) {
+      const path = [
         ...dataPath2,
         i
-      ].join(".")];
+      ].join(".");
+      const keys = Object.keys(props2.formData.internal.fields);
+      keys.forEach((key) => {
+        if (key.startsWith(`${path}`))
+          delete props2.formData.internal.fields[key];
+      });
+    } else
+      deleteAfterKeys.forEach((v) => {
+        delete props2.formData.internal.fields[v];
+      });
     props2.formData.internal.fields[newItemPath]?.value.splice(i, 1);
   }, "ArrayTemplateMaker_component_removeItem_OTI0xQOnwaM", [
     dataPath,
