@@ -25,8 +25,9 @@ export type FormProps<S, T, TResponseData extends ResponseData<T>> = {
     autoComplete?: "on" | "off" | undefined;
     encType?: "application/x-www-form-urlencoded" | "multipart/form-data" | undefined;
     name?: string | undefined;
+    children?: JSX.Element;
 };
 /**
  * Form element that takes care of validation and simplifies submission.
  */
-export declare function QSONForm<S, T, TResponseData extends ResponseData<FromData<T>>>({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, reloadDocument, ...formProps }: FormProps<S, FromData<T>, TResponseData>): JSX.Element;
+export declare function QSONForm<S, T, TResponseData extends ResponseData<FromData<T>>>({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, children, reloadDocument, ...formProps }: FormProps<S, FromData<T>, TResponseData>): JSX.Element;

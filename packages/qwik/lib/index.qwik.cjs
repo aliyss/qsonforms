@@ -328,6 +328,7 @@ exports.AdditionalTemplateType = void 0;
   AdditionalTemplateType2["BUTTON"] = "Button";
   AdditionalTemplateType2["ERROR"] = "Error";
   AdditionalTemplateType2["FIELD"] = "Field";
+  AdditionalTemplateType2["ARRAY_ITEM"] = "ArrayItem";
 })(exports.AdditionalTemplateType || (exports.AdditionalTemplateType = {}));
 exports.WidgetType = void 0;
 (function(WidgetType2) {
@@ -385,16 +386,19 @@ const DefaultControlWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
 }, "DefaultControlWidget_component_6y2CbsAOhVI"));
 const DefaultStringWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
-    children: /* @__PURE__ */ qwik._jsxS("input", {
-      ...props.additionalProps
-    }, {
-      class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
-        props
-      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
-      value: qwik._fnSignal((p0) => p0.field.value, [
-        props
-      ], "p0.field.value")
-    }, 0, null)
+    children: [
+      /* @__PURE__ */ qwik._jsxQ("pre", null, null, JSON.stringify(props.additionalProps), 1, null),
+      /* @__PURE__ */ qwik._jsxS("input", {
+        ...props.additionalProps
+      }, {
+        class: qwik._fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+          props
+        ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
+        value: qwik._fnSignal((p0) => p0.field.value, [
+          props
+        ], "p0.field.value")
+      }, 0, null)
+    ]
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
 const DefaultSelectWidget = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
@@ -568,6 +572,19 @@ const DefaultTitle = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
     children: title ? /* @__PURE__ */ qwik._jsxQ("span", null, null, `${title}${props.required ? "*" : ""}`, 1, "jB_2") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "jB_3")
   }, 1, "jB_4");
 }, "DefaultTitle_component_fVzTY795bE0"));
+const DefaultArrayItem = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+  return /* @__PURE__ */ qwik._jsxQ("div", null, {
+    class: `form-array-item`
+  }, [
+    /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "jB_5"),
+    /* @__PURE__ */ qwik._jsxC(qwik.Slot, {
+      name: "remove-button",
+      [qwik._IMMUTABLE]: {
+        name: qwik._IMMUTABLE
+      }
+    }, 3, "jB_6")
+  ], 1, "jB_7");
+}, "DefaultArrayItem_component_xcRPx64OzmI"));
 const defaultTemplates = {
   [exports.TemplateType.VERTICAL_LAYOUT]: {
     defaultVertical: DefaultVertical
@@ -595,6 +612,9 @@ const defaultAdditionals = {
   },
   [exports.AdditionalTemplateType.FIELD]: {
     defaultTitle: DefaultTitle
+  },
+  [exports.AdditionalTemplateType.ARRAY_ITEM]: {
+    defaultArrayItem: DefaultArrayItem
   }
 };
 const defaultWidgets = {
@@ -1082,6 +1102,10 @@ const Lifecycle = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlined
       updateFormState(props2.of);
     }
     cleanup(() => setTimeout(() => {
+      if (!props2.store) {
+        updateFormState(props2.of);
+        return;
+      }
       props2.store.internal.consumers.splice(props2.store.internal.consumers.indexOf(consumer), 1);
       if (!props2.keepActive && !props2.store.internal.consumers.length) {
         props2.store.active = false;
@@ -1152,7 +1176,8 @@ function Field({ children, name, type, ...props }) {
       max: props.max,
       step: props.step,
       selectOptions: props.selectOptions,
-      required: props.required
+      required: props.required,
+      disabled: form.disabled
     })
   }, 0, name);
 }
@@ -1234,53 +1259,55 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
       get default() {
         return subSchema.default;
       },
-      children: (field, props1) => /* @__PURE__ */ qwik._jsxC(FormTemplate, {
-        field,
-        get layout() {
-          return props.layout;
-        },
-        children: [
-          /* @__PURE__ */ qwik._jsxC(TitleTemplate, {
-            "q:slot": "title",
-            get layout() {
-              return props.layout;
-            },
-            field,
-            required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
-            subSchema,
-            [qwik._IMMUTABLE]: {
-              layout: qwik._fnSignal((p0) => p0.layout, [
-                props
-              ], "p0.layout"),
-              "q:slot": qwik._IMMUTABLE
-            }
-          }, 3, "2l_2"),
-          /* @__PURE__ */ qwik._jsxQ("span", {
-            "q:slot": "description"
-          }, null, props.layout["ui:description"] || subSchema?.description, 1, null),
-          widget(field, props1),
-          /* @__PURE__ */ qwik._jsxC(ErrorTemplate, {
-            "q:slot": "errors",
-            get errors() {
-              return field.error;
-            },
-            get dirty() {
-              return field.dirty;
-            },
-            [qwik._IMMUTABLE]: {
-              dirty: qwik._wrapProp(field, "dirty"),
-              errors: qwik._wrapProp(field, "error"),
-              "q:slot": qwik._IMMUTABLE
-            }
-          }, 3, "2l_3")
-        ],
-        subSchema,
-        [qwik._IMMUTABLE]: {
-          layout: qwik._fnSignal((p0) => p0.layout, [
-            props
-          ], "p0.layout")
-        }
-      }, 1, "2l_4"),
+      children: (field, props1) => /* @__PURE__ */ qwik._jsxBranch(/* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+        children: field ? /* @__PURE__ */ qwik._jsxC(FormTemplate, {
+          field,
+          get layout() {
+            return props.layout;
+          },
+          children: [
+            /* @__PURE__ */ qwik._jsxC(TitleTemplate, {
+              "q:slot": "title",
+              get layout() {
+                return props.layout;
+              },
+              field,
+              required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
+              subSchema,
+              [qwik._IMMUTABLE]: {
+                layout: qwik._fnSignal((p0) => p0.layout, [
+                  props
+                ], "p0.layout"),
+                "q:slot": qwik._IMMUTABLE
+              }
+            }, 3, "2l_2"),
+            /* @__PURE__ */ qwik._jsxQ("span", {
+              "q:slot": "description"
+            }, null, props.layout["ui:description"] || subSchema?.description, 1, null),
+            widget(field, props1),
+            /* @__PURE__ */ qwik._jsxC(ErrorTemplate, {
+              "q:slot": "errors",
+              get errors() {
+                return field.error;
+              },
+              get dirty() {
+                return field.dirty;
+              },
+              [qwik._IMMUTABLE]: {
+                dirty: qwik._wrapProp(field, "dirty"),
+                errors: qwik._wrapProp(field, "error"),
+                "q:slot": qwik._IMMUTABLE
+              }
+            }, 3, "2l_3")
+          ],
+          subSchema,
+          [qwik._IMMUTABLE]: {
+            layout: qwik._fnSignal((p0) => p0.layout, [
+              props
+            ], "p0.layout")
+          }
+        }, 1, "2l_4") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "2l_5")
+      }, 1, "2l_6")),
       required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
       [qwik._IMMUTABLE]: {
         default: qwik._wrapProp(subSchema, "default"),
@@ -1292,8 +1319,8 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
         selectOptions: qwik._wrapProp(subSchema, "enum"),
         step: qwik._wrapProp(subSchema, "multipleOf")
       }
-    }, 3, "2l_5")
-  }, 1, "2l_6");
+    }, 3, "2l_7")
+  }, 1, "2l_8");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
 const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n\n.default-uniqueitem-enum-widget {\n  display: flex;\n  flex-direction: row;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
@@ -1327,6 +1354,21 @@ function createUiSchema({ templates, widgets, layout }) {
     templates
   };
 }
+function shiftAndDelete(obj, index, path) {
+  const keys = Object.keys(obj);
+  const filteredKeys = keys.filter((key) => key.startsWith(`${path}.`) && parseInt(key.split(`${path}.`)[1]) > index);
+  const newObj = keys.reduce((acc, key) => {
+    if (filteredKeys.includes(key)) {
+      const parts = key.split(`${path}.`);
+      const newKey = `${path}.` + (parseInt(parts[1]) - 1).toString();
+      acc[key] = newKey;
+    }
+    return acc;
+  }, {});
+  return {
+    newObj
+  };
+}
 const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   qwik._jsxBranch();
   let layoutScope = props.layout.scope;
@@ -1355,11 +1397,59 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
     dataPath,
     props
   ]);
+  const removeItem = /* @__PURE__ */ qwik.inlinedQrl((i) => {
+    const [dataPath2, props2] = qwik.useLexicalScope();
+    const newItemPath = dataPath2.join(".");
+    const { newObj } = shiftAndDelete(props2.formData.internal.fields, i, newItemPath);
+    let lastKey;
+    Object.entries(newObj).forEach(([k, v]) => {
+      props2.formData.internal.fields[v] = props2.formData.internal.fields[k];
+      props2.formData.internal.fields[v].name = v;
+      lastKey = k;
+    });
+    if (lastKey)
+      delete props2.formData.internal.fields[lastKey];
+    else
+      delete props2.formData.internal.fields[[
+        ...dataPath2,
+        i
+      ].join(".")];
+    props2.formData.internal.fields[newItemPath]?.value.splice(i, 1);
+  }, "ArrayTemplateMaker_component_removeItem_OTI0xQOnwaM", [
+    dataPath,
+    props
+  ]);
   const testUniqueEnum = subSchema.uniqueItems && subSchema.items && typeof subSchema.items !== "boolean" && !Array.isArray(subSchema.items) ? qwik.noSerialize(subSchema.items.enum) : void 0;
+  const defaultSubSchema = subSchema.default;
   qwik.useTaskQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
-    const [dataPath2, props2, testUniqueEnum2] = qwik.useLexicalScope();
-    if (!props2.formData.internal.fields[dataPath2.join(".")])
-      props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."));
+    const [dataPath2, defaultSubSchema2, props2, testUniqueEnum2] = qwik.useLexicalScope();
+    if (!props2.formData.internal.fields[dataPath2.join(".")]) {
+      props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."), {
+        value: defaultSubSchema2,
+        initialValue: [],
+        error: []
+      });
+      for (let i = 0; i < (defaultSubSchema2 || []).length; i++) {
+        props2.formData.internal.fields[[
+          ...dataPath2,
+          i
+        ].join(".")] = getInitialFieldStore([
+          ...dataPath2,
+          i
+        ].join("."), {
+          value: defaultSubSchema2[i],
+          initialValue: void 0,
+          error: []
+        });
+        props2.formData.internal.fields[[
+          ...dataPath2,
+          i
+        ].join(".")].internal.startValue = defaultSubSchema2[i];
+      }
+      props2.formData.internal.fields[[
+        ...dataPath2
+      ].join(".")].internal.startValue = defaultSubSchema2;
+    }
     if (testUniqueEnum2) {
       for (let i = 0; i < testUniqueEnum2.length; i++) {
         props2.formData.internal.fields[[
@@ -1383,40 +1473,65 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
     }
   }, "ArrayTemplateMaker_component_useTask_Csvxd5Rb3s8", [
     dataPath,
+    defaultSubSchema,
     props,
     testUniqueEnum
   ]));
-  const ButtonTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
+  const AddButtonTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
+  const RemoveButtonTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "removeButton");
+  const ArrayItemTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.ARRAY_ITEM, props.formData.uiSchema.templates, "defaultArrayItem");
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxC(FormTemplate, {
       get layout() {
         return props.layout;
       },
       children: [
-        (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
-          children: /* @__PURE__ */ qwik._jsxC(SchemaParser, {
-            itemScope: layoutScope + `/items/${i}`,
-            layout: {
-              ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
-            },
-            overrideScope: (newOverrideScope || layoutScope) + `/items/`,
-            get templates() {
-              return props.formData.uiSchema.templates;
-            },
-            get formData() {
-              return props.formData;
-            },
-            [qwik._IMMUTABLE]: {
-              formData: qwik._fnSignal((p0) => p0.formData, [
-                props
-              ], "p0.formData"),
-              templates: qwik._fnSignal((p0) => p0.formData.uiSchema.templates, [
-                props
-              ], "p0.formData.uiSchema.templates")
-            }
-          }, 3, dataPath.join(".") + "-" + i)
-        }, 1, "92_1")),
-        !testUniqueEnum ? /* @__PURE__ */ qwik._jsxC(ButtonTemplate, {
+        (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ qwik._jsxBranch(/* @__PURE__ */ qwik._jsxC(ArrayItemTemplate, {
+          children: [
+            /* @__PURE__ */ qwik._jsxC(SchemaParser, {
+              itemScope: layoutScope + `/items/${i}`,
+              layout: {
+                ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
+              },
+              overrideScope: (newOverrideScope || layoutScope) + `/items/`,
+              get templates() {
+                return props.formData.uiSchema.templates;
+              },
+              get formData() {
+                return props.formData;
+              },
+              [qwik._IMMUTABLE]: {
+                formData: qwik._fnSignal((p0) => p0.formData, [
+                  props
+                ], "p0.formData"),
+                templates: qwik._fnSignal((p0) => p0.formData.uiSchema.templates, [
+                  props
+                ], "p0.formData.uiSchema.templates")
+              }
+            }, 3, "92_1"),
+            !testUniqueEnum ? /* @__PURE__ */ qwik._jsxC(RemoveButtonTemplate, {
+              children: "Remove",
+              props: {
+                type: "button",
+                onClick$: /* @__PURE__ */ qwik.inlinedQrl(() => {
+                  const [i2, removeItem2] = qwik.useLexicalScope();
+                  return removeItem2(i2);
+                }, "ArrayTemplateMaker_component__Fragment_FormTemplate_ArrayItemTemplate_RemoveButtonTemplate_props_080XKdSEXos", [
+                  i,
+                  removeItem
+                ])
+              },
+              slot: "remove-button",
+              [qwik._IMMUTABLE]: {
+                slot: qwik._IMMUTABLE
+              }
+            }, 3, "92_2") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_3")
+          ]
+        }, 1, [
+          ...dataPath,
+          i
+        ].join(".")))),
+        !testUniqueEnum ? /* @__PURE__ */ qwik._jsxC(AddButtonTemplate, {
           get props() {
             return {
               type: "button",
@@ -1432,7 +1547,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
               addItem
             ], '{type:"button",onClick$:p0}')
           }
-        }, 3, "92_2") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_3")
+        }, 3, "92_4") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_5")
       ],
       subSchema,
       [qwik._IMMUTABLE]: {
@@ -1440,8 +1555,8 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
           props
         ], "p0.layout")
       }
-    }, 1, "92_4")
-  }, 1, "92_5");
+    }, 1, "92_6")
+  }, 1, "92_7");
 }, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   qwik._jsxBranch();
@@ -1604,7 +1719,7 @@ const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
     }, 1, "PK_4");
   throw new Error(`SchemaParser: Layout Type is invalid at: ${JSON.stringify(props.layout, null, 4)}`);
 }, "SchemaParser_component_FDQ3hr5ltMg"));
-function QSONForm({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, reloadDocument, ...formProps }) {
+function QSONForm({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, children, reloadDocument, ...formProps }) {
   qwik._jsxBranch();
   const { encType } = formProps;
   const options = {
@@ -1642,7 +1757,8 @@ function QSONForm({ of: form, action, onSubmit$, responseDuration: duration, kee
         [qwik._IMMUTABLE]: {
           props: qwik._IMMUTABLE
         }
-      }, 3, "iB_1") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "iB_2")
+      }, 3, "iB_1") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "iB_2"),
+      children
     ],
     onSubmit$: /* @__PURE__ */ qwik.inlinedQrl(async (event, element) => {
       const [action2, encType2, form2, keepResponse2, onSubmit$2, options2, reloadDocument2] = qwik.useLexicalScope();

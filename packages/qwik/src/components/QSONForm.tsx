@@ -66,6 +66,7 @@ export type FormProps<S, T, TResponseData extends ResponseData<T>> = {
     | "multipart/form-data"
     | undefined;
   name?: string | undefined;
+  children?: JSX.Element;
 };
 
 /**
@@ -85,6 +86,7 @@ export function QSONForm<
   shouldTouched,
   shouldDirty,
   shouldFocus,
+  children,
   reloadDocument,
   ...formProps
 }: FormProps<S, FromData<T>, TResponseData>): JSX.Element {
@@ -193,6 +195,7 @@ export function QSONForm<
       ) : (
         <></>
       )}
+      {children}
     </form>
   );
 }

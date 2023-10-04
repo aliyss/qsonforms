@@ -21,6 +21,7 @@ export const DefaultStringWidget = component$<ControlWidgetProps>(
   ({ field, layout, additionalProps }) => {
     return (
       <>
+        <pre>{JSON.stringify(additionalProps)}</pre>
         <input
           value={field.value}
           {...additionalProps}

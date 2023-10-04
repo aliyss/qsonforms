@@ -13,6 +13,7 @@ import type {
   ButtonTemplateProps,
   ControlTemplates,
   ControlWidgets,
+  DefaultArrayItemTemplateProps,
   DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
@@ -56,6 +57,26 @@ interface ArrayTemplateMakerProps<
   formData: FormStore<S, T, TResponseData>;
   overrideScope?: string;
   itemScope?: string;
+}
+
+function shiftAndDelete(obj: Record<string, any>, index: number, path: string) {
+  const keys = Object.keys(obj);
+
+  const filteredKeys = keys.filter(
+    (key) =>
+      key.startsWith(`${path}.`) && parseInt(key.split(`${path}.`)[1]) > index,
+  );
+
+  const newObj = keys.reduce((acc: any, key: any) => {
+    if (filteredKeys.includes(key)) {
+      const parts = key.split(`${path}.`);
+      const newKey = `${path}.` + (parseInt(parts[1]) - 1).toString();
+      acc[key] = newKey;
+    }
+    return acc;
+  }, {});
+
+  return { newObj };
 }
 
 export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
@@ -103,6 +124,31 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
       formData.internal.fields[newItemPath]!.value.push(undefined);
     });
 
+    const removeItem = $((i: number) => {
+      const newItemPath = dataPath.join(".");
+
+      const { newObj } = shiftAndDelete(
+        formData.internal.fields,
+        i,
+        newItemPath,
+      );
+
+      let lastKey;
+      Object.entries(newObj).forEach(([k, v]: any) => {
+        formData.internal.fields[v] = formData.internal.fields[k];
+        formData.internal.fields[v]!.name = v;
+        lastKey = k;
+      });
+
+      if (lastKey) {
+        delete formData.internal.fields[lastKey];
+      } else {
+        delete formData.internal.fields[[...dataPath, i].join(".")];
+      }
+
+      formData.internal.fields[newItemPath]?.value.splice(i, 1);
+    });
+
     const testUniqueEnum =
       subSchema.uniqueItems &&
       subSchema.items &&
@@ -111,11 +157,31 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
         ? noSerialize(subSchema.items.enum)
         : undefined;
 
+    const defaultSubSchema = subSchema.default as any[];
+
     useTask$(() => {
       if (!formData.internal.fields[dataPath.join(".")]) {
         formData.internal.fields[dataPath.join(".")] = getInitialFieldStore(
           dataPath.join("."),
+          {
+            value: defaultSubSchema,
+            initialValue: [],
+            error: [],
+          },
         );
+        for (let i = 0; i < (defaultSubSchema || []).length; i++) {
+          formData.internal.fields[[...dataPath, i].join(".")] =
+            getInitialFieldStore([...dataPath, i].join("."), {
+              value: defaultSubSchema[i],
+              initialValue: undefined,
+              error: [],
+            });
+          formData.internal.fields[
+            [...dataPath, i].join(".")
+          ]!.internal.startValue = defaultSubSchema[i];
+        }
+        formData.internal.fields[[...dataPath].join(".")]!.internal.startValue =
+          defaultSubSchema;
       }
       if (testUniqueEnum) {
         for (let i = 0; i < testUniqueEnum.length; i++) {
@@ -142,11 +208,25 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
       }
     });
 
-    const ButtonTemplate = getAdditionalTemplate(
+    const AddButtonTemplate = getAdditionalTemplate(
       AdditionalTemplateType.BUTTON,
       formData.uiSchema.templates,
       "addButton",
     ) as Component<ButtonTemplateProps & QwikIntrinsicElements["button"]>;
+
+    const RemoveButtonTemplate = getAdditionalTemplate(
+      AdditionalTemplateType.BUTTON,
+      formData.uiSchema.templates,
+      "removeButton",
+    ) as Component<ButtonTemplateProps & QwikIntrinsicElements["button"]>;
+
+    const ArrayItemTemplate = getAdditionalTemplate(
+      AdditionalTemplateType.ARRAY_ITEM,
+      formData.uiSchema.templates,
+      "defaultArrayItem",
+    ) as Component<
+      DefaultArrayItemTemplateProps & QwikIntrinsicElements["button"]
+    >;
 
     return (
       <>
@@ -159,9 +239,8 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
             formData.internal.fields[dataPath.join(".")]?.value ||
             []
           ).map((_item: any, i: number) => (
-            <>
+            <ArrayItemTemplate key={[...dataPath, i].join(".")}>
               <SchemaParser
-                key={dataPath.join(".") + "-" + i}
                 layout={{
                   ...(layout["ui:items"] ||
                     inferUiSchemaSingle(
@@ -174,12 +253,22 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
                 templates={formData.uiSchema.templates}
                 formData={formData}
               />
-            </>
+              {!testUniqueEnum ? (
+                <RemoveButtonTemplate
+                  slot="remove-button"
+                  props={{ type: "button", onClick$: $(() => removeItem(i)) }}
+                >
+                  Remove
+                </RemoveButtonTemplate>
+              ) : (
+                <></>
+              )}
+            </ArrayItemTemplate>
           ))}
           {!testUniqueEnum ? (
-            <ButtonTemplate props={{ type: "button", onClick$: addItem }}>
+            <AddButtonTemplate props={{ type: "button", onClick$: addItem }}>
               Add
-            </ButtonTemplate>
+            </AddButtonTemplate>
           ) : (
             <></>
           )}

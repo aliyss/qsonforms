@@ -74,6 +74,7 @@ export default component$(() => {
       array: {
         title: "Array",
         type: "array",
+        default: [1, 2, 3],
         items: {
           title: "Number",
           type: "number",
@@ -261,7 +262,7 @@ export default component$(() => {
     return [];
   });
 
-  const [, { QSONForm }] = useQSONForm(schema, {
+  const [form, { QSONForm }] = useQSONForm(schema, {
     loader: useSignal(formData),
     uiSchema: uiSchema,
     validate: validate,
@@ -271,6 +272,7 @@ export default component$(() => {
 
   const onSubmit = $((value: any) => {
     console.log(value);
+    form.disabled = !form.disabled;
   });
 
   return (
@@ -279,7 +281,9 @@ export default component$(() => {
         <meta charSet="utf-8" />
       </head>
       <body lang="en" style="background: black;">
-        <QSONForm onSubmit$={onSubmit} shouldActive={false} />
+        <QSONForm onSubmit$={onSubmit} shouldActive={false}>
+          <p>Anything else</p>
+        </QSONForm>
       </body>
     </>
   );

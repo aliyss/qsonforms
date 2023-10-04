@@ -6,7 +6,8 @@ import { ElementLayout } from "./layout";
 export declare enum AdditionalTemplateType {
     BUTTON = "Button",
     ERROR = "Error",
-    FIELD = "Field"
+    FIELD = "Field",
+    ARRAY_ITEM = "ArrayItem"
 }
 export interface ButtonTemplateProps {
     props: QwikIntrinsicElements["button"];
@@ -21,6 +22,8 @@ export interface DefaultFieldTemplateProps {
     subSchema: JSONSchema7Object;
     required?: boolean | undefined;
 }
+export interface DefaultArrayItemTemplateProps {
+}
 export interface DefaultButtonTemplates<CP extends ButtonTemplateProps = ButtonTemplateProps> {
     addButton?: Component<CP>;
     removeButton?: Component<CP>;
@@ -34,8 +37,12 @@ export interface DefaultErrorTemplates<CP extends ErrorTemplateProps = ErrorTemp
 export interface DefaultFieldTemplates<CP extends DefaultFieldTemplateProps = DefaultFieldTemplateProps> {
     defaultTitle?: Component<CP>;
 }
+export interface DefaultArrayItemTemplates<CP extends DefaultArrayItemTemplateProps = DefaultArrayItemTemplateProps> {
+    defaultArrayItem?: Component<CP>;
+}
 export interface DefaultAdditionals {
     [AdditionalTemplateType.BUTTON]?: DefaultButtonTemplates<ButtonTemplateProps>;
     [AdditionalTemplateType.ERROR]?: DefaultErrorTemplates<ErrorTemplateProps>;
     [AdditionalTemplateType.FIELD]?: DefaultFieldTemplates<DefaultFieldTemplateProps>;
+    [AdditionalTemplateType.ARRAY_ITEM]?: DefaultArrayItemTemplates<DefaultArrayItemTemplateProps>;
 }

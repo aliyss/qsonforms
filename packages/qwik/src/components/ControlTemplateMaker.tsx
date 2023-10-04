@@ -157,30 +157,36 @@ export const ControlTemplateMaker = component$<
         )}
       >
         {(field, props) => (
-          <FormTemplate
-            field={field}
-            layout={layout}
-            subSchema={subSchema as JSONSchema7Object}
-          >
-            <TitleTemplate
-              q:slot="title"
-              layout={layout}
-              subSchema={subSchema as JSONSchema7Object}
-              required={parentSchema?.required?.includes(
-                dataPath[dataPath.length - 1],
-              )}
-              field={field}
-            />
-            <span q:slot="description">
-              {layout["ui:description"] || subSchema?.description}
-            </span>
-            {widget(field, props)}
-            <ErrorTemplate
-              q:slot="errors"
-              errors={field.error}
-              dirty={field.dirty}
-            />
-          </FormTemplate>
+          <>
+            {field ? (
+              <FormTemplate
+                field={field}
+                layout={layout}
+                subSchema={subSchema as JSONSchema7Object}
+              >
+                <TitleTemplate
+                  q:slot="title"
+                  layout={layout}
+                  subSchema={subSchema as JSONSchema7Object}
+                  required={parentSchema?.required?.includes(
+                    dataPath[dataPath.length - 1],
+                  )}
+                  field={field}
+                />
+                <span q:slot="description">
+                  {layout["ui:description"] || subSchema?.description}
+                </span>
+                {widget(field, props)}
+                <ErrorTemplate
+                  q:slot="errors"
+                  errors={field.error}
+                  dirty={field.dirty}
+                />
+              </FormTemplate>
+            ) : (
+              <></>
+            )}
+          </>
         )}
       </Field>
     </>

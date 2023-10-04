@@ -21,6 +21,7 @@ import {
   DefaultSubmitButton,
 } from "../../components/defaults/default-button";
 import {
+  DefaultArrayItem,
   DefaultError,
   DefaultTitle,
 } from "../../components/defaults/default-additional";
@@ -45,6 +46,9 @@ export const defaultAdditionals: DefaultAdditionals = {
   },
   [AdditionalTemplateType.FIELD]: {
     defaultTitle: DefaultTitle,
+  },
+  [AdditionalTemplateType.ARRAY_ITEM]: {
+    defaultArrayItem: DefaultArrayItem,
   },
 };
 

@@ -103,6 +103,11 @@ export const Lifecycle: <
       // On cleanup, remove consumer from field
       cleanup(() =>
         setTimeout(() => {
+          if (!store) {
+            updateFormState(form);
+            return;
+          }
+
           store.internal.consumers.splice(
             store.internal.consumers.indexOf(consumer),
             1,

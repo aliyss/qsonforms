@@ -326,6 +326,7 @@ let AdditionalTemplateType;
   AdditionalTemplateType2["BUTTON"] = "Button";
   AdditionalTemplateType2["ERROR"] = "Error";
   AdditionalTemplateType2["FIELD"] = "Field";
+  AdditionalTemplateType2["ARRAY_ITEM"] = "ArrayItem";
 })(AdditionalTemplateType || (AdditionalTemplateType = {}));
 let WidgetType;
 (function(WidgetType2) {
@@ -383,16 +384,19 @@ const DefaultControlWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
 }, "DefaultControlWidget_component_6y2CbsAOhVI"));
 const DefaultStringWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   return /* @__PURE__ */ _jsxC(Fragment, {
-    children: /* @__PURE__ */ _jsxS("input", {
-      ...props.additionalProps
-    }, {
-      class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
-        props
-      ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
-      value: _fnSignal((p0) => p0.field.value, [
-        props
-      ], "p0.field.value")
-    }, 0, null)
+    children: [
+      /* @__PURE__ */ _jsxQ("pre", null, null, JSON.stringify(props.additionalProps), 1, null),
+      /* @__PURE__ */ _jsxS("input", {
+        ...props.additionalProps
+      }, {
+        class: _fnSignal((p0) => `form-control-widget ${p0.layout["ui:widget:class"] || "form-control-widget-default"}`, [
+          props
+        ], '`form-control-widget ${p0.layout["ui:widget:class"]||"form-control-widget-default"}`'),
+        value: _fnSignal((p0) => p0.field.value, [
+          props
+        ], "p0.field.value")
+      }, 0, null)
+    ]
   }, 1, "O9_1");
 }, "DefaultStringWidget_component_Pk5JOD6cApc"));
 const DefaultSelectWidget = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
@@ -566,6 +570,19 @@ const DefaultTitle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((pr
     children: title ? /* @__PURE__ */ _jsxQ("span", null, null, `${title}${props.required ? "*" : ""}`, 1, "jB_2") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "jB_3")
   }, 1, "jB_4");
 }, "DefaultTitle_component_fVzTY795bE0"));
+const DefaultArrayItem = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl(() => {
+  return /* @__PURE__ */ _jsxQ("div", null, {
+    class: `form-array-item`
+  }, [
+    /* @__PURE__ */ _jsxC(Slot, null, 3, "jB_5"),
+    /* @__PURE__ */ _jsxC(Slot, {
+      name: "remove-button",
+      [_IMMUTABLE]: {
+        name: _IMMUTABLE
+      }
+    }, 3, "jB_6")
+  ], 1, "jB_7");
+}, "DefaultArrayItem_component_xcRPx64OzmI"));
 const defaultTemplates = {
   [TemplateType.VERTICAL_LAYOUT]: {
     defaultVertical: DefaultVertical
@@ -593,6 +610,9 @@ const defaultAdditionals = {
   },
   [AdditionalTemplateType.FIELD]: {
     defaultTitle: DefaultTitle
+  },
+  [AdditionalTemplateType.ARRAY_ITEM]: {
+    defaultArrayItem: DefaultArrayItem
   }
 };
 const defaultWidgets = {
@@ -1080,6 +1100,10 @@ const Lifecycle = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props
       updateFormState(props2.of);
     }
     cleanup(() => setTimeout(() => {
+      if (!props2.store) {
+        updateFormState(props2.of);
+        return;
+      }
       props2.store.internal.consumers.splice(props2.store.internal.consumers.indexOf(consumer), 1);
       if (!props2.keepActive && !props2.store.internal.consumers.length) {
         props2.store.active = false;
@@ -1150,7 +1174,8 @@ function Field({ children, name, type, ...props }) {
       max: props.max,
       step: props.step,
       selectOptions: props.selectOptions,
-      required: props.required
+      required: props.required,
+      disabled: form.disabled
     })
   }, 0, name);
 }
@@ -1232,53 +1257,55 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
       get default() {
         return subSchema.default;
       },
-      children: (field, props1) => /* @__PURE__ */ _jsxC(FormTemplate, {
-        field,
-        get layout() {
-          return props.layout;
-        },
-        children: [
-          /* @__PURE__ */ _jsxC(TitleTemplate, {
-            "q:slot": "title",
-            get layout() {
-              return props.layout;
-            },
-            field,
-            required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
-            subSchema,
-            [_IMMUTABLE]: {
-              layout: _fnSignal((p0) => p0.layout, [
-                props
-              ], "p0.layout"),
-              "q:slot": _IMMUTABLE
-            }
-          }, 3, "2l_2"),
-          /* @__PURE__ */ _jsxQ("span", {
-            "q:slot": "description"
-          }, null, props.layout["ui:description"] || subSchema?.description, 1, null),
-          widget(field, props1),
-          /* @__PURE__ */ _jsxC(ErrorTemplate, {
-            "q:slot": "errors",
-            get errors() {
-              return field.error;
-            },
-            get dirty() {
-              return field.dirty;
-            },
-            [_IMMUTABLE]: {
-              dirty: _wrapProp(field, "dirty"),
-              errors: _wrapProp(field, "error"),
-              "q:slot": _IMMUTABLE
-            }
-          }, 3, "2l_3")
-        ],
-        subSchema,
-        [_IMMUTABLE]: {
-          layout: _fnSignal((p0) => p0.layout, [
-            props
-          ], "p0.layout")
-        }
-      }, 1, "2l_4"),
+      children: (field, props1) => /* @__PURE__ */ _jsxBranch(/* @__PURE__ */ _jsxC(Fragment, {
+        children: field ? /* @__PURE__ */ _jsxC(FormTemplate, {
+          field,
+          get layout() {
+            return props.layout;
+          },
+          children: [
+            /* @__PURE__ */ _jsxC(TitleTemplate, {
+              "q:slot": "title",
+              get layout() {
+                return props.layout;
+              },
+              field,
+              required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
+              subSchema,
+              [_IMMUTABLE]: {
+                layout: _fnSignal((p0) => p0.layout, [
+                  props
+                ], "p0.layout"),
+                "q:slot": _IMMUTABLE
+              }
+            }, 3, "2l_2"),
+            /* @__PURE__ */ _jsxQ("span", {
+              "q:slot": "description"
+            }, null, props.layout["ui:description"] || subSchema?.description, 1, null),
+            widget(field, props1),
+            /* @__PURE__ */ _jsxC(ErrorTemplate, {
+              "q:slot": "errors",
+              get errors() {
+                return field.error;
+              },
+              get dirty() {
+                return field.dirty;
+              },
+              [_IMMUTABLE]: {
+                dirty: _wrapProp(field, "dirty"),
+                errors: _wrapProp(field, "error"),
+                "q:slot": _IMMUTABLE
+              }
+            }, 3, "2l_3")
+          ],
+          subSchema,
+          [_IMMUTABLE]: {
+            layout: _fnSignal((p0) => p0.layout, [
+              props
+            ], "p0.layout")
+          }
+        }, 1, "2l_4") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "2l_5")
+      }, 1, "2l_6")),
       required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
       [_IMMUTABLE]: {
         default: _wrapProp(subSchema, "default"),
@@ -1290,8 +1317,8 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
         selectOptions: _wrapProp(subSchema, "enum"),
         step: _wrapProp(subSchema, "multipleOf")
       }
-    }, 3, "2l_5")
-  }, 1, "2l_6");
+    }, 3, "2l_7")
+  }, 1, "2l_8");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
 const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n\n.default-uniqueitem-enum-widget {\n  display: flex;\n  flex-direction: row;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
@@ -1325,6 +1352,21 @@ function createUiSchema({ templates, widgets, layout }) {
     templates
   };
 }
+function shiftAndDelete(obj, index, path) {
+  const keys = Object.keys(obj);
+  const filteredKeys = keys.filter((key) => key.startsWith(`${path}.`) && parseInt(key.split(`${path}.`)[1]) > index);
+  const newObj = keys.reduce((acc, key) => {
+    if (filteredKeys.includes(key)) {
+      const parts = key.split(`${path}.`);
+      const newKey = `${path}.` + (parseInt(parts[1]) - 1).toString();
+      acc[key] = newKey;
+    }
+    return acc;
+  }, {});
+  return {
+    newObj
+  };
+}
 const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   _jsxBranch();
   let layoutScope = props.layout.scope;
@@ -1353,11 +1395,59 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
     dataPath,
     props
   ]);
+  const removeItem = /* @__PURE__ */ inlinedQrl((i) => {
+    const [dataPath2, props2] = useLexicalScope();
+    const newItemPath = dataPath2.join(".");
+    const { newObj } = shiftAndDelete(props2.formData.internal.fields, i, newItemPath);
+    let lastKey;
+    Object.entries(newObj).forEach(([k, v]) => {
+      props2.formData.internal.fields[v] = props2.formData.internal.fields[k];
+      props2.formData.internal.fields[v].name = v;
+      lastKey = k;
+    });
+    if (lastKey)
+      delete props2.formData.internal.fields[lastKey];
+    else
+      delete props2.formData.internal.fields[[
+        ...dataPath2,
+        i
+      ].join(".")];
+    props2.formData.internal.fields[newItemPath]?.value.splice(i, 1);
+  }, "ArrayTemplateMaker_component_removeItem_OTI0xQOnwaM", [
+    dataPath,
+    props
+  ]);
   const testUniqueEnum = subSchema.uniqueItems && subSchema.items && typeof subSchema.items !== "boolean" && !Array.isArray(subSchema.items) ? noSerialize(subSchema.items.enum) : void 0;
+  const defaultSubSchema = subSchema.default;
   useTaskQrl(/* @__PURE__ */ inlinedQrl(() => {
-    const [dataPath2, props2, testUniqueEnum2] = useLexicalScope();
-    if (!props2.formData.internal.fields[dataPath2.join(".")])
-      props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."));
+    const [dataPath2, defaultSubSchema2, props2, testUniqueEnum2] = useLexicalScope();
+    if (!props2.formData.internal.fields[dataPath2.join(".")]) {
+      props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."), {
+        value: defaultSubSchema2,
+        initialValue: [],
+        error: []
+      });
+      for (let i = 0; i < (defaultSubSchema2 || []).length; i++) {
+        props2.formData.internal.fields[[
+          ...dataPath2,
+          i
+        ].join(".")] = getInitialFieldStore([
+          ...dataPath2,
+          i
+        ].join("."), {
+          value: defaultSubSchema2[i],
+          initialValue: void 0,
+          error: []
+        });
+        props2.formData.internal.fields[[
+          ...dataPath2,
+          i
+        ].join(".")].internal.startValue = defaultSubSchema2[i];
+      }
+      props2.formData.internal.fields[[
+        ...dataPath2
+      ].join(".")].internal.startValue = defaultSubSchema2;
+    }
     if (testUniqueEnum2) {
       for (let i = 0; i < testUniqueEnum2.length; i++) {
         props2.formData.internal.fields[[
@@ -1381,40 +1471,65 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
     }
   }, "ArrayTemplateMaker_component_useTask_Csvxd5Rb3s8", [
     dataPath,
+    defaultSubSchema,
     props,
     testUniqueEnum
   ]));
-  const ButtonTemplate = getAdditionalTemplate(AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
+  const AddButtonTemplate = getAdditionalTemplate(AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
+  const RemoveButtonTemplate = getAdditionalTemplate(AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "removeButton");
+  const ArrayItemTemplate = getAdditionalTemplate(AdditionalTemplateType.ARRAY_ITEM, props.formData.uiSchema.templates, "defaultArrayItem");
   return /* @__PURE__ */ _jsxC(Fragment, {
     children: /* @__PURE__ */ _jsxC(FormTemplate, {
       get layout() {
         return props.layout;
       },
       children: [
-        (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxC(Fragment, {
-          children: /* @__PURE__ */ _jsxC(SchemaParser, {
-            itemScope: layoutScope + `/items/${i}`,
-            layout: {
-              ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
-            },
-            overrideScope: (newOverrideScope || layoutScope) + `/items/`,
-            get templates() {
-              return props.formData.uiSchema.templates;
-            },
-            get formData() {
-              return props.formData;
-            },
-            [_IMMUTABLE]: {
-              formData: _fnSignal((p0) => p0.formData, [
-                props
-              ], "p0.formData"),
-              templates: _fnSignal((p0) => p0.formData.uiSchema.templates, [
-                props
-              ], "p0.formData.uiSchema.templates")
-            }
-          }, 3, dataPath.join(".") + "-" + i)
-        }, 1, "92_1")),
-        !testUniqueEnum ? /* @__PURE__ */ _jsxC(ButtonTemplate, {
+        (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxBranch(/* @__PURE__ */ _jsxC(ArrayItemTemplate, {
+          children: [
+            /* @__PURE__ */ _jsxC(SchemaParser, {
+              itemScope: layoutScope + `/items/${i}`,
+              layout: {
+                ...props.layout["ui:items"] || inferUiSchemaSingle(subSchema?.items, layoutScope + `/items/${i}`)
+              },
+              overrideScope: (newOverrideScope || layoutScope) + `/items/`,
+              get templates() {
+                return props.formData.uiSchema.templates;
+              },
+              get formData() {
+                return props.formData;
+              },
+              [_IMMUTABLE]: {
+                formData: _fnSignal((p0) => p0.formData, [
+                  props
+                ], "p0.formData"),
+                templates: _fnSignal((p0) => p0.formData.uiSchema.templates, [
+                  props
+                ], "p0.formData.uiSchema.templates")
+              }
+            }, 3, "92_1"),
+            !testUniqueEnum ? /* @__PURE__ */ _jsxC(RemoveButtonTemplate, {
+              children: "Remove",
+              props: {
+                type: "button",
+                onClick$: /* @__PURE__ */ inlinedQrl(() => {
+                  const [i2, removeItem2] = useLexicalScope();
+                  return removeItem2(i2);
+                }, "ArrayTemplateMaker_component__Fragment_FormTemplate_ArrayItemTemplate_RemoveButtonTemplate_props_080XKdSEXos", [
+                  i,
+                  removeItem
+                ])
+              },
+              slot: "remove-button",
+              [_IMMUTABLE]: {
+                slot: _IMMUTABLE
+              }
+            }, 3, "92_2") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_3")
+          ]
+        }, 1, [
+          ...dataPath,
+          i
+        ].join(".")))),
+        !testUniqueEnum ? /* @__PURE__ */ _jsxC(AddButtonTemplate, {
           get props() {
             return {
               type: "button",
@@ -1430,7 +1545,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
               addItem
             ], '{type:"button",onClick$:p0}')
           }
-        }, 3, "92_2") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_3")
+        }, 3, "92_4") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_5")
       ],
       subSchema,
       [_IMMUTABLE]: {
@@ -1438,8 +1553,8 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
           props
         ], "p0.layout")
       }
-    }, 1, "92_4")
-  }, 1, "92_5");
+    }, 1, "92_6")
+  }, 1, "92_7");
 }, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   _jsxBranch();
@@ -1602,7 +1717,7 @@ const SchemaParser = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((pr
     }, 1, "PK_4");
   throw new Error(`SchemaParser: Layout Type is invalid at: ${JSON.stringify(props.layout, null, 4)}`);
 }, "SchemaParser_component_FDQ3hr5ltMg"));
-function QSONForm({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, reloadDocument, ...formProps }) {
+function QSONForm({ of: form, action, onSubmit$, responseDuration: duration, keepResponse, shouldActive, shouldTouched, shouldDirty, shouldFocus, children, reloadDocument, ...formProps }) {
   _jsxBranch();
   const { encType } = formProps;
   const options = {
@@ -1640,7 +1755,8 @@ function QSONForm({ of: form, action, onSubmit$, responseDuration: duration, kee
         [_IMMUTABLE]: {
           props: _IMMUTABLE
         }
-      }, 3, "iB_1") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "iB_2")
+      }, 3, "iB_1") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "iB_2"),
+      children
     ],
     onSubmit$: /* @__PURE__ */ inlinedQrl(async (event, element) => {
       const [action2, encType2, form2, keepResponse2, onSubmit$2, options2, reloadDocument2] = useLexicalScope();

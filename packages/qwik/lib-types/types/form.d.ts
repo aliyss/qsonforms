@@ -45,6 +45,7 @@ export type InternalFormStore<T> = {
 export type FormStore<T, S, TResponseData extends ResponseData<S>> = {
     internal: InternalFormStore<S>;
     schema: T;
+    disabled?: boolean | undefined;
     uiSchema: UiSchema;
     element: HTMLFormElement | undefined;
     submitCount: number;

@@ -48,6 +48,7 @@ export type FieldElementProps<T, TFieldName extends FieldPath<T>> = {
   step?: number | undefined;
   default?: any | undefined;
   required?: boolean | undefined;
+  disabled?: boolean | undefined;
   selectOptions?: any[] | undefined;
 };
 
@@ -77,6 +78,7 @@ export type FieldProps<
   step?: number | undefined;
   default?: any | undefined;
   required?: boolean | undefined;
+  disabled?: boolean | undefined;
   selectOptions?: any[] | undefined;
 };
 
@@ -146,6 +148,7 @@ export function Field<
         step: props.step,
         selectOptions: props.selectOptions,
         required: props.required,
+        disabled: form.disabled,
       })}
     </Lifecycle>
   );
