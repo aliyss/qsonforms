@@ -23,6 +23,7 @@ import type {
   DefaultArrayTemplates,
   DefaultControlTemplates,
   DefaultControlWidgets,
+  DefaultFieldTemplateProps,
   DefaultHorizontalTemplates,
   DefaultVerticalTemplates,
   FormStore,
@@ -267,8 +268,14 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
       formData.uiSchema.templates,
       "defaultArrayItem",
     ) as Component<
-      DefaultArrayItemTemplateProps & QwikIntrinsicElements["button"]
+      DefaultArrayItemTemplateProps & QwikIntrinsicElements["div"]
     >;
+
+    const TitleTemplate = getAdditionalTemplate(
+      AdditionalTemplateType.FIELD,
+      formData.uiSchema.templates,
+      "defaultArrayTitle",
+    ) as Component<DefaultFieldTemplateProps>;
 
     return (
       <>
@@ -276,12 +283,24 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
           layout={layout}
           subSchema={subSchema as JSONSchema7Object}
         >
+          <TitleTemplate
+            q:slot="title"
+            layout={layout}
+            subSchema={subSchema as JSONSchema7Object}
+            required={!!subSchema.minItems}
+          />
           {(
             testUniqueEnum ||
             formData.internal.fields[dataPath.join(".")]?.value ||
             []
           ).map((_item: any, i: number) => (
-            <ArrayItemTemplate key={[...dataPath, i].join(".")}>
+            <ArrayItemTemplate
+              key={[...dataPath, i].join(".")}
+              itemPath={[...dataPath, i].join(".")}
+              layout={layout}
+              subSchema={subSchema as JSONSchema7Object}
+              isUniqueEnum={!!testUniqueEnum}
+            >
               <SchemaParser
                 layout={{
                   ...(layout["ui:items"] ||
@@ -297,7 +316,7 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
               />
               {!testUniqueEnum ? (
                 <RemoveButtonTemplate
-                  slot="remove-button"
+                  q:slot="remove-button"
                   props={{ type: "button", onClick$: $(() => removeItem(i)) }}
                 >
                   Remove
@@ -308,7 +327,10 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
             </ArrayItemTemplate>
           ))}
           {!testUniqueEnum ? (
-            <AddButtonTemplate props={{ type: "button", onClick$: addItem }}>
+            <AddButtonTemplate
+              q:slot="add-button"
+              props={{ type: "button", onClick$: addItem }}
+            >
               Add
             </AddButtonTemplate>
           ) : (

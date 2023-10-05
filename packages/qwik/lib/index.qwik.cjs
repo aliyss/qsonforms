@@ -530,15 +530,21 @@ const DefaultArray = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
         props
       ], '`form-array ${p0.layout["ui:class"]||"form-array-default"}`')
     }, [
-      /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "CN_0"),
+      /* @__PURE__ */ qwik._jsxC(qwik.Slot, {
+        name: "title",
+        [qwik._IMMUTABLE]: {
+          name: qwik._IMMUTABLE
+        }
+      }, 3, "CN_0"),
+      /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "CN_1"),
       /* @__PURE__ */ qwik._jsxC(qwik.Slot, {
         name: "add-button",
         [qwik._IMMUTABLE]: {
           name: qwik._IMMUTABLE
         }
-      }, 3, "CN_1")
+      }, 3, "CN_2")
     ], 1, null)
-  }, 1, "CN_2");
+  }, 1, "CN_3");
 }, "DefaultArray_component_R4SqZX2sFjE"));
 const DefaultButton = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
@@ -569,18 +575,30 @@ const DefaultTitle = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inli
     children: title ? /* @__PURE__ */ qwik._jsxQ("span", null, null, `${title}${props.required ? "*" : ""}`, 1, "jB_2") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "jB_3")
   }, 1, "jB_4");
 }, "DefaultTitle_component_fVzTY795bE0"));
-const DefaultArrayItem = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl(() => {
+const DefaultArrayTitle = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  const title = props.layout["ui:title"] || props.subSchema.title;
+  return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+    children: title ? /* @__PURE__ */ qwik._jsxQ("span", null, null, `${title}${props.required ? "*" : ""}`, 1, "jB_5") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "jB_6")
+  }, 1, "jB_7");
+}, "DefaultArrayTitle_component_twDX2tPurgg"));
+const DefaultArrayItem = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
+  const title = props.isUniqueEnum ? "" : (props.layout["ui:title"] || props.subSchema.title) + ` - ${props.itemPath.split(".")[props.itemPath.split(".").length - 1]}`;
   return /* @__PURE__ */ qwik._jsxQ("div", null, {
-    class: `form-array-item`
+    class: qwik._fnSignal((p0) => `form-array-item ${p0.isUniqueEnum ? "form-uniqueitem-enum-array-item" : ""}`, [
+      props
+    ], '`form-array-item ${p0.isUniqueEnum?"form-uniqueitem-enum-array-item":""}`')
   }, [
-    /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "jB_5"),
+    /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
+      children: title ? /* @__PURE__ */ qwik._jsxQ("span", null, null, `${title}`, 1, "jB_8") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "jB_9")
+    }, 1, "jB_10"),
+    /* @__PURE__ */ qwik._jsxC(qwik.Slot, null, 3, "jB_11"),
     /* @__PURE__ */ qwik._jsxC(qwik.Slot, {
       name: "remove-button",
       [qwik._IMMUTABLE]: {
         name: qwik._IMMUTABLE
       }
-    }, 3, "jB_6")
-  ], 1, "jB_7");
+    }, 3, "jB_12")
+  ], 1, "jB_13");
 }, "DefaultArrayItem_component_xcRPx64OzmI"));
 const defaultTemplates = {
   [exports.TemplateType.VERTICAL_LAYOUT]: {
@@ -608,7 +626,8 @@ const defaultAdditionals = {
     defaultError: DefaultError
   },
   [exports.AdditionalTemplateType.FIELD]: {
-    defaultTitle: DefaultTitle
+    defaultTitle: DefaultTitle,
+    defaultArrayTitle: DefaultArrayTitle
   },
   [exports.AdditionalTemplateType.ARRAY_ITEM]: {
     defaultArrayItem: DefaultArrayItem
@@ -1319,7 +1338,7 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
     }, 3, "2l_7")
   }, 1, "2l_8");
 }, "ControlTemplateMaker_component_gL3RUfrE0Yw"));
-const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n\n.default-uniqueitem-enum-widget {\n  display: flex;\n  flex-direction: row;\n}\n";
+const defaultClasses = ".form-vertical-default {\n  display: flex;\n  flex-direction: column;\n}\n\n.form-horizontal-default {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-control-default {\n  padding: 6px;\n}\n\n.form-control-widget-default {\n  display: flex;\n  flex-direction: column;\n  padding: 4px;\n}\n\n.default-uniqueitem-enum-widget {\n  display: flex;\n  flex-direction: row;\n}\n\n.form-array-item {\n  border-style: solid;\n  border-width: 1px;\n  margin: 8px;\n  padding: 4px;\n}\n\n.form-uniqueitem-enum-array-item {\n  border-style: unset;\n  border-width: unset;\n  margin: unset;\n  padding: unset;\n}\n";
 function inferUiSchemaSingle(schema, scope) {
   if (typeof schema === "boolean" || Array.isArray(schema) || !schema)
     return {
@@ -1515,13 +1534,35 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
   const AddButtonTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "addButton");
   const RemoveButtonTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.BUTTON, props.formData.uiSchema.templates, "removeButton");
   const ArrayItemTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.ARRAY_ITEM, props.formData.uiSchema.templates, "defaultArrayItem");
+  const TitleTemplate = getAdditionalTemplate(exports.AdditionalTemplateType.FIELD, props.formData.uiSchema.templates, "defaultArrayTitle");
   return /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
     children: /* @__PURE__ */ qwik._jsxC(FormTemplate, {
       get layout() {
         return props.layout;
       },
       children: [
+        /* @__PURE__ */ qwik._jsxC(TitleTemplate, {
+          "q:slot": "title",
+          get layout() {
+            return props.layout;
+          },
+          required: !!subSchema.minItems,
+          subSchema,
+          [qwik._IMMUTABLE]: {
+            layout: qwik._fnSignal((p0) => p0.layout, [
+              props
+            ], "p0.layout"),
+            "q:slot": qwik._IMMUTABLE
+          }
+        }, 3, "92_1"),
         (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ qwik._jsxBranch(/* @__PURE__ */ qwik._jsxC(ArrayItemTemplate, {
+          itemPath: [
+            ...dataPath,
+            i
+          ].join("."),
+          get layout() {
+            return props.layout;
+          },
           children: [
             /* @__PURE__ */ qwik._jsxC(SchemaParser, {
               itemScope: layoutScope + `/items/${i}`,
@@ -1543,7 +1584,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
                   props
                 ], "p0.formData.uiSchema.templates")
               }
-            }, 3, "92_1"),
+            }, 3, "92_2"),
             !testUniqueEnum ? /* @__PURE__ */ qwik._jsxC(RemoveButtonTemplate, {
               children: "Remove",
               props: {
@@ -1556,17 +1597,25 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
                   removeItem
                 ])
               },
-              slot: "remove-button",
+              "q:slot": "remove-button",
               [qwik._IMMUTABLE]: {
-                slot: qwik._IMMUTABLE
+                "q:slot": qwik._IMMUTABLE
               }
-            }, 3, "92_2") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_3")
-          ]
+            }, 3, "92_3") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_4")
+          ],
+          isUniqueEnum: !!testUniqueEnum,
+          subSchema,
+          [qwik._IMMUTABLE]: {
+            layout: qwik._fnSignal((p0) => p0.layout, [
+              props
+            ], "p0.layout")
+          }
         }, 1, [
           ...dataPath,
           i
         ].join(".")))),
         !testUniqueEnum ? /* @__PURE__ */ qwik._jsxC(AddButtonTemplate, {
+          "q:slot": "add-button",
           get props() {
             return {
               type: "button",
@@ -1580,9 +1629,10 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
               onClick$: p0
             }), [
               addItem
-            ], '{type:"button",onClick$:p0}')
+            ], '{type:"button",onClick$:p0}'),
+            "q:slot": qwik._IMMUTABLE
           }
-        }, 3, "92_4") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_5")
+        }, 3, "92_5") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "92_6")
       ],
       subSchema,
       [qwik._IMMUTABLE]: {
@@ -1590,8 +1640,8 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
           props
         ], "p0.layout")
       }
-    }, 1, "92_6")
-  }, 1, "92_7");
+    }, 1, "92_7")
+  }, 1, "92_8");
 }, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwik.inlinedQrl((props) => {
   qwik._jsxBranch();

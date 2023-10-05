@@ -22,6 +22,7 @@ import {
 } from "../../components/defaults/default-button";
 import {
   DefaultArrayItem,
+  DefaultArrayTitle,
   DefaultError,
   DefaultTitle,
 } from "../../components/defaults/default-additional";
@@ -46,6 +47,7 @@ export const defaultAdditionals: DefaultAdditionals = {
   },
   [AdditionalTemplateType.FIELD]: {
     defaultTitle: DefaultTitle,
+    defaultArrayTitle: DefaultArrayTitle,
   },
   [AdditionalTemplateType.ARRAY_ITEM]: {
     defaultArrayItem: DefaultArrayItem,

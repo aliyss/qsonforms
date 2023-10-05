@@ -24,10 +24,29 @@ export const DefaultTitle = component$<DefaultFieldTemplateProps>(
   },
 );
 
-export const DefaultArrayItem = component$<DefaultArrayItemTemplateProps>(
-  () => {
+export const DefaultArrayTitle = component$<DefaultFieldTemplateProps>(
+  ({ subSchema, required, layout }) => {
+    const title = layout["ui:title"] || subSchema.title;
     return (
-      <div class={`form-array-item`}>
+      <>{title ? <span>{`${title}${required ? "*" : ""}`}</span> : <></>}</>
+    );
+  },
+);
+
+export const DefaultArrayItem = component$<DefaultArrayItemTemplateProps>(
+  ({ itemPath, subSchema, layout, isUniqueEnum }) => {
+    const title = isUniqueEnum
+      ? ""
+      : (layout["ui:title"] || subSchema.title) +
+        ` - ${itemPath.split(".")[itemPath.split(".").length - 1]}`;
+
+    return (
+      <div
+        class={`form-array-item ${
+          isUniqueEnum ? "form-uniqueitem-enum-array-item" : ""
+        }`}
+      >
+        <>{title ? <span>{`${title}`}</span> : <></>}</>
         <Slot />
         <Slot name="remove-button" />
       </div>

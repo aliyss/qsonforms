@@ -72,7 +72,7 @@ export default component$(() => {
         },
       },
       array: {
-        title: "Array",
+        title: "ArrayWithNumber",
         type: "array",
         default: [1, 2, 3],
         items: {
@@ -90,7 +90,7 @@ export default component$(() => {
         },
       },
       arrayInArray: {
-        title: "Array",
+        title: "ArrayInArray",
         type: "array",
         items: {
           title: "SubArray",
@@ -102,7 +102,7 @@ export default component$(() => {
         },
       },
       arrayWithObject: {
-        title: "Array",
+        title: "ArrayWithObject",
         type: "array",
         items: {
           title: "Object",
@@ -197,6 +197,7 @@ export default component$(() => {
             {
               type: TemplateType.ARRAY,
               scope: "#/properties/array",
+              ["ui:title"]: "ArrayWithNumberAndCheckbox",
               ["ui:items"]: {
                 type: TemplateType.HORIZONTAL_LAYOUT,
                 elements: [

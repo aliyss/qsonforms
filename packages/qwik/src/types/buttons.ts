@@ -21,13 +21,18 @@ export interface ErrorTemplateProps {
 }
 
 export interface DefaultFieldTemplateProps {
-  field: FieldStore<any, any>;
+  field?: FieldStore<any, any>;
   layout: ElementLayout;
   subSchema: JSONSchema7Object;
   required?: boolean | undefined;
 }
 
-export interface DefaultArrayItemTemplateProps {}
+export interface DefaultArrayItemTemplateProps {
+  itemPath: string;
+  layout: ElementLayout;
+  subSchema: JSONSchema7Object;
+  isUniqueEnum: boolean;
+}
 
 export interface DefaultButtonTemplates<
   CP extends ButtonTemplateProps = ButtonTemplateProps,
@@ -49,6 +54,7 @@ export interface DefaultFieldTemplates<
   CP extends DefaultFieldTemplateProps = DefaultFieldTemplateProps,
 > {
   defaultTitle?: Component<CP>;
+  defaultArrayTitle?: Component<CP>;
 }
 
 export interface DefaultArrayItemTemplates<

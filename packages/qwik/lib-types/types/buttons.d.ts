@@ -17,12 +17,16 @@ export interface ErrorTemplateProps {
     dirty: boolean;
 }
 export interface DefaultFieldTemplateProps {
-    field: FieldStore<any, any>;
+    field?: FieldStore<any, any>;
     layout: ElementLayout;
     subSchema: JSONSchema7Object;
     required?: boolean | undefined;
 }
 export interface DefaultArrayItemTemplateProps {
+    itemPath: string;
+    layout: ElementLayout;
+    subSchema: JSONSchema7Object;
+    isUniqueEnum: boolean;
 }
 export interface DefaultButtonTemplates<CP extends ButtonTemplateProps = ButtonTemplateProps> {
     addButton?: Component<CP>;
@@ -36,6 +40,7 @@ export interface DefaultErrorTemplates<CP extends ErrorTemplateProps = ErrorTemp
 }
 export interface DefaultFieldTemplates<CP extends DefaultFieldTemplateProps = DefaultFieldTemplateProps> {
     defaultTitle?: Component<CP>;
+    defaultArrayTitle?: Component<CP>;
 }
 export interface DefaultArrayItemTemplates<CP extends DefaultArrayItemTemplateProps = DefaultArrayItemTemplateProps> {
     defaultArrayItem?: Component<CP>;
