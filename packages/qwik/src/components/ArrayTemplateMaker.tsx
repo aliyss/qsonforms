@@ -283,12 +283,16 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
           layout={layout}
           subSchema={subSchema as JSONSchema7Object}
         >
-          <TitleTemplate
-            q:slot="title"
-            layout={layout}
-            subSchema={subSchema as JSONSchema7Object}
-            required={!!subSchema.minItems}
-          />
+          {layout["ui:title"] === false ? (
+            <></>
+          ) : (
+            <TitleTemplate
+              q:slot="title"
+              layout={layout}
+              subSchema={subSchema as JSONSchema7Object}
+              required={!!subSchema.minItems}
+            />
+          )}
           {(
             testUniqueEnum ||
             formData.internal.fields[dataPath.join(".")]?.value ||
@@ -317,7 +321,11 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
               {!testUniqueEnum ? (
                 <RemoveButtonTemplate
                   q:slot="remove-button"
-                  props={{ type: "button", onClick$: $(() => removeItem(i)) }}
+                  props={{
+                    type: "button",
+                    onClick$: $(() => removeItem(i)),
+                    disabled: formData.disabled,
+                  }}
                 >
                   Remove
                 </RemoveButtonTemplate>
@@ -329,7 +337,11 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
           {!testUniqueEnum ? (
             <AddButtonTemplate
               q:slot="add-button"
-              props={{ type: "button", onClick$: addItem }}
+              props={{
+                type: "button",
+                onClick$: addItem,
+                disabled: formData.disabled,
+              }}
             >
               Add
             </AddButtonTemplate>

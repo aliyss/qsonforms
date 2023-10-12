@@ -197,7 +197,7 @@ export default component$(() => {
             {
               type: TemplateType.ARRAY,
               scope: "#/properties/array",
-              ["ui:title"]: "ArrayWithNumberAndCheckbox",
+              ["ui:title"]: false,
               ["ui:items"]: {
                 type: TemplateType.HORIZONTAL_LAYOUT,
                 elements: [
