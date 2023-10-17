@@ -207,7 +207,7 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
         formData.internal.fields[dataPath.join(".")] = getInitialFieldStore(
           dataPath.join("."),
           {
-            value: defaultSubSchema,
+            value: defaultSubSchema ? [...defaultSubSchema] : undefined,
             initialValue: [],
             error: [],
           },
@@ -224,7 +224,7 @@ export const ArrayTemplateMaker = component$<ArrayTemplateMakerProps<any, any>>(
           ]!.internal.startValue = defaultSubSchema[i];
         }
         formData.internal.fields[[...dataPath].join(".")]!.internal.startValue =
-          defaultSubSchema;
+          defaultSubSchema ? [...defaultSubSchema] : undefined;
       }
       if (testUniqueEnum) {
         for (let i = 0; i < testUniqueEnum.length; i++) {

@@ -1479,7 +1479,9 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
     const [dataPath2, defaultSubSchema2, props2, testUniqueEnum2] = useLexicalScope();
     if (!props2.formData.internal.fields[dataPath2.join(".")]) {
       props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."), {
-        value: defaultSubSchema2,
+        value: defaultSubSchema2 ? [
+          ...defaultSubSchema2
+        ] : void 0,
         initialValue: [],
         error: []
       });
@@ -1502,7 +1504,9 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
       }
       props2.formData.internal.fields[[
         ...dataPath2
-      ].join(".")].internal.startValue = defaultSubSchema2;
+      ].join(".")].internal.startValue = defaultSubSchema2 ? [
+        ...defaultSubSchema2
+      ] : void 0;
     }
     if (testUniqueEnum2) {
       for (let i = 0; i < testUniqueEnum2.length; i++) {

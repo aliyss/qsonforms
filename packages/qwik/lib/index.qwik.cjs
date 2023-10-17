@@ -1481,7 +1481,9 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
     const [dataPath2, defaultSubSchema2, props2, testUniqueEnum2] = qwik.useLexicalScope();
     if (!props2.formData.internal.fields[dataPath2.join(".")]) {
       props2.formData.internal.fields[dataPath2.join(".")] = getInitialFieldStore(dataPath2.join("."), {
-        value: defaultSubSchema2,
+        value: defaultSubSchema2 ? [
+          ...defaultSubSchema2
+        ] : void 0,
         initialValue: [],
         error: []
       });
@@ -1504,7 +1506,9 @@ const ArrayTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ qwi
       }
       props2.formData.internal.fields[[
         ...dataPath2
-      ].join(".")].internal.startValue = defaultSubSchema2;
+      ].join(".")].internal.startValue = defaultSubSchema2 ? [
+        ...defaultSubSchema2
+      ] : void 0;
     }
     if (testUniqueEnum2) {
       for (let i = 0; i < testUniqueEnum2.length; i++) {

@@ -101,6 +101,47 @@ export default component$(() => {
           },
         },
       },
+      Rooms: {
+        title: "Rooms",
+        default: [],
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            Room: {
+              title: "Room",
+              type: "string",
+            },
+            Tasks: {
+              title: "Tasks",
+              default: [],
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  Task: {
+                    title: "Task",
+                    type: "string",
+                  },
+                  Completed: {
+                    title: "Completed",
+                    default: false,
+                    type: "boolean",
+                  },
+                },
+                additionalProperties: false,
+                required: ["Task", "Completed"],
+              },
+            },
+            "Room Description": {
+              title: "Room Description",
+              type: "string",
+            },
+          },
+          additionalProperties: false,
+          required: ["Room", "Tasks", "Room Description"],
+        },
+      },
       arrayWithObject: {
         title: "ArrayWithObject",
         type: "array",
@@ -218,6 +259,51 @@ export default component$(() => {
               ["ui:items"]: {
                 type: TemplateType.ARRAY,
                 scope: "{scope}",
+              },
+            },
+          ],
+        },
+        {
+          type: TemplateType.VERTICAL_LAYOUT,
+          elements: [
+            {
+              type: TemplateType.ARRAY,
+              scope: "#/properties/Rooms",
+              "ui:items": {
+                type: TemplateType.VERTICAL_LAYOUT,
+                elements: [
+                  {
+                    type: TemplateType.CONTROL,
+                    scope: "{scope}/properties/Room",
+                  },
+                  {
+                    type: TemplateType.CONTROL,
+                    scope: "{scope}/properties/Room Description",
+                  },
+                  {
+                    type: TemplateType.ARRAY,
+                    scope: "{scope}/properties/Tasks",
+                    "ui:items": {
+                      type: TemplateType.VERTICAL_LAYOUT,
+                      elements: [
+                        {
+                          type: TemplateType.VERTICAL_LAYOUT,
+                          "ui:title": "Task-Group",
+                          elements: [
+                            {
+                              type: TemplateType.CONTROL,
+                              scope: "{scope}/properties/Task",
+                            },
+                            {
+                              type: TemplateType.CONTROL,
+                              scope: "{scope}/properties/Completed",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  },
+                ],
               },
             },
           ],
