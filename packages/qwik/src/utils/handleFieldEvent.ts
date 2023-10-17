@@ -54,6 +54,10 @@ export async function handleFieldEvent<
     field.value = inputValue;
   }
 
+  if (form.emptyIsUndefined && field.value === "") {
+    field.value = undefined;
+  }
+
   // Transform value state
   for (const transformation of field.internal.transform) {
     field.value = await transformation(field.value, event, element);

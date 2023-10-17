@@ -51,6 +51,7 @@ export function useQSONFormStore<
       schema,
       uiSchema: options.uiSchema,
       // FIXME: Set state based on `action`
+      emptyIsUndefined: options.emptyIsUndefined,
       element: undefined,
       submitCount: 0,
       submitting: false,

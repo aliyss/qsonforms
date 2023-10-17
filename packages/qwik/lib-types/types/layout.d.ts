@@ -6,7 +6,7 @@ import { FieldPathValue } from "./path";
 export interface ElementLayout {
     type: TemplateType;
     "ui:options"?: Record<string, any>;
-    "ui:title"?: string;
+    "ui:title"?: string | boolean;
     "ui:description"?: string;
     "ui:class"?: string;
 }

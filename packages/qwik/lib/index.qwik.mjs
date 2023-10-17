@@ -152,6 +152,8 @@ function updateFormState(form) {
 async function handleFieldEvent(form, field, name, event, element, validationModes, inputValue) {
   if (inputValue !== void 0 && inputValue !== null)
     field.value = inputValue;
+  if (form.emptyIsUndefined && field.value === "")
+    field.value = void 0;
   for (const transformation of field.internal.transform)
     field.value = await transformation(field.value, event, element);
   field.touched = true;
@@ -180,7 +182,7 @@ function getValues(form, arg2, arg3) {
       (typeof arg2 === "string" ? name.replace(`${arg2}.`, "") : name).split(".").reduce((object, key, index, keys) => {
         if (field.isUniqueEnum && Array.isArray(object))
           key = object.length;
-        return object[key] = index === keys.length - 1 ? field.value : typeof object[key] === "object" && object[key] || (isNaN(+keys[index + 1]) ? {} : []);
+        return object[key] = index === keys.length - 1 ? field.value === "" && form.emptyIsUndefined ? void 0 : field.value : typeof object[key] === "object" && object[key] || (isNaN(+keys[index + 1]) ? {} : []);
       }, values);
     return values;
   }, typeof arg2 === "string" ? [] : {});
@@ -1539,7 +1541,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
         return props.layout;
       },
       children: [
-        /* @__PURE__ */ _jsxC(TitleTemplate, {
+        props.layout["ui:title"] === false ? /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_1") : /* @__PURE__ */ _jsxC(TitleTemplate, {
           "q:slot": "title",
           get layout() {
             return props.layout;
@@ -1552,7 +1554,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
             ], "p0.layout"),
             "q:slot": _IMMUTABLE
           }
-        }, 3, "92_1"),
+        }, 3, "92_2"),
         (testUniqueEnum || props.formData.internal.fields[dataPath.join(".")]?.value || []).map((_item, i) => /* @__PURE__ */ _jsxBranch(/* @__PURE__ */ _jsxC(ArrayItemTemplate, {
           itemPath: [
             ...dataPath,
@@ -1582,7 +1584,7 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
                   props
                 ], "p0.formData.uiSchema.templates")
               }
-            }, 3, "92_2"),
+            }, 3, "92_3"),
             !testUniqueEnum ? /* @__PURE__ */ _jsxC(RemoveButtonTemplate, {
               children: "Remove",
               props: {
@@ -1593,13 +1595,14 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
                 }, "ArrayTemplateMaker_component__Fragment_FormTemplate_ArrayItemTemplate_RemoveButtonTemplate_props_080XKdSEXos", [
                   i,
                   removeItem
-                ])
+                ]),
+                disabled: props.formData.disabled
               },
               "q:slot": "remove-button",
               [_IMMUTABLE]: {
                 "q:slot": _IMMUTABLE
               }
-            }, 3, "92_3") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_4")
+            }, 3, "92_4") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_5")
           ],
           isUniqueEnum: !!testUniqueEnum,
           subSchema,
@@ -1617,20 +1620,23 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
           get props() {
             return {
               type: "button",
-              onClick$: addItem
+              onClick$: addItem,
+              disabled: props.formData.disabled
             };
           },
           children: "Add",
           [_IMMUTABLE]: {
-            props: _fnSignal((p0) => ({
+            props: _fnSignal((p0, p1) => ({
               type: "button",
-              onClick$: p0
+              onClick$: p0,
+              disabled: p1.formData.disabled
             }), [
-              addItem
-            ], '{type:"button",onClick$:p0}'),
+              addItem,
+              props
+            ], '{type:"button",onClick$:p0,disabled:p1.formData.disabled}'),
             "q:slot": _IMMUTABLE
           }
-        }, 3, "92_5") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_6")
+        }, 3, "92_6") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "92_7")
       ],
       subSchema,
       [_IMMUTABLE]: {
@@ -1638,8 +1644,8 @@ const ArrayTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQ
           props
         ], "p0.layout")
       }
-    }, 1, "92_7")
-  }, 1, "92_8");
+    }, 1, "92_8")
+  }, 1, "92_9");
 }, "ArrayTemplateMaker_component_wblFW1RfRCw"));
 const SchemaParser = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inlinedQrl((props) => {
   _jsxBranch();
@@ -1908,6 +1914,7 @@ function useQSONFormStore(schema, { validate: validate2, validateOn = "submit", 
       schema,
       uiSchema: options.uiSchema,
       // FIXME: Set state based on `action`
+      emptyIsUndefined: options.emptyIsUndefined,
       element: void 0,
       submitCount: 0,
       submitting: false,

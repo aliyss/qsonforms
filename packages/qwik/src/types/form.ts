@@ -52,6 +52,7 @@ export type FormOptions<T, TResponseData extends ResponseData<T>> = {
   action?:
     | ActionStore<FormActionStore<T, TResponseData>, Partial<T>, true>
     | undefined;
+  emptyIsUndefined?: boolean | undefined;
   validate?: QRL<ValidateForm<T>> | undefined;
   validateOn?: ValidationMode | undefined;
   revalidateOn?: ValidationMode | undefined;
@@ -82,6 +83,7 @@ export type FormStore<T, S, TResponseData extends ResponseData<S>> = {
 
   schema: T;
   disabled?: boolean | undefined;
+  emptyIsUndefined?: boolean | undefined;
   uiSchema: UiSchema;
   element: HTMLFormElement | undefined;
   submitCount: number;

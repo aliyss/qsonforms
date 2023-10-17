@@ -21,6 +21,7 @@ export type FormOptions<T, TResponseData extends ResponseData<T>> = {
     loader: Readonly<Signal<Partial<T>>>;
     uiSchema: UiSchema;
     action?: ActionStore<FormActionStore<T, TResponseData>, Partial<T>, true> | undefined;
+    emptyIsUndefined?: boolean | undefined;
     validate?: QRL<ValidateForm<T>> | undefined;
     validateOn?: ValidationMode | undefined;
     revalidateOn?: ValidationMode | undefined;
@@ -46,6 +47,7 @@ export type FormStore<T, S, TResponseData extends ResponseData<S>> = {
     internal: InternalFormStore<S>;
     schema: T;
     disabled?: boolean | undefined;
+    emptyIsUndefined?: boolean | undefined;
     uiSchema: UiSchema;
     element: HTMLFormElement | undefined;
     submitCount: number;

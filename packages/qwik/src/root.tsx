@@ -265,6 +265,7 @@ export default component$(() => {
 
   const [form, { QSONForm }] = useQSONForm(schema, {
     loader: useSignal(formData),
+    emptyIsUndefined: true,
     uiSchema: uiSchema,
     validate: validate,
     validateOn: "input",
