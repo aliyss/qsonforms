@@ -155,6 +155,7 @@ export const ControlTemplateMaker = component$<
         required={parentSchema?.required?.includes(
           dataPath[dataPath.length - 1],
         )}
+        disabled={layout["ui:disabled"] === true ? true : false}
       >
         {(field, props) => (
           <>

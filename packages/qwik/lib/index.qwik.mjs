@@ -1193,7 +1193,7 @@ function Field({ children, name, type, ...props }) {
       step: props.step,
       selectOptions: props.selectOptions,
       required: props.required,
-      disabled: form.disabled
+      disabled: props.disabled || form.disabled
     })
   }, 0, name);
 }
@@ -1275,6 +1275,10 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
       get default() {
         return subSchema.default;
       },
+      required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
+      get disabled() {
+        return props.layout["ui:disabled"] === true ? true : false;
+      },
       children: (field, props1) => /* @__PURE__ */ _jsxBranch(/* @__PURE__ */ _jsxC(Fragment, {
         children: field ? /* @__PURE__ */ _jsxC(FormTemplate, {
           field,
@@ -1324,9 +1328,11 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
           }
         }, 1, "2l_4") : /* @__PURE__ */ _jsxC(Fragment, null, 3, "2l_5")
       }, 1, "2l_6")),
-      required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
       [_IMMUTABLE]: {
         default: _wrapProp(subSchema, "default"),
+        disabled: _fnSignal((p0) => p0.layout["ui:disabled"] === true ? true : false, [
+          props
+        ], 'p0.layout["ui:disabled"]===true?true:false'),
         max: _wrapProp(subSchema, "maximum"),
         min: _wrapProp(subSchema, "minimum"),
         of: _fnSignal((p0) => p0.formData, [

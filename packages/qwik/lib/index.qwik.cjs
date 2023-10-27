@@ -1195,7 +1195,7 @@ function Field({ children, name, type, ...props }) {
       step: props.step,
       selectOptions: props.selectOptions,
       required: props.required,
-      disabled: form.disabled
+      disabled: props.disabled || form.disabled
     })
   }, 0, name);
 }
@@ -1277,6 +1277,10 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
       get default() {
         return subSchema.default;
       },
+      required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
+      get disabled() {
+        return props.layout["ui:disabled"] === true ? true : false;
+      },
       children: (field, props1) => /* @__PURE__ */ qwik._jsxBranch(/* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
         children: field ? /* @__PURE__ */ qwik._jsxC(FormTemplate, {
           field,
@@ -1326,9 +1330,11 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
           }
         }, 1, "2l_4") : /* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, null, 3, "2l_5")
       }, 1, "2l_6")),
-      required: parentSchema?.required?.includes(dataPath[dataPath.length - 1]),
       [qwik._IMMUTABLE]: {
         default: qwik._wrapProp(subSchema, "default"),
+        disabled: qwik._fnSignal((p0) => p0.layout["ui:disabled"] === true ? true : false, [
+          props
+        ], 'p0.layout["ui:disabled"]===true?true:false'),
         max: qwik._wrapProp(subSchema, "maximum"),
         min: qwik._wrapProp(subSchema, "minimum"),
         of: qwik._fnSignal((p0) => p0.formData, [

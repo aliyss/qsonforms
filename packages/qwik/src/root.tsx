@@ -189,6 +189,7 @@ export default component$(() => {
         {
           type: TemplateType.CONTROL,
           ["ui:title"]: "Override Control Title",
+          ["ui:disabled"]: true,
           scope: "#/properties/default",
         },
         {

@@ -148,7 +148,7 @@ export function Field<
         step: props.step,
         selectOptions: props.selectOptions,
         required: props.required,
-        disabled: form.disabled,
+        disabled: props.disabled || form.disabled,
       })}
     </Lifecycle>
   );

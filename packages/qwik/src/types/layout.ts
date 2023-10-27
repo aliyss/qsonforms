@@ -20,6 +20,7 @@ export interface ElementLayout {
   "ui:title"?: string | boolean;
   "ui:description"?: string;
   "ui:class"?: string;
+  "ui:disabled"?: boolean;
 }
 
 interface ViewLayout<V, H, A, C, W> extends ElementLayout {
