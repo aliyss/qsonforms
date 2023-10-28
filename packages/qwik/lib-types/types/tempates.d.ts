@@ -31,6 +31,7 @@ export interface ArrayTemplates<CP extends ArrayTemplateProps = ArrayTemplatePro
     [key: string]: Component<CP>;
 }
 export interface ControlTemplateProps extends TemplateProps {
+    formDisabled: boolean | undefined;
     field: FieldStore<any, any>;
     subSchema: JSONSchema7Type;
 }

@@ -46,6 +46,7 @@ export interface ArrayTemplates<
 }
 
 export interface ControlTemplateProps extends TemplateProps {
+  formDisabled: boolean | undefined;
   field: FieldStore<any, any>;
   subSchema: JSONSchema7Type;
 }

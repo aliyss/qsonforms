@@ -161,6 +161,7 @@ export const ControlTemplateMaker = component$<
           <>
             {field ? (
               <FormTemplate
+                formDisabled={formData.disabled}
                 field={field}
                 layout={layout}
                 subSchema={subSchema as JSONSchema7Object}

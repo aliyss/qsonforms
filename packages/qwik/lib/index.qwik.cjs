@@ -1283,6 +1283,9 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
       },
       children: (field, props1) => /* @__PURE__ */ qwik._jsxBranch(/* @__PURE__ */ qwik._jsxC(jsxRuntime.Fragment, {
         children: field ? /* @__PURE__ */ qwik._jsxC(FormTemplate, {
+          get formDisabled() {
+            return props.formData.disabled;
+          },
           field,
           get layout() {
             return props.layout;
@@ -1324,6 +1327,9 @@ const ControlTemplateMaker = /* @__PURE__ */ qwik.componentQrl(/* @__PURE__ */ q
           ],
           subSchema,
           [qwik._IMMUTABLE]: {
+            formDisabled: qwik._fnSignal((p0) => p0.formData.disabled, [
+              props
+            ], "p0.formData.disabled"),
             layout: qwik._fnSignal((p0) => p0.layout, [
               props
             ], "p0.layout")

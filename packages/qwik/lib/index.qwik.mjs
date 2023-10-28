@@ -1281,6 +1281,9 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
       },
       children: (field, props1) => /* @__PURE__ */ _jsxBranch(/* @__PURE__ */ _jsxC(Fragment, {
         children: field ? /* @__PURE__ */ _jsxC(FormTemplate, {
+          get formDisabled() {
+            return props.formData.disabled;
+          },
           field,
           get layout() {
             return props.layout;
@@ -1322,6 +1325,9 @@ const ControlTemplateMaker = /* @__PURE__ */ componentQrl(/* @__PURE__ */ inline
           ],
           subSchema,
           [_IMMUTABLE]: {
+            formDisabled: _fnSignal((p0) => p0.formData.disabled, [
+              props
+            ], "p0.formData.disabled"),
             layout: _fnSignal((p0) => p0.layout, [
               props
             ], "p0.layout")
